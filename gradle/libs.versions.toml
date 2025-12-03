@@ -20,6 +20,8 @@ kotlinCoroutinesTest = "1.10.2"
 appcompat = "1.7.1"
 material = "1.12.0"
 converterGson = "3.0.0"
+runner = "1.7.0"
+rules = "1.7.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -51,6 +53,8 @@ kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-te
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+test-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
+test-rules = { module = "androidx.test:rules", version.ref = "rules" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

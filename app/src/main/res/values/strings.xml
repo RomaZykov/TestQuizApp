@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">DailyQuizeTest</string>
     <string name="quiz_welcome_screen">quiz welcome screen</string>
-    <string name="history_button_text">История</string>
+    <string name="history_title_text">История</string>
     <string name="quiz_history_screen">quiz history screen</string>
     <string name="quiz_welcome_text">Добро пожаловать\nв DailyQuiz!</string>
     <string name="start_quiz_button_text">НАЧАТЬ ВИКТОРИНУ</string>
@@ -13,4 +13,33 @@
     <string name="category_menu_text">Категория</string>
     <string name="difficulty_menu_text">Сложность</string>
     <string name="empty_history">Вы еще не проходили\nни одной викторины</string>
+    <string name="quiz_bottom_hint">Вернуться к предыдущим вопросам нельзя</string>
+    <string name="total_questions">Вопрос %1$d из %2$d</string>
+    <string name="network_error_exception">API error with response code: $d</string>
+    <string name="finish_quiz_button_text">Завершить</string>
+    <string name="five_stars_title">Идеально!</string>
+    <string name="five_stars_description">5/5 — вы ответили на всё правильно. Это блестящий результат!</string>
+    <string name="score_result">%1$d из %2$d</string>
+    <string name="four_stars_title">Почти идеально!</string>
+    <string name="four_stars_desc">4/5 — очень близко к совершенству. Ещё один шаг!</string>
+    <string name="three_stars_title">Хороший результат!</string>
+    <string name="three_stars_desc">3/5 — вы на верном пути. Продолжайте тренироваться!</string>
+    <string name="two_stars_title">Есть над чем поработать</string>
+    <string name="two_stars_desc">2/5 — не расстраивайтесь, попробуйте ещё раз!</string>
+    <string name="one_stars_title">Сложный вопрос?</string>
+    <string name="one_stars_desc">1/5 — иногда просто не ваш день. Следующая попытка будет лучше!</string>
+    <string name="zero_stars_title">Бывает и так!</string>
+    <string name="zero_stars_desc">0/5 — не отчаивайтесь. Начните заново\nи удивите себя!</string>
+    <string name="result_title_text">Результаты</string>
+    <string name="start_again">НАЧАТЬ ЗАНОВО</string>
+    <string name="questions_count">Вопросы %1$d из %2$d</string>
+    <string name="quiz_number_title">Quiz %1$d</string>
+    <string name="category_result">Категория: %1$s</string>
+    <string name="difficulty_result">Сложность: %1$s</string>
+    <string name="delete_text">Удалить</string>
+    <string name="delete_history_toast">Попытка удалена</string>
+    <string name="time_counter">%02d:%02d</string>
+    <string name="time_is_over_title">Время вышло!</string>
+    <string name="time_is_over_desc">Вы не успели завершить викторину. Попробуйте еще раз!</string>
+    <string name="back_button">back_button</string>
 </resources>

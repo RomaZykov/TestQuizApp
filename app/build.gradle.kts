@@ -1,10 +1,7 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
@@ -12,17 +9,17 @@ plugins {
 }
 
 android {
-    namespace = "com.example.dailyquizetest"
+    namespace = "com.example.dailyquiztest"
     compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.dailyquizetest"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.example.dailyquiztest.core.DailyQuizTestRunner"
     }
 
     buildTypes {
@@ -71,6 +68,7 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
     androidTestImplementation(libs.hilt.android.testing)
+
     ksp(libs.hilt.compiler)
 
     testImplementation(kotlin("test"))
@@ -78,6 +76,8 @@ dependencies {
     testImplementation(libs.kotlin.coroutines.test)
 
     androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.test.rules)
+    androidTestImplementation(libs.test.runner)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
