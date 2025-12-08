@@ -38,7 +38,7 @@
     <string name="category_result">Категория: %1$s</string>
     <string name="difficulty_result">Сложность: %1$s</string>
     <string name="delete_text">Удалить</string>
-    <string name="delete_history_toast">Попытка удалена</string>
+    <string name="delete_retry">Попытка удалена</string>
     <string name="time_counter">%02.0d:%02.0d</string>
     <string name="time_is_over_title">Время вышло!</string>
     <string name="time_is_over_desc">Вы не успели завершить викторину. Попробуйте еще раз!</string>
