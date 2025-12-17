@@ -1,8 +1,10 @@
-package com.example.dailyquiztest.data.test
+package com.example.dailyquiztest.core
 
 import com.example.dailyquiztest.data.di.DataModule
 import com.example.dailyquiztest.domain.repository.HistoryQuizRepository
 import com.example.dailyquiztest.domain.repository.QuizRepository
+import com.example.testing.repository.FakeHistoryRepository
+import com.example.testing.repository.FakeQuizRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent

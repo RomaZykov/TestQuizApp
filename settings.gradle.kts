@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "DailyQuizeTest"
 include(":app")
+include(":testing")
 include(":test")
