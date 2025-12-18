@@ -148,12 +148,12 @@ class ScenarioTest : StringResources() {
         quizPage.assertPageDisplayed()
         repeat(DifficultiesTypes.EASY.amountOfQuestions - 1) {
             quizPage.assertNextButtonNotEnabled()
-            quizPage.chooseCorrectOption()
+            quizPage.chooseOption(true)
             quizPage.clickNextButton()
         }
 
         quizPage.assertFinishQuizButtonNotEnabled()
-        quizPage.chooseCorrectOption()
+        quizPage.chooseOption(true)
         quizPage.clickFinishQuizButton()
 
         resultPage.assertPageDisplayed()
@@ -169,24 +169,45 @@ class ScenarioTest : StringResources() {
         historyPage.assertNonEmptyHistoriesDisplayed()
     }
 
-//    @Test
-//    fun showErrorMessageWhenStartingQuizWithNoConnection() = runTest {
-//        welcomePage.assertPageDisplayed()
-//        welcomePage.clickStartButton()
-//
-//        filtersPage.assertPageDisplayed()
-//        filtersPage.assertStartQuizButtonNotEnabled()
-//        filtersPage.chooseSomeCategory(CategoriesTypes.VIDEO_GAMES)
-//        filtersPage.assertStartQuizButtonNotEnabled()
-//        filtersPage.chooseSomeDifficulty(DifficultiesTypes.EASY)
-//        filtersPage.assertStartQuizButtonEnabled()
-//        filtersPage.clickStartQuizButton()
-//
-//    }
+    @Test
+    fun showErrorMessageWhenStartingQuizWithNoConnection() = runTest {
+        welcomePage.assertPageDisplayed()
+        welcomePage.clickStartButton()
 
-//    @Test
-//    fun startQuizButTimeWasNotEnoughToComplete() = runTest {
-//    }
+        filtersPage.assertPageDisplayed()
+        filtersPage.assertStartQuizButtonNotEnabled()
+        filtersPage.chooseSomeCategory(CategoriesTypes.VIDEO_GAMES)
+        filtersPage.assertStartQuizButtonNotEnabled()
+        filtersPage.chooseSomeDifficulty(DifficultiesTypes.EASY)
+        filtersPage.assertStartQuizButtonEnabled()
+        filtersPage.clickStartQuizButton()
+
+    }
+
+    @Test
+    fun failHardQuizDueToTime() = runTest {
+        welcomePage.assertPageDisplayed()
+        welcomePage.clickStartButton()
+
+        filtersPage.assertPageDisplayed()
+        filtersPage.assertStartQuizButtonNotEnabled()
+        filtersPage.chooseSomeDifficulty(DifficultiesTypes.HARD)
+        filtersPage.assertStartQuizButtonNotEnabled()
+        filtersPage.chooseSomeCategory(CategoriesTypes.BOARD_GAMES)
+        filtersPage.assertStartQuizButtonEnabled()
+        filtersPage.clickStartQuizButton()
+
+        quizPage.assertPageDisplayed()
+        quizPage.chooseOption(false)
+
+        // Failed after 60 seconds for HARD difficulty
+        composeTestRule.mainClock.advanceTimeBy(60005)
+        composeTestRule.waitForIdle()
+        quizPage.assertFailedDialogDisplayed()
+        quizPage.clickStartAgainButton()
+
+        welcomePage.assertPageDisplayed()
+    }
 
     @Composable
     private fun rememberTestNavController(): TestNavHostController {

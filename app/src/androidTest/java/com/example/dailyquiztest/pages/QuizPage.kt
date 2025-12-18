@@ -1,5 +1,7 @@
 package com.example.dailyquiztest.pages
 
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -35,6 +37,12 @@ class QuizPage(
                     and hasClickAction()
         )
 
+    private val startAgainButton =
+        composeTestRule.onNode(
+            hasText(retrieveString(R.string.start_again))
+                    and hasClickAction()
+        )
+
     private val finishButton =
         composeTestRule.onNode(
             hasText(retrieveString(R.string.finish_quiz_button_text))
@@ -45,6 +53,10 @@ class QuizPage(
         composeTestRule.onNodeWithContentDescription(QuizUiState.QUIZ_SCREEN)
             .assertExists()
             .assertIsDisplayed()
+    }
+
+    fun clickStartAgainButton() {
+        startAgainButton.assertIsDisplayed().assertIsEnabled().performClick()
     }
 
     fun clickNextButton() {
@@ -69,25 +81,44 @@ class QuizPage(
         nextButton.assertIsDisplayed().assertIsNotEnabled()
     }
 
-    fun chooseCorrectOption() {
-        composeTestRule.onNodeWithText(dummyQuizesToIterate[0].question).isDisplayed()
-        composeTestRule.onNodeWithText(
-            dummyQuizesToIterate[0].correctAnswer,
-            ignoreCase = true
-        )
-            .assertIsDisplayed()
-            .performScrollTo()
-            .performTouchInput {
-                // Sometimes simple click() is too fast.
-                // Imitate long press a lil longer (default — 100ms)
-                down(center)
-                advanceEventTime(1000)
-                up()
+    fun chooseOption(shouldChooseCorrect: Boolean) {
+        composeTestRule.apply {
+            onNodeWithText(dummyQuizesToIterate[0].question).isDisplayed()
+            val yourAnswer = if (shouldChooseCorrect) {
+                dummyQuizesToIterate[0].correctAnswer
+            } else {
+                dummyQuizesToIterate[0].incorrectAnswers.shuffled()[0]
             }
-        composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithText(
-            dummyQuizesToIterate[0].correctAnswer,
-            ignoreCase = true
-        ).assertIsSelected()
+            onNodeWithText(
+                yourAnswer,
+                ignoreCase = true
+            )
+                .assertIsDisplayed()
+                .performScrollTo()
+                .performTouchInput {
+                    // Sometimes simple click() is too fast.
+                    // Imitate long press a lil longer (default — 100ms)
+                    down(center)
+                    advanceEventTime(1000)
+                    up()
+                }
+            waitForIdle()
+            onNodeWithText(
+                yourAnswer,
+                ignoreCase = true
+            ).assertIsSelected()
+        }
+    }
+
+    fun assertFailedDialogDisplayed() {
+        composeTestRule.apply {
+            onNode(SemanticsMatcher.expectValue(SemanticsProperties.IsDialog, Unit))
+                .assertExists()
+                .assertIsDisplayed()
+            onNodeWithText(retrieveString(R.string.time_is_over_title))
+                .assertExists()
+                .assertIsDisplayed()
+            startAgainButton.assertExists().assertIsDisplayed()
+        }
     }
 }
