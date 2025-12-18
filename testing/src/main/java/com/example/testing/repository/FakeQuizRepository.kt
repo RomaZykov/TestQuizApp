@@ -5,11 +5,16 @@ import com.example.dailyquiztest.domain.repository.QuizRepository
 import com.example.testing.dummy.dummyQuizes
 
 class FakeQuizRepository : QuizRepository {
+    var shouldSimulateError = false
     override suspend fun retrieveQuizQuestions(
         amount: Int,
         category: Int,
         difficulty: String
     ): Result<List<QuizQuestion>> {
-        return Result.success(dummyQuizes.take(amount))
+        return if (shouldSimulateError) {
+            Result.failure(Exception())
+        } else {
+            Result.success(dummyQuizes.take(amount))
+        }
     }
 }

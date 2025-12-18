@@ -13,6 +13,7 @@ import com.example.dailyquiztest.core.dummyHistoryResults
 import com.example.dailyquiztest.domain.model.CategoriesTypes
 import com.example.dailyquiztest.domain.model.DifficultiesTypes
 import com.example.dailyquiztest.domain.repository.HistoryQuizRepository
+import com.example.dailyquiztest.domain.repository.QuizRepository
 import com.example.dailyquiztest.pages.FiltersPage
 import com.example.dailyquiztest.pages.HistoryPage
 import com.example.dailyquiztest.pages.QuizPage
@@ -20,6 +21,7 @@ import com.example.dailyquiztest.pages.WelcomePage
 import com.example.dailyquiztest.presentation.features.welcome.navigation.WelcomeRoute
 import com.example.dailyquiztest.presentation.main_navigation.MainNavigation
 import com.example.dayliquiztest.HiltComponentActivity
+import com.example.testing.repository.FakeQuizRepository
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.test.runTest
@@ -41,6 +43,9 @@ class ScenarioTest : StringResources() {
 
     @Inject
     lateinit var fakeHistoryRepository: HistoryQuizRepository
+
+    @Inject
+    lateinit var fakeQuizRepository: QuizRepository
 
     private lateinit var welcomePage: WelcomePage
     private lateinit var historyPage: HistoryPage
@@ -171,6 +176,8 @@ class ScenarioTest : StringResources() {
 
     @Test
     fun showErrorMessageWhenStartingQuizWithNoConnection() = runTest {
+        (fakeQuizRepository as FakeQuizRepository).shouldSimulateError = true
+
         welcomePage.assertPageDisplayed()
         welcomePage.clickStartButton()
 
@@ -182,6 +189,15 @@ class ScenarioTest : StringResources() {
         filtersPage.assertStartQuizButtonEnabled()
         filtersPage.clickStartQuizButton()
 
+
+        filtersPage.assertPageDisplayed()
+        filtersPage.errorSnackBarWasDisplayed()
+
+        composeTestRule.activityRule.scenario.onActivity { activity ->
+            activity.onBackPressedDispatcher.onBackPressed()
+        }
+
+        welcomePage.assertPageDisplayed()
     }
 
     @Test

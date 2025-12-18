@@ -55,4 +55,10 @@ class FiltersPage(private val composeTestRule: ComposeTestRule) :
         startButton.assertIsDisplayed()
         startButton.performClick()
     }
+
+    fun errorSnackBarWasDisplayed() {
+        composeTestRule.onNodeWithText(retrieveString(R.string.error_message))
+            .assertExists()
+            .assertIsDisplayed()
+    }
 }
