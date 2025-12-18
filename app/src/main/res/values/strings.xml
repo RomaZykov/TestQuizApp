@@ -40,6 +40,7 @@
     <string name="delete_retry">Попытка удалена</string>
     <string name="time_counter">%02d:%02d</string>
     <string name="time_is_over_title">Время вышло!</string>
-    <string name="time_is_over_desc">Вы не успели завершить викторину. Попробуйте еще раз!</string>
+    <string name="time_is_over_desc">Вы не успели завершить викторину./nПопробуйте еще раз!</string>
     <string name="back_button">back_button</string>
+    <string name="failed_dialog_content_desc">failed_dialog_content_desc</string>
 </resources>

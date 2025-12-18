@@ -53,7 +53,7 @@ internal class RadioButtonGroup(
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .padding(8.dp)
+                        .padding(24.dp)
                         .clip(RoundedCornerShape(16.dp))
                         .background(DailyQuizTheme.colorScheme.onSecondary)
                         .requiredHeightIn(56.dp)

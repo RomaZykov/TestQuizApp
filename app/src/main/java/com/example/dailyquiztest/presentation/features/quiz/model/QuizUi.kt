@@ -5,14 +5,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -27,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -42,6 +47,8 @@ import com.example.dailyquiztest.domain.model.DifficultiesTypes
 import com.example.dailyquiztest.domain.model.QuestionTypes
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.CommonCard
+import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
+import com.example.dailyquiztest.presentation.common.UiLogo
 import com.example.dailyquiztest.presentation.common.answers_group.AnswersSpecificTypeFactory
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
@@ -62,6 +69,7 @@ data class QuizUi(
     val difficulty: DifficultiesTypes
 ) : QuizUiState {
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Display(
         onFiltersPhaseNextButtonClicked: (CategoriesTypes, DifficultiesTypes) -> Unit,
@@ -76,6 +84,8 @@ data class QuizUi(
         val actionButtonEnabled = rememberSaveable(question) { mutableStateOf(false) }
         val shouldShowTimeIsOverDialog = remember { mutableStateOf(false) }
         val shouldShowBorder = rememberSaveable(question) { mutableStateOf(false) }
+        val scrollState = rememberScrollState()
+        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
         val scope = rememberCoroutineScope()
         LaunchedEffect(shouldShowBorder) {
             if (shouldShowBorder.value) {
@@ -83,66 +93,79 @@ data class QuizUi(
                 shouldShowBorder.value = false
             }
         }
-        Column(
+        Scaffold(
+            topBar = {
+                TopAppBarDecorator(scrollBehavior) {
+                    UiLogo(40.dp)
+                }
+            },
             modifier = Modifier
                 .semantics {
                     contentDescription = QuizUiState.QUIZ_SCREEN
                 }
-                .fillMaxSize()
-                .background(DailyQuizTheme.colorScheme.primary)
-                .verticalScroll(rememberScrollState())
-        ) {
-            CommonCard {
-                Column(
-                    modifier = Modifier
-                        .background(DailyQuizTheme.colorScheme.secondary),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    TimerProgress(shouldShowTimeIsOverDialog)
-                    NumberOfQuestions(currentNumberQuestion, totalQuestions)
-                    Question(question)
-                    QuizOptions(
-                        listOf(correctAnswer),
-                        incorrectAnswers,
-                        actionButtonEnabled,
-                        shouldShowBorder.value
-                    ) { userAnswers, isAnswersCorrect ->
-                        finalUserAnswers.clear()
-                        finalUserAnswers.addAll(userAnswers)
-                        finalAnswersCorrect.value = isAnswersCorrect
-                    }
-                    ActionButtonWithText(
-                        enabled = actionButtonEnabled.value && !shouldShowBorder.value,
-                        onClick = {
-                            shouldShowBorder.value = true
-                            val updatedQuizUi = this@QuizUi.copy(
-                                userAnswers = finalUserAnswers,
-                                isAnsweredCorrect = finalAnswersCorrect.value
-                            )
-                            scope.launch {
-                                delay(2.seconds)
-                                if (currentNumberQuestion + 1 == totalQuestions) {
-                                    onResultClicked.invoke(updatedQuizUi)
-                                } else {
-                                    onNextClicked.invoke(updatedQuizUi)
-                                }
-                            }
-                        },
-                        text = if (currentNumberQuestion + 1 == totalQuestions) {
-                            R.string.finish_quiz_button_text
-                        } else {
-                            R.string.next_button_text
-                        }
-                    )
-                }
-            }
-            Text(
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+        ) { innerPadding ->
+            Column(
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally),
-                text = stringResource(R.string.quiz_bottom_hint),
-                color = Color.White,
-                fontSize = 10.sp
-            )
+                    .fillMaxHeight()
+                    .padding(top = innerPadding.calculateTopPadding())
+                    .background(DailyQuizTheme.colorScheme.primary)
+                    .verticalScroll(scrollState)
+            ) {
+                CommonCard {
+                    Column(
+                        modifier = Modifier
+                            .background(DailyQuizTheme.colorScheme.secondary),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        TimerProgress(shouldShowTimeIsOverDialog)
+                        NumberOfQuestions(currentNumberQuestion, totalQuestions)
+                        Question(question)
+                        QuizOptions(
+                            listOf(correctAnswer),
+                            incorrectAnswers,
+                            actionButtonEnabled,
+                            shouldShowBorder.value
+                        ) { userAnswers, isAnswersCorrect ->
+                            finalUserAnswers.clear()
+                            finalUserAnswers.addAll(userAnswers)
+                            finalAnswersCorrect.value = isAnswersCorrect
+                        }
+                        ActionButtonWithText(
+                            enabled = actionButtonEnabled.value && !shouldShowBorder.value,
+                            onClick = {
+                                shouldShowBorder.value = true
+                                val updatedQuizUi = this@QuizUi.copy(
+                                    userAnswers = finalUserAnswers,
+                                    isAnsweredCorrect = finalAnswersCorrect.value
+                                )
+                                scope.launch {
+                                    delay(2.seconds)
+                                    if (currentNumberQuestion + 1 == totalQuestions) {
+                                        onResultClicked.invoke(updatedQuizUi)
+                                    } else {
+                                        onNextClicked.invoke(updatedQuizUi)
+                                    }
+                                }
+                            },
+                            text = if (currentNumberQuestion + 1 == totalQuestions) {
+                                R.string.finish_quiz_button_text
+                            } else {
+                                R.string.next_button_text
+                            }
+                        )
+                    }
+                }
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp, bottom = 40.dp),
+                    text = stringResource(R.string.quiz_bottom_hint),
+                    textAlign = TextAlign.Center,
+                    color = Color.White,
+                    fontSize = 10.sp
+                )
+            }
         }
         if (shouldShowTimeIsOverDialog.value) {
             TimeIsOverDialog(onStartNewQuizClicked)
@@ -288,7 +311,7 @@ private fun DialogPreview() {
 
 @Composable
 @Preview(showSystemUi = true)
-private fun QuizPreview() {
+private fun LongQuizPreview() {
     QuizUi(
         currentNumberQuestion = 0,
         question = "Test question Test question  Test question Test question Test question Test question Test question Test question Test question?",
@@ -297,6 +320,25 @@ private fun QuizPreview() {
             "Test 2 Test 2 Test 2 Test 2 Test 2 Test 2 Test 2 Test 2 Test 2 Test 2 Test 2 Test 2 Test 2",
             "Test 3",
             "Test 4"
+        ),
+        correctAnswer = "i`m correct answer",
+        questionType = QuestionTypes.MULTIPLE,
+        totalQuestions = 5,
+        category = CategoriesTypes.CARTOON_AND_ANIMATIONS,
+        difficulty = DifficultiesTypes.EASY
+    ).Display({ _, _ -> }, { _ -> }, {}, {}) {}
+}
+
+@Composable
+@Preview(showSystemUi = true)
+private fun ShortQuizPreview() {
+    QuizUi(
+        currentNumberQuestion = 0,
+        question = "Short Test question",
+        incorrectAnswers = listOf(
+            "1",
+            "2",
+            "4"
         ),
         correctAnswer = "i`m correct answer",
         questionType = QuestionTypes.MULTIPLE,

@@ -91,6 +91,10 @@ internal class CheckboxGroup(
                 Row(
                     Modifier
                         .fillMaxWidth()
+                        .padding(horizontal = 24.dp, vertical = 8.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(DailyQuizTheme.colorScheme.onSecondary)
+                        .requiredHeightIn(56.dp)
                         .selectable(
                             enabled = checkedEnabled,
                             selected = optionSelected,
@@ -118,11 +122,7 @@ internal class CheckboxGroup(
                                 },
                                 RoundedCornerShape(16.dp)
                             ) else Modifier
-                        )
-                        .padding(8.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(DailyQuizTheme.colorScheme.onSecondary)
-                        .requiredHeightIn(56.dp),
+                        ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Checkbox(
