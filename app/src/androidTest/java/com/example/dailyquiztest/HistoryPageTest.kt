@@ -6,12 +6,12 @@ import androidx.navigation.NavController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.dailyquiztest.core.dummyHistoryResults
 import com.example.dailyquiztest.core.rememberTestNavController
-import com.example.dailyquiztest.data.test.FakeHistoryRepository
 import com.example.dailyquiztest.pages.HistoryPage
 import com.example.dailyquiztest.presentation.features.history.HistoryScreen
 import com.example.dailyquiztest.presentation.features.history.HistoryUiState
 import com.example.dailyquiztest.presentation.features.history.HistoryViewModel
 import com.example.dailyquiztest.presentation.features.history.model.HistoryUi
+import com.example.testing.repository.FakeHistoryRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
