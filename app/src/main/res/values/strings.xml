@@ -6,7 +6,7 @@
     <string name="quiz_welcome_text">Добро пожаловать\nв DailyQuiz!</string>
     <string name="start_quiz_button_text">НАЧАТЬ ВИКТОРИНУ</string>
     <string name="logo">DailyQuiz logo</string>
-    <string name="welcome_error_text">Ошибка! Попробуйте ещё раз</string>
+    <string name="error_message">Ошибка! Попробуйте ещё раз</string>
     <string name="almost_done">Почти готовы</string>
     <string name="category_description"><![CDATA[Осталось выбрать категорию\nи сложность викторины.]]></string>
     <string name="next_button_text">Далее</string>
