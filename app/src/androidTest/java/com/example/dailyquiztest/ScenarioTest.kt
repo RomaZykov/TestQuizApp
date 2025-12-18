@@ -8,8 +8,10 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.dailyquiztest.core.dummyHistoryResults
 import com.example.dailyquiztest.core.StringResources
+import com.example.dailyquiztest.core.dummyHistoryResults
+import com.example.dailyquiztest.domain.model.CategoriesTypes
+import com.example.dailyquiztest.domain.model.DifficultiesTypes
 import com.example.dailyquiztest.domain.repository.HistoryQuizRepository
 import com.example.dailyquiztest.pages.FiltersPage
 import com.example.dailyquiztest.pages.HistoryPage
@@ -43,6 +45,7 @@ class ScenarioTest : StringResources() {
     private lateinit var welcomePage: WelcomePage
     private lateinit var historyPage: HistoryPage
     private lateinit var quizPage: QuizPage
+    private lateinit var resultPage: ResultPage
     private lateinit var filtersPage: FiltersPage
 
     private lateinit var navController: TestNavHostController
@@ -54,6 +57,7 @@ class ScenarioTest : StringResources() {
         historyPage = HistoryPage(composeTestRule, fakeHistoryRepository)
         filtersPage = FiltersPage(composeTestRule)
         quizPage = QuizPage(composeTestRule)
+        resultPage = ResultPage(composeTestRule)
         composeTestRule.activity.setContent {
             navController = rememberTestNavController()
             MainNavigation(
@@ -127,6 +131,62 @@ class ScenarioTest : StringResources() {
         historyPage.clickBackButton()
         welcomePage.assertPageDisplayed()
     }
+
+    @Test
+    fun fromStartToFinishQuizWithCheckingHistory() = runTest {
+        welcomePage.assertPageDisplayed()
+        welcomePage.clickStartButton()
+
+        filtersPage.assertPageDisplayed()
+        filtersPage.assertStartQuizButtonNotEnabled()
+        filtersPage.chooseSomeCategory(CategoriesTypes.VIDEO_GAMES)
+        filtersPage.assertStartQuizButtonNotEnabled()
+        filtersPage.chooseSomeDifficulty(DifficultiesTypes.EASY)
+        filtersPage.assertStartQuizButtonEnabled()
+        filtersPage.clickStartQuizButton()
+
+        quizPage.assertPageDisplayed()
+        repeat(DifficultiesTypes.EASY.amountOfQuestions - 1) {
+            quizPage.assertNextButtonNotEnabled()
+            quizPage.chooseCorrectOption()
+            quizPage.clickNextButton()
+        }
+
+        quizPage.assertFinishQuizButtonNotEnabled()
+        quizPage.chooseCorrectOption()
+        quizPage.clickFinishQuizButton()
+
+        resultPage.assertPageDisplayed()
+        resultPage.assertFinalResultContains(
+            retrieveString(R.string.five_stars_title),
+            retrieveString(R.string.five_stars_description)
+        )
+        resultPage.clickStartAgainButton()
+
+        welcomePage.assertPageDisplayed()
+        welcomePage.clickHistoryButton()
+
+        historyPage.assertNonEmptyHistoriesDisplayed()
+    }
+
+//    @Test
+//    fun showErrorMessageWhenStartingQuizWithNoConnection() = runTest {
+//        welcomePage.assertPageDisplayed()
+//        welcomePage.clickStartButton()
+//
+//        filtersPage.assertPageDisplayed()
+//        filtersPage.assertStartQuizButtonNotEnabled()
+//        filtersPage.chooseSomeCategory(CategoriesTypes.VIDEO_GAMES)
+//        filtersPage.assertStartQuizButtonNotEnabled()
+//        filtersPage.chooseSomeDifficulty(DifficultiesTypes.EASY)
+//        filtersPage.assertStartQuizButtonEnabled()
+//        filtersPage.clickStartQuizButton()
+//
+//    }
+
+//    @Test
+//    fun startQuizButTimeWasNotEnoughToComplete() = runTest {
+//    }
 
     @Composable
     private fun rememberTestNavController(): TestNavHostController {

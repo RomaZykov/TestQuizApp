@@ -1,4 +1,4 @@
-package com.example.dailyquiztest.data.test
+package com.example.testing.repository
 
 import com.example.dailyquiztest.domain.model.QuizResult
 import com.example.dailyquiztest.domain.repository.HistoryQuizRepository
