@@ -16,7 +16,6 @@ interface AnswersSpecificTypeFactory {
         private val checkedEnabled: Boolean,
         private val actionButtonEnabled: MutableState<Boolean> = mutableStateOf(true),
         private val userAnswers: List<String> = listOf("")
-
     ) : AnswersSpecificTypeFactory {
 
         override fun createGroup(): AnswersGroup {
@@ -26,7 +25,7 @@ interface AnswersSpecificTypeFactory {
                         question,
                         correctAnswers,
                         inCorrectAnswers,
-                        checkedEnabled = true,
+                        checkedEnabled = checkedEnabled,
                         actionButtonEnabled,
                         userAnswers = userAnswers
                     )

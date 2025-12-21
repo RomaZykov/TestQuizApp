@@ -17,7 +17,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
@@ -38,7 +37,7 @@ internal class RadioButtonGroup(
         shouldShowBorder: Boolean,
         updateQuiz: (List<String>) -> Unit
     ) {
-        val (selectedOption, onOptionSelected) = rememberSaveable(inputs = listOf(question).toTypedArray()) {
+        val (selectedOption, onOptionSelected) = rememberSaveable(question) {
             mutableStateOf(userAnswer)
         }
         val allOptions = listOf(true, false)
@@ -49,17 +48,17 @@ internal class RadioButtonGroup(
                 .fillMaxWidth()
         ) {
             allOptions.forEach { option ->
-                val optionSelected = option == selectedOption
+                val isOptionSelected = option == selectedOption
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .padding(24.dp)
+                        .padding(horizontal = 24.dp, vertical = 4.dp)
                         .clip(RoundedCornerShape(16.dp))
                         .background(DailyQuizTheme.colorScheme.onSecondary)
                         .requiredHeightIn(56.dp)
                         .selectable(
                             enabled = checkedEnabled,
-                            selected = optionSelected,
+                            selected = isOptionSelected,
                             onClick = {
                                 onOptionSelected(option)
                                 updateQuiz.invoke(listOf(option.toString()))
@@ -67,7 +66,7 @@ internal class RadioButtonGroup(
                             role = Role.RadioButton
                         )
                         .then(
-                            if (shouldShowBorder && (optionSelected || correctOption == option)
+                            if (shouldShowBorder && (isOptionSelected || correctOption == option)
                             ) Modifier.border(
                                 2.dp,
                                 if (correctOption == option) {
@@ -82,7 +81,7 @@ internal class RadioButtonGroup(
                 ) {
                     RadioButton(
                         modifier = Modifier.padding(horizontal = 8.dp),
-                        selected = option == selectedOption,
+                        selected = isOptionSelected,
                         onClick = null
                     )
                     Text(
