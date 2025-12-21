@@ -5,6 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.performScrollTo
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -61,7 +63,7 @@ class ScenarioTest : StringResources() {
         welcomePage = WelcomePage(composeTestRule)
         historyPage = HistoryPage(composeTestRule, fakeHistoryRepository)
         filtersPage = FiltersPage(composeTestRule)
-        quizPage = QuizPage(composeTestRule)
+        quizPage = QuizPage(composeTestRule, fakeQuizRepository)
         resultPage = ResultPage(composeTestRule)
         composeTestRule.activity.setContent {
             navController = rememberTestNavController()
@@ -221,6 +223,70 @@ class ScenarioTest : StringResources() {
         composeTestRule.waitForIdle()
         quizPage.assertFailedDialogDisplayed()
         quizPage.clickStartAgainButton()
+
+        welcomePage.assertPageDisplayed()
+    }
+
+    @Test
+    fun finishQuizWhereAllOptionsAreTrueOrFalseWithFourCorrectAnswersOutFive() {
+        (fakeQuizRepository as FakeQuizRepository).shouldSimulateOnlyTrueFalseOptions = true
+
+        welcomePage.assertPageDisplayed()
+        welcomePage.clickStartButton()
+
+        filtersPage.chooseSomeCategory(CategoriesTypes.FILM)
+        filtersPage.chooseSomeDifficulty(DifficultiesTypes.EASY)
+        filtersPage.clickStartQuizButton()
+
+        repeat(4) {
+            quizPage.assertNextButtonNotEnabled()
+            quizPage.chooseOption(true)
+            quizPage.clickNextButton()
+        }
+
+        quizPage.assertFinishQuizButtonNotEnabled()
+        quizPage.chooseOption(false)
+        quizPage.clickFinishQuizButton()
+
+        resultPage.assertPageDisplayed()
+        resultPage.assertFinalResultContains(
+            retrieveString(R.string.four_stars_title),
+            retrieveString(R.string.four_stars_desc)
+        )
+        //
+        composeTestRule.onNodeWithContentDescription("bottom start again button").performScrollTo()
+        resultPage.clickStartAgainButton()
+
+        welcomePage.assertPageDisplayed()
+    }
+
+    @Test
+    fun finishQuizWhereAllOptionsAreTrueOrFalseWithAllInCorrectAnswers() {
+        (fakeQuizRepository as FakeQuizRepository).shouldSimulateOnlyTrueFalseOptions = true
+
+        welcomePage.assertPageDisplayed()
+        welcomePage.clickStartButton()
+
+        filtersPage.chooseSomeCategory(CategoriesTypes.COMICS)
+        filtersPage.chooseSomeDifficulty(DifficultiesTypes.EASY)
+        filtersPage.clickStartQuizButton()
+
+        repeat(4) {
+            quizPage.assertNextButtonNotEnabled()
+            quizPage.chooseOption(false)
+            quizPage.clickNextButton()
+        }
+
+        quizPage.assertFinishQuizButtonNotEnabled()
+        quizPage.chooseOption(false)
+        quizPage.clickFinishQuizButton()
+
+        resultPage.assertPageDisplayed()
+        resultPage.assertFinalResultContains(
+            retrieveString(R.string.zero_stars_title),
+            retrieveString(R.string.zero_stars_desc)
+        )
+        resultPage.clickStartAgainButton()
 
         welcomePage.assertPageDisplayed()
     }

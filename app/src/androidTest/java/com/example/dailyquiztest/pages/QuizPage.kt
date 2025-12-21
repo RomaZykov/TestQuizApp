@@ -18,16 +18,18 @@ import androidx.compose.ui.test.performTouchInput
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
 import com.example.dailyquiztest.domain.model.QuizQuestion
+import com.example.dailyquiztest.domain.repository.QuizRepository
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
-import com.example.testing.dummy.dummyQuizes
+import com.example.testing.repository.FakeQuizRepository
 
 class QuizPage(
-    private val composeTestRule: ComposeTestRule
+    private val composeTestRule: ComposeTestRule,
+    private val fakeQuizRepository: QuizRepository,
 ) : StringResources() {
 
-    private val dummyQuizesToIterate: ArrayDeque<QuizQuestion> = ArrayDeque<QuizQuestion>().apply {
-        dummyQuizes.forEach {
-            this.add(it)
+    private val dummyQuizesToIterate: ArrayDeque<QuizQuestion> by lazy {
+        ArrayDeque<QuizQuestion>().apply {
+            this.addAll((fakeQuizRepository as FakeQuizRepository).savedQuizes)
         }
     }
 
