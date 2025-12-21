@@ -40,7 +40,6 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-
 data class QuizResultUi(
     private val quizAnswers: List<QuizUi>
 ) : QuizUiState {
@@ -85,6 +84,9 @@ data class QuizResultUi(
                 item {
                     ActionButtonWithText(
                         modifier = Modifier
+                            .semantics {
+                                contentDescription = "bottom start again button"
+                            }
                             .padding(bottom = 72.dp)
                             .padding(horizontal = 20.dp),
                         onClick = {
@@ -98,6 +100,24 @@ data class QuizResultUi(
                     )
                 }
             }
+        }
+    }
+
+    @Composable
+    fun CalculatedScoreResult() {
+        val title = stringResource(titleAndDescription().first)
+        val description = stringResource(titleAndDescription().second)
+        Column(
+            modifier = Modifier.padding(vertical = 4.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(title, style = DailyQuizTheme.typography.title)
+            Spacer(modifier = Modifier.padding(vertical = 4.dp))
+            Text(
+                description,
+                style = DailyQuizTheme.typography.regular,
+                textAlign = TextAlign.Center
+            )
         }
     }
 
@@ -135,24 +155,6 @@ data class QuizResultUi(
             ActionButtonWithText(onClick = {
                 onStartNewQuizClicked.invoke()
             }, text = R.string.start_again)
-        }
-    }
-
-    @Composable
-    fun CalculatedScoreResult() {
-        val title = stringResource(titleAndDescription().first)
-        val description = stringResource(titleAndDescription().second)
-        Column(
-            modifier = Modifier.padding(vertical = 4.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(title, style = DailyQuizTheme.typography.title)
-            Spacer(modifier = Modifier.padding(vertical = 4.dp))
-            Text(
-                description,
-                style = DailyQuizTheme.typography.regular,
-                textAlign = TextAlign.Center
-            )
         }
     }
 
@@ -252,8 +254,9 @@ data class QuizResultUi(
     fun calculatedStarsScoreResult(): Int {
         val percentagesList = listOf(20, 40, 60, 80, 100)
         var starsCounter = 0
+        val calculatedScore = calculatedScorePercentage()
         for (e in percentagesList) {
-            if (calculatedScorePercentage() > e) {
+            if (calculatedScore >= e) {
                 starsCounter++
             } else {
                 break
