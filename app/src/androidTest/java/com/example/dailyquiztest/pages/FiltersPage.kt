@@ -9,6 +9,7 @@ import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
 import com.example.dailyquiztest.domain.model.CategoriesTypes
@@ -42,7 +43,7 @@ class FiltersPage(private val composeTestRule: ComposeTestRule) :
     fun chooseSomeCategory(someCategory: CategoriesTypes) {
         composeTestRule.onNodeWithText(retrieveString(R.string.category_menu_text))
             .assertIsDisplayed().performClick()
-        composeTestRule.onNodeWithText(someCategory.categoryName).assertIsDisplayed().performClick()
+        composeTestRule.onNodeWithText(someCategory.categoryName).performScrollTo().assertIsDisplayed().performClick()
     }
 
     fun chooseSomeDifficulty(someDifficulty: DifficultiesTypes) {
