@@ -10,12 +10,12 @@ plugins {
 
 android {
     namespace = "com.example.dailyquiztest"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.dailyquizetest"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -44,6 +44,9 @@ android {
 }
 
 dependencies {
+    testImplementation(project(":testing"))
+    androidTestImplementation(project(":testing"))
+
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -62,25 +65,27 @@ dependencies {
     // room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.test.runner)
+    implementation(libs.androidx.compose.material3)
     ksp(libs.androidx.room.compiler)
 
     // hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
-    androidTestImplementation(libs.hilt.android.testing)
-
+    implementation(libs.hilt.android.testing)
     ksp(libs.hilt.compiler)
+
+    kspAndroidTest(libs.hilt.compiler)
 
     testImplementation(kotlin("test"))
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.coroutines.test)
 
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.test.rules)
-    androidTestImplementation(libs.test.runner)
-    androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.test.junit.ktx)
+    androidTestImplementation(libs.test.runner)
+    androidTestImplementation(libs.test.rules)
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
