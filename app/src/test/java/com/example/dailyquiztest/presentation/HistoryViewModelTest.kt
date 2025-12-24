@@ -2,10 +2,12 @@ package com.example.dailyquiztest.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
+import com.example.dailyquiztest.core.dummyHistoryResults
 import com.example.dailyquiztest.domain.repository.HistoryQuizRepository
 import com.example.dailyquiztest.presentation.features.history.HistoryUiState
 import com.example.dailyquiztest.presentation.features.history.HistoryViewModel
 import com.example.dailyquiztest.presentation.features.history.model.EmptyHistoryUi
+import com.example.dailyquiztest.presentation.features.history.model.HistoryUi
 import com.example.dailyquiztest.presentation.main_navigation.QuizRouteProvider
 import com.example.dailyquiztest.presentation.main_navigation.Route
 import com.example.testing.di.FakeDispatcherList
@@ -40,8 +42,22 @@ class HistoryViewModelTest {
     }
 
     @Test
-    fun loadEmptyHistoryPage_whenNoHistories() = runTest {
-        (fakeHistoryRepository as FakeHistoryRepository).clearHistories()
+    fun `when there are histories historyUiStateFlow should be HistoryUi with these histories`() = runTest {
+        dummyHistoryResults.forEach {
+            fakeHistoryRepository.saveQuizResult(it)
+        }
+
+        viewModel.loadQuizHistory()
+
+        assertTrue(dispatchers.wasIoCalled)
+        assertFalse(dispatchers.wasUiCalled)
+
+        val expectedUiState = HistoryUi(dummyHistoryResults)
+        assertEquals(expectedUiState, stateFlow.value)
+    }
+
+    @Test
+    fun `default value of historyUiStateFlow should be EmptyHistoryUi`() = runTest {
         viewModel.loadQuizHistory()
 
         assertTrue(dispatchers.wasIoCalled)
