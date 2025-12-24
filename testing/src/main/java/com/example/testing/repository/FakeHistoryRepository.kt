@@ -10,6 +10,8 @@ class FakeHistoryRepository @Inject constructor() : HistoryQuizRepository {
 
     private val histories = mutableListOf<QuizResult>()
 
+    fun clearHistories() = histories.clear()
+
     override suspend fun saveQuizResult(quizResult: QuizResult) {
         histories.add(quizResult)
     }
