@@ -5,8 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.performScrollTo
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -253,9 +251,7 @@ class ScenarioTest : StringResources() {
             retrieveString(R.string.four_stars_title),
             retrieveString(R.string.four_stars_desc)
         )
-        //
-        composeTestRule.onNodeWithContentDescription("bottom start again button").performScrollTo()
-        resultPage.clickStartAgainButton()
+        resultPage.clickBottomStartAgainButton()
 
         welcomePage.assertPageDisplayed()
     }
