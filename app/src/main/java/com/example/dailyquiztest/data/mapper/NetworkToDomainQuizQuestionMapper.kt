@@ -13,8 +13,8 @@ class NetworkToDomainQuizQuestionMapper @Inject constructor() : NetworkQuizQuest
     ): QuizQuestion {
         return QuizQuestion(
             question = question,
-            incorrectAnswers = incorrectAnswers,
-            correctAnswer = correctAnswer,
+            incorrectAnswers = incorrectAnswers.map { it.lowercase() },
+            correctAnswer = correctAnswer.lowercase(),
             type = type
         )
     }
