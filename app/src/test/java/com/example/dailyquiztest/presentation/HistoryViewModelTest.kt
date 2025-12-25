@@ -1,15 +1,16 @@
 package com.example.dailyquiztest.presentation
 
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
+import com.example.dailyquiztest.core.FakeQuizRouteProvider
 import com.example.dailyquiztest.core.dummyHistoryResults
+import com.example.dailyquiztest.domain.model.CategoriesTypes
+import com.example.dailyquiztest.domain.model.DifficultiesTypes
+import com.example.dailyquiztest.domain.model.QuizResult
 import com.example.dailyquiztest.domain.repository.HistoryQuizRepository
 import com.example.dailyquiztest.presentation.features.history.HistoryUiState
 import com.example.dailyquiztest.presentation.features.history.HistoryViewModel
 import com.example.dailyquiztest.presentation.features.history.model.EmptyHistoryUi
 import com.example.dailyquiztest.presentation.features.history.model.HistoryUi
 import com.example.dailyquiztest.presentation.main_navigation.QuizRouteProvider
-import com.example.dailyquiztest.presentation.main_navigation.Route
 import com.example.testing.di.FakeDispatcherList
 import com.example.testing.repository.FakeHistoryRepository
 import kotlinx.coroutines.flow.StateFlow
@@ -42,19 +43,18 @@ class HistoryViewModelTest {
     }
 
     @Test
-    fun `when there are histories historyUiStateFlow should be HistoryUi with these histories`() = runTest {
-        dummyHistoryResults.forEach {
-            fakeHistoryRepository.saveQuizResult(it)
+    fun `when there are histories historyUiStateFlow should be HistoryUi with these histories`() =
+        runTest {
+            initDummyHistories(fakeHistoryRepository)
+
+            viewModel.loadQuizHistory()
+
+            assertTrue(dispatchers.wasIoCalled)
+            assertFalse(dispatchers.wasUiCalled)
+
+            val expectedUiState = HistoryUi(dummyHistoryResults)
+            assertEquals(expectedUiState, stateFlow.value)
         }
-
-        viewModel.loadQuizHistory()
-
-        assertTrue(dispatchers.wasIoCalled)
-        assertFalse(dispatchers.wasUiCalled)
-
-        val expectedUiState = HistoryUi(dummyHistoryResults)
-        assertEquals(expectedUiState, stateFlow.value)
-    }
 
     @Test
     fun `default value of historyUiStateFlow should be EmptyHistoryUi`() = runTest {
@@ -67,14 +67,53 @@ class HistoryViewModelTest {
         assertEquals(expectedUiState, stateFlow.value)
     }
 
-    private class FakeQuizRouteProvider : QuizRouteProvider {
-        var wasRouteCalled = false
-        override fun route(): Route {
-            wasRouteCalled = true
-            return object : Route {
-                @Composable
-                override fun Content(navController: NavController) = Unit
-            }
+    @Test
+    fun `delete all histories should show empty history state`() = runTest {
+        initDummyHistories(fakeHistoryRepository)
+        viewModel.loadQuizHistory()
+
+        assertTrue(dispatchers.wasIoCalled)
+        assertFalse(dispatchers.wasUiCalled)
+
+        var countOfHistory = 0
+        repeat(5) {
+            viewModel.deleteQuizHistory(countOfHistory++)
         }
+
+        val expectedUiState = EmptyHistoryUi
+        assertEquals(expectedUiState, stateFlow.value)
     }
+
+    @Test
+    fun `delete all histories except from middle should show that only one history`() = runTest {
+        initDummyHistories(fakeHistoryRepository)
+        viewModel.loadQuizHistory()
+
+        assertTrue(dispatchers.wasIoCalled)
+        assertFalse(dispatchers.wasUiCalled)
+
+        viewModel.deleteQuizHistory(0)
+        viewModel.deleteQuizHistory(4)
+        viewModel.deleteQuizHistory(2)
+        viewModel.deleteQuizHistory(3)
+
+        val expectedUiState = HistoryUi(
+            listOf(
+                QuizResult(
+                    id = 1,
+                    stars = 0,
+                    categoriesTypes = CategoriesTypes.GENERAL_KNOWLEDGE,
+                    difficultiesTypes = DifficultiesTypes.EASY,
+                    lastTime = "00:00",
+                    lastDate = "2025"
+                )
+            )
+        )
+        assertEquals(expectedUiState, stateFlow.value)
+    }
+
+    private suspend fun initDummyHistories(fakeHistoryRepository: HistoryQuizRepository) =
+        dummyHistoryResults.forEach {
+            fakeHistoryRepository.saveQuizResult(it)
+        }
 }
