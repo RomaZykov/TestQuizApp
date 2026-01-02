@@ -73,7 +73,7 @@ class HistoryPage(
         }
     }
 
-    fun longPressToDelete(id: Int) {
+    fun longPressToDeleteHistoryByIndex(id: Int) {
         val historyToDelete =
             composeTestRule.onNodeWithText(retrieveString(R.string.quiz_number_title, id + 1))
         historyToDelete.performScrollTo().assertExists().assertIsDisplayed().performTouchInput {

@@ -20,6 +20,7 @@ import com.example.dailyquiztest.domain.repository.QuizRepository
 import com.example.dailyquiztest.pages.FiltersPage
 import com.example.dailyquiztest.pages.HistoryPage
 import com.example.dailyquiztest.pages.QuizPage
+import com.example.dailyquiztest.pages.ResultPage
 import com.example.dailyquiztest.pages.WelcomePage
 import com.example.dailyquiztest.presentation.features.welcome.navigation.WelcomeRoute
 import com.example.dailyquiztest.presentation.main_navigation.MainNavigation
