@@ -1,8 +1,5 @@
 package com.example.dailyquiztest.presentation.features.welcome
 
-import androidx.lifecycle.ViewModelStore
-import androidx.navigation.testing.TestNavHostController
-import androidx.test.core.app.ApplicationProvider
 import com.example.dailyquiztest.core.FakeHistoryRouteProvider
 import com.example.dailyquiztest.core.FakeQuizRouteProvider
 import org.junit.Before
@@ -17,8 +14,6 @@ class WelcomeViewModelTest {
 
     private lateinit var fakeHistoryRouteProvider: FakeHistoryRouteProvider
 
-    private val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
-
     @Before
     fun setUp() {
         fakeQuizRouteProvider = FakeQuizRouteProvider()
@@ -31,12 +26,15 @@ class WelcomeViewModelTest {
 
     @Test
     fun `start quiz navigates to filters route`() {
-        viewModel.navigateToFilters(navController)
+        viewModel.navigateToFilters {}
 
         assertTrue(fakeQuizRouteProvider.wasRouteCalled)
     }
 
     @Test
     fun `history button navigates to history route`() {
+        viewModel.navigateToHistory {}
+
+        assertTrue(fakeHistoryRouteProvider.wasRouteCalled)
     }
 }

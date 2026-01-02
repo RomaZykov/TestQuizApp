@@ -24,6 +24,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
+import com.example.dailyquiztest.presentation.main_navigation.navigateIfResumed
 import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
 
 @Composable
@@ -35,14 +36,14 @@ fun WelcomeScreen(
     Scaffold(
         topBar = {
             WelcomeAppBar(onHistoryButtonClicked = {
-                viewModel.navigateToHistory(navController)
+                viewModel.navigateToHistory(navController::navigateIfResumed)
             })
         }
     ) { innerPadding ->
         uiState.Display(
             innerPadding,
             onStartQuizClicked = {
-                viewModel.navigateToFilters(navController)
+                viewModel.navigateToFilters(navController::navigateIfResumed)
             }
         )
     }
