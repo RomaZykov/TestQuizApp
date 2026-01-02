@@ -30,9 +30,10 @@ import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
 @Composable
 fun WelcomeScreen(
     navController: NavController,
-    viewModel: WelcomeViewModel = hiltViewModel<WelcomeViewModel.Base>()
+    viewModel: WelcomeViewModel = hiltViewModel<WelcomeViewModel>()
 ) {
-    val uiState by viewModel.welcomeUiStateFlow().collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     Scaffold(
         topBar = {
             WelcomeAppBar(onHistoryButtonClicked = {

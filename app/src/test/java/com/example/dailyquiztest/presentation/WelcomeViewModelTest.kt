@@ -1,7 +1,8 @@
-package com.example.dailyquiztest.presentation.features.welcome
+package com.example.dailyquiztest.presentation
 
-import com.example.dailyquiztest.core.FakeHistoryRouteProvider
-import com.example.dailyquiztest.core.FakeQuizRouteProvider
+import com.example.dailyquiztest.fake.FakeHistoryRouteProvider
+import com.example.dailyquiztest.fake.FakeQuizRouteProvider
+import com.example.dailyquiztest.presentation.features.welcome.WelcomeViewModel
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertTrue
@@ -18,7 +19,7 @@ class WelcomeViewModelTest {
     fun setUp() {
         fakeQuizRouteProvider = FakeQuizRouteProvider()
         fakeHistoryRouteProvider = FakeHistoryRouteProvider()
-        viewModel = WelcomeViewModel.Base(
+        viewModel = WelcomeViewModel(
             quizRouteProvider = fakeQuizRouteProvider,
             historyRouteProvider = fakeHistoryRouteProvider
         )

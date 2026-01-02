@@ -13,32 +13,27 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
-interface WelcomeViewModel {
+@HiltViewModel
+class WelcomeViewModel @Inject constructor(
+    private val quizRouteProvider: QuizRouteProvider,
+    private val historyRouteProvider: HistoryRouteProvider
+) : ViewModel(), ViewModelActions {
 
-    fun welcomeUiStateFlow(): StateFlow<WelcomeUiState>
+    private val uiStateMutable = MutableStateFlow<WelcomeUiState>(Initial)
+    val uiState: StateFlow<WelcomeUiState>
+        get() = uiStateMutable.asStateFlow()
 
+    override fun navigateToFilters(toFilters: (Route) -> Unit) {
+        toFilters.invoke(quizRouteProvider.route())
+    }
+
+    override fun navigateToHistory(toHistory: (Route) -> Unit) {
+        toHistory.invoke(historyRouteProvider.route())
+    }
+}
+
+interface ViewModelActions {
     fun navigateToFilters(toFilters: (Route) -> Unit)
 
     fun navigateToHistory(toHistory: (Route) -> Unit)
-
-    @HiltViewModel
-    class Base @Inject constructor(
-        private val quizRouteProvider: QuizRouteProvider,
-        private val historyRouteProvider: HistoryRouteProvider
-    ) : ViewModel(), WelcomeViewModel {
-
-        private val uiState = MutableStateFlow<WelcomeUiState>(Initial)
-
-        override fun welcomeUiStateFlow(): StateFlow<WelcomeUiState> {
-            return uiState.asStateFlow()
-        }
-
-        override fun navigateToFilters(toFilters: (Route) -> Unit) {
-            toFilters.invoke(quizRouteProvider.route())
-        }
-
-        override fun navigateToHistory(toHistory: (Route) -> Unit) {
-            toHistory.invoke(historyRouteProvider.route())
-        }
-    }
 }
