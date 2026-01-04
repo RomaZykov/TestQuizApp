@@ -38,14 +38,6 @@ data class NetworkQuizQuestion(
             type: String
         ): T
     }
-//    override fun mappedValue(): QuizQuestion {
-//        return QuizQuestion(
-//            question = this.question ?: "",
-//            incorrectAnswers = this.incorrectAnswers ?: emptyList(),
-//            correctAnswer = this.correctAnswer ?: "",
-//            type = this.type ?: ""
-//        )
-//    }
 }
 
 data class NetworkQuizQuestionsList(
