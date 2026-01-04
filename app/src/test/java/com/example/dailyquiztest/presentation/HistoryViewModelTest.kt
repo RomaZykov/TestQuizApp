@@ -1,11 +1,11 @@
 package com.example.dailyquiztest.presentation
 
-import com.example.dailyquiztest.core.FakeQuizRouteProvider
+import com.example.dailyquiztest.fake.FakeQuizRouteProvider
 import com.example.dailyquiztest.core.dummyHistoryResults
 import com.example.dailyquiztest.domain.model.CategoriesTypes
 import com.example.dailyquiztest.domain.model.DifficultiesTypes
 import com.example.dailyquiztest.domain.model.QuizResult
-import com.example.dailyquiztest.domain.repository.HistoryQuizRepository
+import com.example.dailyquiztest.domain.repository.HistoryRepository
 import com.example.dailyquiztest.presentation.features.history.HistoryUiState
 import com.example.dailyquiztest.presentation.features.history.HistoryViewModel
 import com.example.dailyquiztest.presentation.features.history.model.EmptyHistoryUi
@@ -13,7 +13,9 @@ import com.example.dailyquiztest.presentation.features.history.model.HistoryUi
 import com.example.dailyquiztest.presentation.main_navigation.QuizRouteProvider
 import com.example.testing.di.FakeDispatcherList
 import com.example.testing.repository.FakeHistoryRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import kotlin.test.Test
@@ -24,18 +26,21 @@ import kotlin.test.assertTrue
 class HistoryViewModelTest {
 
     private lateinit var viewModel: HistoryViewModel
-    private lateinit var fakeHistoryRepository: HistoryQuizRepository
+    private lateinit var fakeHistoryRepository: HistoryRepository
     private lateinit var fakeQuizRouteProvider: QuizRouteProvider
     private lateinit var dispatchers: FakeDispatcherList
     private lateinit var stateFlow: StateFlow<HistoryUiState>
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private var testDispatcher = UnconfinedTestDispatcher()
 
     @Before
     fun setup() {
         fakeHistoryRepository = FakeHistoryRepository()
         fakeQuizRouteProvider = FakeQuizRouteProvider()
-        dispatchers = FakeDispatcherList()
+        dispatchers = FakeDispatcherList(testDispatcher)
         viewModel = HistoryViewModel.Base(
-            historyQuizRepository = fakeHistoryRepository,
+            historyRepository = fakeHistoryRepository,
             quizRouteProvider = fakeQuizRouteProvider,
             dispatchers = dispatchers
         )
@@ -112,7 +117,7 @@ class HistoryViewModelTest {
         assertEquals(expectedUiState, stateFlow.value)
     }
 
-    private suspend fun initDummyHistories(fakeHistoryRepository: HistoryQuizRepository) =
+    private suspend fun initDummyHistories(fakeHistoryRepository: HistoryRepository) =
         dummyHistoryResults.forEach {
             fakeHistoryRepository.saveQuizResult(it)
         }
