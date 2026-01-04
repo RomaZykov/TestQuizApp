@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.dailyquiztest.core.DispatcherList
-import com.example.dailyquiztest.domain.repository.HistoryQuizRepository
+import com.example.dailyquiztest.domain.repository.HistoryRepository
 import com.example.dailyquiztest.presentation.features.history.model.EmptyHistoryUi
 import com.example.dailyquiztest.presentation.features.history.model.HistoryUi
 import com.example.dailyquiztest.presentation.main_navigation.QuizRouteProvider
@@ -27,7 +27,7 @@ interface HistoryViewModel {
 
     @HiltViewModel
     class Base @Inject constructor(
-        private val historyQuizRepository: HistoryQuizRepository,
+        private val historyRepository: HistoryRepository,
         private val quizRouteProvider: QuizRouteProvider,
         private val dispatchers: DispatcherList
     ) : ViewModel(), HistoryViewModel {
@@ -39,7 +39,7 @@ interface HistoryViewModel {
 
         override fun loadQuizHistory() {
             viewModelScope.launch(dispatchers.io()) {
-                historyQuizRepository.fetchQuizResults().collect {
+                historyRepository.fetchQuizResults().collect {
                     uiState.value = if (it.isEmpty()) {
                         EmptyHistoryUi
                     } else {
@@ -51,7 +51,7 @@ interface HistoryViewModel {
 
         override fun deleteQuizHistory(quizNumber: Int) {
             viewModelScope.launch(dispatchers.io()) {
-                historyQuizRepository.deleteQuizResult(quizNumber)
+                historyRepository.deleteQuizResult(quizNumber)
                 loadQuizHistory()
             }
         }

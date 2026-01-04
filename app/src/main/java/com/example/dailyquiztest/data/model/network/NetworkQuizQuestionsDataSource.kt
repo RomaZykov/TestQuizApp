@@ -6,7 +6,7 @@ import com.example.dailyquiztest.data.model.network.model.NetworkQuizQuestion
 import java.net.UnknownHostException
 import javax.inject.Inject
 
-interface NetworkQuizDataSource {
+interface NetworkQuizQuestionsDataSource {
 
     suspend fun retrieveQuizQuestions(
         amount: Int,
@@ -17,7 +17,7 @@ interface NetworkQuizDataSource {
     class Base @Inject constructor(
         private val quizApi: QuizApi,
         private val stringProvider: StringProvider
-    ) : NetworkQuizDataSource {
+    ) : NetworkQuizQuestionsDataSource {
         override suspend fun retrieveQuizQuestions(
             amount: Int,
             category: Int,

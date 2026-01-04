@@ -1,12 +1,12 @@
 package com.example.testing.repository
 
 import com.example.dailyquiztest.domain.model.QuizResult
-import com.example.dailyquiztest.domain.repository.HistoryQuizRepository
+import com.example.dailyquiztest.domain.repository.HistoryRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class FakeHistoryRepository @Inject constructor() : HistoryQuizRepository {
+class FakeHistoryRepository @Inject constructor() : HistoryRepository {
 
     private val histories = mutableListOf<QuizResult>()
 

@@ -15,7 +15,7 @@ import com.example.dailyquiztest.core.StringResources
 import com.example.dailyquiztest.core.dummyHistoryResults
 import com.example.dailyquiztest.domain.model.CategoriesTypes
 import com.example.dailyquiztest.domain.model.DifficultiesTypes
-import com.example.dailyquiztest.domain.repository.HistoryQuizRepository
+import com.example.dailyquiztest.domain.repository.HistoryRepository
 import com.example.dailyquiztest.domain.repository.QuizRepository
 import com.example.dailyquiztest.pages.FiltersPage
 import com.example.dailyquiztest.pages.HistoryPage
@@ -48,7 +48,7 @@ class ScenarioTest : StringResources() {
     val composeTestRule = createAndroidComposeRule<HiltComponentActivity>()
 
     @Inject
-    lateinit var fakeHistoryRepository: HistoryQuizRepository
+    lateinit var fakeHistoryRepository: HistoryRepository
 
     @Inject
     lateinit var fakeQuizRepository: QuizRepository

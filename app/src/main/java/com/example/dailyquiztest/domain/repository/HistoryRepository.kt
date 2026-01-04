@@ -3,7 +3,7 @@ package com.example.dailyquiztest.domain.repository
 import com.example.dailyquiztest.domain.model.QuizResult
 import kotlinx.coroutines.flow.Flow
 
-interface HistoryQuizRepository {
+interface HistoryRepository {
     suspend fun saveQuizResult(quizResult: QuizResult)
 
     suspend fun deleteQuizResult(id: Int)

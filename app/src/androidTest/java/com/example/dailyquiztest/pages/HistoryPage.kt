@@ -14,13 +14,13 @@ import androidx.compose.ui.test.performTouchInput
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
 import com.example.dailyquiztest.core.dummyHistoryResults
-import com.example.dailyquiztest.domain.repository.HistoryQuizRepository
+import com.example.dailyquiztest.domain.repository.HistoryRepository
 import com.example.dailyquiztest.presentation.features.history.HistoryUiState
 import kotlinx.coroutines.test.runTest
 
 class HistoryPage(
     private val composeTestRule: ComposeTestRule,
-    private val fakeHistoryRepository: HistoryQuizRepository,
+    private val fakeHistoryRepository: HistoryRepository,
 ) : StringResources() {
 
     private val backButton =

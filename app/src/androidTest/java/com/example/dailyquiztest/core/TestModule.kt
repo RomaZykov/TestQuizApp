@@ -1,7 +1,7 @@
 package com.example.dailyquiztest.core
 
 import com.example.dailyquiztest.data.di.DataModule
-import com.example.dailyquiztest.domain.repository.HistoryQuizRepository
+import com.example.dailyquiztest.domain.repository.HistoryRepository
 import com.example.dailyquiztest.domain.repository.QuizRepository
 import com.example.testing.repository.FakeHistoryRepository
 import com.example.testing.repository.FakeQuizRepository
@@ -17,7 +17,7 @@ object TestModule {
 
     @Provides
     @Singleton
-    fun provideFakeHistoryRepo(): HistoryQuizRepository = FakeHistoryRepository()
+    fun provideFakeHistoryRepo(): HistoryRepository = FakeHistoryRepository()
 
     @Provides
     @Singleton
