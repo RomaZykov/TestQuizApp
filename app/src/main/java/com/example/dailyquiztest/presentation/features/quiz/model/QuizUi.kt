@@ -51,6 +51,7 @@ import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
 import com.example.dailyquiztest.presentation.common.UiLogo
 import com.example.dailyquiztest.presentation.common.answers_group.AnswersSpecificTypeFactory
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
+import com.example.dailyquiztest.presentation.features.quiz.UserActions
 import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -72,11 +73,7 @@ data class QuizUi(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Display(
-        onFiltersPhaseNextButtonClicked: (CategoriesTypes, DifficultiesTypes) -> Unit,
-        onNextClicked: (QuizUi) -> Unit,
-        onBackClicked: () -> Unit,
-        onResultClicked: (QuizUi) -> Unit,
-        onStartNewQuizClicked: () -> Unit
+        userActions: UserActions
     ) {
         val finalUserAnswers =
             rememberSaveable(question) { mutableListOf(userAnswers.joinToString()) }
@@ -142,9 +139,9 @@ data class QuizUi(
                                 scope.launch {
                                     delay(2.seconds)
                                     if (currentNumberQuestion + 1 == totalQuestions) {
-                                        onResultClicked.invoke(updatedQuizUi)
+                                        userActions.onResultClicked().invoke(updatedQuizUi)
                                     } else {
-                                        onNextClicked.invoke(updatedQuizUi)
+                                        userActions.onNextClicked().invoke(updatedQuizUi)
                                     }
                                 }
                             },
@@ -168,7 +165,7 @@ data class QuizUi(
             }
         }
         if (shouldShowTimeIsOverDialog.value) {
-            TimeIsOverDialog(onStartNewQuizClicked)
+            TimeIsOverDialog(userActions.onStartNewQuizClicked())
         }
     }
 
@@ -326,7 +323,7 @@ private fun LongQuizPreview() {
         totalQuestions = 5,
         category = CategoriesTypes.CARTOON_AND_ANIMATIONS,
         difficulty = DifficultiesTypes.EASY
-    ).Display({ _, _ -> }, { _ -> }, {}, {}) {}
+    ).Display(userActions = UserActions.previewUserActions)
 }
 
 @Composable
@@ -345,5 +342,5 @@ private fun ShortQuizPreview() {
         totalQuestions = 5,
         category = CategoriesTypes.CARTOON_AND_ANIMATIONS,
         difficulty = DifficultiesTypes.EASY
-    ).Display({ _, _ -> }, { _ -> }, {}, {}) {}
+    ).Display(userActions = UserActions.previewUserActions)
 }

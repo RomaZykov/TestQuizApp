@@ -36,6 +36,7 @@ import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.StarsScore
 import com.example.dailyquiztest.presentation.common.answers_group.AnswersSpecificTypeFactory
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
+import com.example.dailyquiztest.presentation.features.quiz.UserActions
 import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -47,11 +48,7 @@ data class QuizResultUi(
 
     @Composable
     override fun Display(
-        onFiltersPhaseNextButtonClicked: (CategoriesTypes, DifficultiesTypes) -> Unit,
-        onNextClicked: (QuizUi) -> Unit,
-        onBackClicked: () -> Unit,
-        onResultClicked: (QuizUi) -> Unit,
-        onStartNewQuizClicked: () -> Unit
+        userActions: UserActions
     ) {
         Column(
             modifier = Modifier
@@ -78,7 +75,7 @@ data class QuizResultUi(
                     )
                 }
                 item {
-                    ResultActionCard(onStartNewQuizClicked)
+                    ResultActionCard(userActions.onStartNewQuizClicked())
                 }
                 items(quizAnswers) {
                     QuizResultItem(it)
@@ -92,7 +89,7 @@ data class QuizResultUi(
                             .padding(bottom = 72.dp)
                             .padding(horizontal = 20.dp),
                         onClick = {
-                            onStartNewQuizClicked.invoke()
+                            userActions.onStartNewQuizClicked().invoke()
                         },
                         text = R.string.start_again,
                         containerColors = ButtonDefaults.buttonColors().copy(
@@ -307,5 +304,5 @@ fun QuizResultsPreview() {
                 )
             }
         }.toList()
-    ).Display({ _, _ -> }, {}, {}, {}) {}
+    ).Display(userActions = UserActions.previewUserActions)
 }

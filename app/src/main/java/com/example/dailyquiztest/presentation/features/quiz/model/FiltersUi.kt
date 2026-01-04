@@ -41,9 +41,10 @@ import com.example.dailyquiztest.R
 import com.example.dailyquiztest.domain.model.CategoriesTypes
 import com.example.dailyquiztest.domain.model.DifficultiesTypes
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
-import com.example.dailyquiztest.presentation.common.UiLogo
 import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
+import com.example.dailyquiztest.presentation.common.UiLogo
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
+import com.example.dailyquiztest.presentation.features.quiz.UserActions
 import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
 
 data class FiltersUi(
@@ -53,13 +54,7 @@ data class FiltersUi(
 ) : QuizUiState {
 
     @Composable
-    override fun Display(
-        onFiltersPhaseNextButtonClicked: (CategoriesTypes, DifficultiesTypes) -> Unit,
-        onNextClicked: (QuizUi) -> Unit,
-        onBackClicked: () -> Unit,
-        onResultClicked: (QuizUi) -> Unit,
-        onStartNewQuizClicked: () -> Unit
-    ) {
+    override fun Display(userActions: UserActions) {
         val shouldShowErrorToast = rememberSaveable { mutableStateOf(shouldShowError) }
         LaunchedEffect(shouldShowError) {
             shouldShowErrorToast.value = shouldShowError
@@ -74,7 +69,7 @@ data class FiltersUi(
             modifier = Modifier.semantics {
                 contentDescription = QuizUiState.FILTERS_SCREEN
             },
-            topBar = { FiltersTopBar(onBackClicked) }
+            topBar = { FiltersTopBar(userActions.onBackClicked()) }
         ) { innerPadding ->
             Box(
                 modifier = Modifier
@@ -96,7 +91,7 @@ data class FiltersUi(
                     Categories(categories, selectedCategory, categoryLabel)
                     Difficulties(difficulties, selectedDifficulty, difficultyLabel)
                     StartQuizButton(
-                        onFiltersPhaseNextButtonClicked,
+                        userActions.onFiltersPhaseNextButtonClicked(),
                         selectedCategory.value,
                         selectedDifficulty.value,
                         startButtonEnabled
@@ -287,5 +282,5 @@ data class FiltersUi(
 @Composable
 fun FiltersPreview() {
     FiltersUi(CategoriesTypes.entries.toList(), emptyList(), true)
-        .Display({ _, _ -> }, { _ -> }, {}, { _ -> }) {}
+        .Display(userActions = UserActions.previewUserActions)
 }
