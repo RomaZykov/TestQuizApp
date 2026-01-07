@@ -7,6 +7,7 @@ import com.example.dailyquiztest.core.DispatcherList
 import com.example.dailyquiztest.domain.repository.HistoryRepository
 import com.example.dailyquiztest.presentation.features.history.model.EmptyHistoryUi
 import com.example.dailyquiztest.presentation.features.history.model.HistoryUi
+import com.example.dailyquiztest.presentation.features.history.model.LoadingUi
 import com.example.dailyquiztest.presentation.main_navigation.QuizRouteProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,6 +40,7 @@ interface HistoryViewModel {
 
         override fun loadQuizHistory() {
             viewModelScope.launch(dispatchers.io()) {
+                uiState.value = LoadingUi
                 historyRepository.fetchQuizResults().collect {
                     uiState.value = if (it.isEmpty()) {
                         EmptyHistoryUi
