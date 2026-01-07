@@ -1,16 +1,13 @@
 package com.example.testing.repository
 
-import com.example.dailyquiztest.core.DispatcherList
 import com.example.dailyquiztest.domain.model.QuizQuestion
 import com.example.dailyquiztest.domain.repository.QuizRepository
-import com.example.testing.di.FakeDispatcherList
 import com.example.testing.dummy.dummyQuizes
 import com.example.testing.dummy.dummyTrueFalseQuizes
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class FakeQuizRepository : QuizRepository {
+class FakeQuizRepository @Inject constructor() : QuizRepository {
     var shouldSimulateError = false
     var shouldSimulateOnlyTrueFalseOptions = false
     var shouldSimulateFiveSecDelay = false

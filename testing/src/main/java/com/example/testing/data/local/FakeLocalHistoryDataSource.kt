@@ -16,6 +16,6 @@ class FakeLocalHistoryDataSource : LocalHistoryDataSource {
     }
 
     override fun fetchQuizResults(): Flow<List<LocalQuizResult>> = flow {
-        emit(localHistories)
+        emit(localHistories.toList())
     }
 }

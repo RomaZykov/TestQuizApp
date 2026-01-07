@@ -19,7 +19,7 @@ class FakeHistoryRepository @Inject constructor() : HistoryRepository {
     }
 
     override fun fetchQuizResults(): Flow<List<QuizResult>> = flow {
-        // Wrong - emit(histories) - link to the object the same -> no updates for ui testing
+        // Wrong - emit(histories) - link to the same object -> no updates for ui testing
         emit(histories.toList())
     }
 }

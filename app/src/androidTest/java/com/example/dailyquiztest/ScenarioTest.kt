@@ -83,27 +83,32 @@ class ScenarioTest : StringResources() {
 
     @Test
     fun checkHistoryScreen_whenNoHistories() {
+        welcomePage.assertPageDisplayed()
         welcomePage.clickHistoryButton()
-        historyPage.assertEmptyHistoriesDisplayed()
 
+        historyPage.assertEmptyHistoriesDisplayed()
         historyPage.clickBackButton()
+
         welcomePage.assertPageDisplayed()
     }
 
     @Test
     fun startQuizFromHistoryPage_whenEmpty() {
+        welcomePage.assertPageDisplayed()
         welcomePage.clickHistoryButton()
-        historyPage.assertEmptyHistoriesDisplayed()
 
+        historyPage.assertEmptyHistoriesDisplayed()
         historyPage.clickStartQuizButtonWhenEmptyHistory()
+
         filtersPage.assertPageDisplayed()
     }
 
     @Test
-    fun fromWelcomeScreen_toNonEmptyHistoryScreen_thenBack() {
-        historyPage.initWithDummyHistories()
-
+    fun fromWelcomeScreen_toNonEmptyHistoryScreen_thenBack() = runTest {
+        welcomePage.assertPageDisplayed()
         welcomePage.clickHistoryButton()
+
+        historyPage.initWithDummyHistories()
         historyPage.assertNonEmptyHistoriesDisplayed()
 
         historyPage.clickBackButton()
@@ -265,7 +270,7 @@ class ScenarioTest : StringResources() {
     }
 
     @Test
-    fun finishQuiz_whereAllOptionsAreTrueOrFalse_withFourCorrectAnswersOutOfFive() {
+    fun finishQuiz_whereAllOptionsAreTrueOrFalse_withFourCorrectAnswersOutOfFive() = runTest {
         (fakeQuizRepository as FakeQuizRepository).shouldSimulateOnlyTrueFalseOptions = true
 
         welcomePage.assertPageDisplayed()
@@ -296,7 +301,7 @@ class ScenarioTest : StringResources() {
     }
 
     @Test
-    fun finishQuiz_whereAllOptionsAreTrueOrFalse_withAllInCorrectAnswers() {
+    fun finishQuiz_whereAllOptionsAreTrueOrFalse_withAllInCorrectAnswers() = runTest {
         (fakeQuizRepository as FakeQuizRepository).shouldSimulateOnlyTrueFalseOptions = true
 
         welcomePage.assertPageDisplayed()

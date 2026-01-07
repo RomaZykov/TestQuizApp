@@ -16,7 +16,6 @@ import com.example.dailyquiztest.core.StringResources
 import com.example.dailyquiztest.core.dummyHistoryResults
 import com.example.dailyquiztest.domain.repository.HistoryRepository
 import com.example.dailyquiztest.presentation.features.history.HistoryUiState
-import kotlinx.coroutines.test.runTest
 
 class HistoryPage(
     private val composeTestRule: ComposeTestRule,
@@ -67,7 +66,7 @@ class HistoryPage(
             .assertExists().assertIsDisplayed()
     }
 
-    fun initWithDummyHistories() = runTest {
+    suspend fun initWithDummyHistories() {
         dummyHistoryResults.forEach {
             fakeHistoryRepository.saveQuizResult(it)
         }
