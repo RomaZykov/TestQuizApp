@@ -110,30 +110,8 @@ class QuizViewModel @Inject constructor(
     }
 }
 
-interface UserActions {
-    fun onFiltersPhaseNextButtonClicked(): (CategoriesTypes, DifficultiesTypes) -> Unit
-    fun onNextClicked(): (QuizUi) -> Unit
-    fun onBackClicked(): () -> Unit
-    fun onResultClicked(): (QuizUi) -> Unit
-    fun onStartNewQuizClicked(): () -> Unit
-
-    companion object {
-        val previewUserActions = object : UserActions {
-            override fun onBackClicked(): () -> Unit = {}
-
-            override fun onFiltersPhaseNextButtonClicked(): (CategoriesTypes, DifficultiesTypes) -> Unit =
-                { _, _ -> }
-
-            override fun onNextClicked(): (QuizUi) -> Unit = {}
-
-            override fun onResultClicked(): (QuizUi) -> Unit = {}
-
-            override fun onStartNewQuizClicked(): () -> Unit = {}
-        }
-    }
-}
-
 interface CoreVMActions {
+
     fun retrieveNextAnswer()
 
     fun showResult()
