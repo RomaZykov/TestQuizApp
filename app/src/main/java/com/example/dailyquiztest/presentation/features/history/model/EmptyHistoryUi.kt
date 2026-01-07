@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.features.history.HistoryUiState
+import com.example.dailyquiztest.presentation.features.history.HistoryUserActions
 import com.example.dailyquiztest.presentation.features.history.components.HistoryTopBar
 import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
 
@@ -30,16 +31,14 @@ object EmptyHistoryUi : HistoryUiState {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Display(
-        onStartQuizClicked: () -> Unit,
-        onDeleteClicked: (Int) -> Unit,
-        onBackButtonClicked: () -> Unit
+        historyUserActions: HistoryUserActions
     ) {
         Scaffold(
             modifier = Modifier.semantics {
                 contentDescription = HistoryUiState.EMPTY_HISTORY_SCREEN
             },
             topBar = {
-                HistoryTopBar(onBackButtonClicked)
+                HistoryTopBar(historyUserActions.onBackButtonClicked())
             }
         ) { innerPadding ->
             Box(
@@ -69,7 +68,7 @@ object EmptyHistoryUi : HistoryUiState {
                     ActionButtonWithText(modifier = Modifier.semantics {
                         contentDescription = contentDesc
                     }, onClick = {
-                        onStartQuizClicked.invoke()
+                        historyUserActions.onStartQuizClicked().invoke()
                     }, text = R.string.start_quiz_button_text)
                 }
             }
@@ -80,5 +79,5 @@ object EmptyHistoryUi : HistoryUiState {
 @Preview(showSystemUi = true)
 @Composable
 fun EmptyHistoryPreview() {
-    EmptyHistoryUi.Display({}, { _ -> }) {}
+    EmptyHistoryUi.Display(HistoryUserActions.previewHistoryUserActions)
 }

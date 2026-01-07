@@ -55,6 +55,7 @@ import com.example.dailyquiztest.domain.model.QuizResult
 import com.example.dailyquiztest.presentation.common.StarsScore
 import com.example.dailyquiztest.presentation.common.UiLogo
 import com.example.dailyquiztest.presentation.features.history.HistoryUiState
+import com.example.dailyquiztest.presentation.features.history.HistoryUserActions
 import com.example.dailyquiztest.presentation.features.history.components.HistoryTopBar
 import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
 import kotlinx.coroutines.launch
@@ -64,9 +65,7 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Display(
-        onStartQuizClicked: () -> Unit,
-        onDeleteClicked: (Int) -> Unit,
-        onBackButtonClicked: () -> Unit
+        historyUserActions: HistoryUserActions
     ) {
         val dropDownMenuActive = rememberSaveable { mutableStateOf(false) }
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -81,7 +80,7 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
                 SnackbarHost(snackBarHostState)
             },
             topBar = {
-                HistoryTopBar(onBackButtonClicked = onBackButtonClicked, scrollBehavior)
+                HistoryTopBar(onBackButtonClicked = historyUserActions.onBackButtonClicked(), scrollBehavior)
             }
         ) { innerPadding ->
             Box(
@@ -97,7 +96,7 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
                 ) {
                     itemsIndexed(historyQuizResults) { i, result ->
                         QuizResultCard(result, dropDownMenuActive, snackBarHostState) {
-                            onDeleteClicked.invoke(result.id)
+                            historyUserActions.onDeleteClicked().invoke(result.id)
                         }
                     }
                     item {
@@ -263,5 +262,5 @@ fun HistoryUiPreview() {
                 lastDate = "14:54"
             )
         )
-    ).Display({}, { _ -> }) { }
+    ).Display(historyUserActions = HistoryUserActions.previewHistoryUserActions)
 }
