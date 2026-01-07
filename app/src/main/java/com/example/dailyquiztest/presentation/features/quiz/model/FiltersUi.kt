@@ -44,7 +44,7 @@ import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
 import com.example.dailyquiztest.presentation.common.UiLogo
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
-import com.example.dailyquiztest.presentation.features.quiz.UserActions
+import com.example.dailyquiztest.presentation.features.quiz.QuizUserActions
 import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
 
 data class FiltersUi(
@@ -54,7 +54,7 @@ data class FiltersUi(
 ) : QuizUiState {
 
     @Composable
-    override fun Display(userActions: UserActions) {
+    override fun Display(quizUserActions: QuizUserActions) {
         val shouldShowErrorToast = rememberSaveable { mutableStateOf(shouldShowError) }
         LaunchedEffect(shouldShowError) {
             shouldShowErrorToast.value = shouldShowError
@@ -69,7 +69,7 @@ data class FiltersUi(
             modifier = Modifier.semantics {
                 contentDescription = QuizUiState.FILTERS_SCREEN
             },
-            topBar = { FiltersTopBar(userActions.onBackClicked()) }
+            topBar = { FiltersTopBar(quizUserActions.onBackClicked()) }
         ) { innerPadding ->
             Box(
                 modifier = Modifier
@@ -91,7 +91,7 @@ data class FiltersUi(
                     Categories(categories, selectedCategory, categoryLabel)
                     Difficulties(difficulties, selectedDifficulty, difficultyLabel)
                     StartQuizButton(
-                        userActions.onFiltersPhaseNextButtonClicked(),
+                        quizUserActions.onFiltersPhaseNextButtonClicked(),
                         selectedCategory.value,
                         selectedDifficulty.value,
                         startButtonEnabled
@@ -282,5 +282,5 @@ data class FiltersUi(
 @Composable
 fun FiltersPreview() {
     FiltersUi(CategoriesTypes.entries.toList(), emptyList(), true)
-        .Display(userActions = UserActions.previewUserActions)
+        .Display(quizUserActions = QuizUserActions.previewQuizUserActions)
 }

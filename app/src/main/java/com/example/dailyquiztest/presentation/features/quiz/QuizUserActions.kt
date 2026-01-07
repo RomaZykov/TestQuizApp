@@ -4,7 +4,7 @@ import com.example.dailyquiztest.domain.model.CategoriesTypes
 import com.example.dailyquiztest.domain.model.DifficultiesTypes
 import com.example.dailyquiztest.presentation.features.quiz.model.QuizUi
 
-interface UserActions {
+interface QuizUserActions {
     fun onFiltersPhaseNextButtonClicked(): (CategoriesTypes, DifficultiesTypes) -> Unit
     fun onNextClicked(): (QuizUi) -> Unit
     fun onBackClicked(): () -> Unit
@@ -12,7 +12,7 @@ interface UserActions {
     fun onStartNewQuizClicked(): () -> Unit
 
     companion object {
-        val previewUserActions = object : UserActions {
+        val previewQuizUserActions = object : QuizUserActions {
             override fun onBackClicked(): () -> Unit = {}
 
             override fun onFiltersPhaseNextButtonClicked(): (CategoriesTypes, DifficultiesTypes) -> Unit =

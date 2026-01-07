@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 interface QuizUiState {
 
     @Composable
-    fun Display(userActions: UserActions)
+    fun Display(quizUserActions: QuizUserActions)
 
     companion object {
         const val FILTERS_SCREEN = "FiltersScreen"
