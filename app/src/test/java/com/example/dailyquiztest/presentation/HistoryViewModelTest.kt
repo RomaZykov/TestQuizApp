@@ -1,16 +1,14 @@
 package com.example.dailyquiztest.presentation
 
-import com.example.dailyquiztest.fake.FakeQuizRouteProvider
 import com.example.dailyquiztest.core.dummyHistoryResults
 import com.example.dailyquiztest.domain.model.CategoriesTypes
 import com.example.dailyquiztest.domain.model.DifficultiesTypes
 import com.example.dailyquiztest.domain.model.QuizResult
-import com.example.dailyquiztest.domain.repository.HistoryRepository
+import com.example.dailyquiztest.fake.FakeQuizRouteProvider
 import com.example.dailyquiztest.presentation.features.history.HistoryUiState
 import com.example.dailyquiztest.presentation.features.history.HistoryViewModel
 import com.example.dailyquiztest.presentation.features.history.model.EmptyHistoryUi
 import com.example.dailyquiztest.presentation.features.history.model.HistoryUi
-import com.example.dailyquiztest.presentation.main_navigation.QuizRouteProvider
 import com.example.testing.di.FakeDispatcherList
 import com.example.testing.repository.FakeHistoryRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,8 +24,8 @@ import kotlin.test.assertTrue
 class HistoryViewModelTest {
 
     private lateinit var viewModel: HistoryViewModel
-    private lateinit var fakeHistoryRepository: HistoryRepository
-    private lateinit var fakeQuizRouteProvider: QuizRouteProvider
+    private lateinit var fakeHistoryRepository: FakeHistoryRepository
+    private lateinit var fakeQuizRouteProvider: FakeQuizRouteProvider
     private lateinit var dispatchers: FakeDispatcherList
     private lateinit var stateFlow: StateFlow<HistoryUiState>
 
@@ -50,7 +48,7 @@ class HistoryViewModelTest {
     @Test
     fun `when there are histories historyUiStateFlow should be HistoryUi with these histories`() =
         runTest {
-            initDummyHistories(fakeHistoryRepository)
+            initDummyHistories()
 
             viewModel.loadQuizHistory()
 
@@ -74,7 +72,7 @@ class HistoryViewModelTest {
 
     @Test
     fun `delete all histories should show empty history state`() = runTest {
-        initDummyHistories(fakeHistoryRepository)
+        initDummyHistories()
         viewModel.loadQuizHistory()
 
         assertTrue(dispatchers.wasIoCalled)
@@ -91,7 +89,7 @@ class HistoryViewModelTest {
 
     @Test
     fun `delete all histories except from middle should show that only one history`() = runTest {
-        initDummyHistories(fakeHistoryRepository)
+        initDummyHistories()
         viewModel.loadQuizHistory()
 
         assertTrue(dispatchers.wasIoCalled)
@@ -117,7 +115,7 @@ class HistoryViewModelTest {
         assertEquals(expectedUiState, stateFlow.value)
     }
 
-    private suspend fun initDummyHistories(fakeHistoryRepository: HistoryRepository) =
+    private suspend fun initDummyHistories() =
         dummyHistoryResults.forEach {
             fakeHistoryRepository.saveQuizResult(it)
         }
