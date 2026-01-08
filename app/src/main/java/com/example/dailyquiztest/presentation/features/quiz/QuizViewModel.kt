@@ -3,8 +3,8 @@ package com.example.dailyquiztest.presentation.features.quiz
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dailyquiztest.core.DispatcherList
-import com.example.dailyquiztest.domain.model.CategoriesTypes
-import com.example.dailyquiztest.domain.model.DifficultiesTypes
+import com.example.dailyquiztest.domain.model.Category
+import com.example.dailyquiztest.domain.model.Difficulty
 import com.example.dailyquiztest.domain.model.QuestionTypes
 import com.example.dailyquiztest.domain.model.QuizResult
 import com.example.dailyquiztest.domain.repository.HistoryRepository
@@ -33,8 +33,8 @@ class QuizViewModel @Inject constructor(
 
     private val uiStateMutable = MutableStateFlow<QuizUiState>(
         FiltersUi(
-            categories = CategoriesTypes.entries.toList(),
-            difficulties = DifficultiesTypes.entries.toList(),
+            categories = Category.entries.toList(),
+            difficulties = Difficulty.entries.toList(),
             false
         )
     )
@@ -45,15 +45,15 @@ class QuizViewModel @Inject constructor(
     private var currentQuizQuestion = 0
 
     override fun prepareQuizGame(
-        category: CategoriesTypes,
-        difficulty: DifficultiesTypes
+        category: Category,
+        difficulty: Difficulty
     ) {
         uiStateMutable.value = LoadingUi
         viewModelScope.launch(dispatcherList.io()) {
             quizRepository.retrieveQuizQuestions(
                 difficulty.amountOfQuestions,
                 category.apiId,
-                difficulty.levelApi
+                difficulty.toString()
             ).onSuccess {
                 questions.addAll(it.mapIndexed { i, quizQuestion ->
                     QuizUi(
@@ -71,8 +71,8 @@ class QuizViewModel @Inject constructor(
                 uiStateMutable.value = questions[currentQuizQuestion]
             }.onFailure {
                 uiStateMutable.value = FiltersUi(
-                    categories = CategoriesTypes.entries.toList(),
-                    difficulties = DifficultiesTypes.entries.toList(),
+                    categories = Category.entries.toList(),
+                    difficulties = Difficulty.entries.toList(),
                     true
                 )
             }
@@ -94,8 +94,8 @@ class QuizViewModel @Inject constructor(
             historyRepository.saveQuizResult(
                 QuizResult(
                     stars = resultScreen.calculatedStarsScoreResult(),
-                    categoriesTypes = questions.first().category,
-                    difficultiesTypes = questions.first().difficulty,
+                    category = questions.first().category,
+                    difficulty = questions.first().difficulty,
                     lastTime = resultScreen.timeFinished(),
                     lastDate = resultScreen.dateFinished()
                 )
@@ -119,8 +119,8 @@ interface CoreVMActions {
     fun saveQuizAnswer(quizUi: QuizUi)
 
     fun prepareQuizGame(
-        category: CategoriesTypes,
-        difficulty: DifficultiesTypes
+        category: Category,
+        difficulty: Difficulty
     )
 
     fun navigateToWelcome(toWelcome: (Route) -> Unit)

@@ -2,8 +2,8 @@ package com.example.testing.data.network
 
 import com.example.dailyquiztest.data.model.network.NetworkQuizQuestionsDataSource
 import com.example.dailyquiztest.data.model.network.model.NetworkQuizQuestion
-import com.example.dailyquiztest.domain.model.CategoriesTypes
-import com.example.dailyquiztest.domain.model.DifficultiesTypes
+import com.example.dailyquiztest.domain.model.Category
+import com.example.dailyquiztest.domain.model.Difficulty
 import java.net.UnknownHostException
 
 class FakeNetworkQuizQuestionsDataSource : NetworkQuizQuestionsDataSource {
@@ -18,13 +18,13 @@ class FakeNetworkQuizQuestionsDataSource : NetworkQuizQuestionsDataSource {
             Result.failure(UnknownHostException())
         } else {
             val result =
-                networkQuestions.filter { it.key.first == category && it.key.second == difficulty }.values.first()
+                networkQuestions.filter { it.key.first == category && it.key.second.toString() == difficulty }.values.first()
             Result.success(result)
         }
     }
 
     private val networkQuestions = mutableMapOf(
-        Pair(CategoriesTypes.FILM.apiId, DifficultiesTypes.EASY.levelApi) to listOf(
+        Pair(Category.FILM.apiId, Difficulty.EASY) to listOf(
             NetworkQuizQuestion(
                 type = "multiple",
                 question = "Question 1",
@@ -62,10 +62,10 @@ class FakeNetworkQuizQuestionsDataSource : NetworkQuizQuestionsDataSource {
                 incorrectAnswers = listOf("True")
             )
         ),
-        Pair(CategoriesTypes.VIDEO_GAMES.apiId, DifficultiesTypes.MEDIUM.levelApi) to listOf(
+        Pair(Category.VIDEO_GAMES.apiId, Difficulty.MEDIUM) to listOf(
             NetworkQuizQuestion()
         ),
-        Pair(CategoriesTypes.BOARD_GAMES.apiId, DifficultiesTypes.HARD.levelApi) to listOf(
+        Pair(Category.BOARD_GAMES.apiId, Difficulty.HARD) to listOf(
             NetworkQuizQuestion()
         )
     )

@@ -1,7 +1,7 @@
 package com.example.dailyquiztest.data.repository
 
-import com.example.dailyquiztest.domain.model.CategoriesTypes
-import com.example.dailyquiztest.domain.model.DifficultiesTypes
+import com.example.dailyquiztest.domain.model.Category
+import com.example.dailyquiztest.domain.model.Difficulty
 import com.example.dailyquiztest.domain.model.QuizQuestion
 import com.example.dailyquiztest.domain.repository.QuizRepository
 import com.example.testing.data.mapper.FakeNetworkToDomainQuizQuestionMapper
@@ -39,8 +39,8 @@ class QuizRepositoryTest {
         fakeNetworkQuizDataSource.shouldSimulateNetworkError = true
 
         quizRepository.retrieveQuizQuestions(
-            5, CategoriesTypes.GENERAL_KNOWLEDGE.apiId,
-            DifficultiesTypes.HARD.levelApi
+            5, Category.GENERAL_KNOWLEDGE.apiId,
+            Difficulty.HARD.toString()
         )
     }
 
@@ -50,8 +50,8 @@ class QuizRepositoryTest {
         UnconfinedTestDispatcher()
     ) {
         val actual = quizRepository.retrieveQuizQuestions(
-            5, CategoriesTypes.FILM.apiId,
-            DifficultiesTypes.EASY.levelApi
+            5, Category.FILM.apiId,
+            Difficulty.EASY.toString()
         )
 
         assertEquals(5, fakeNetworkToDomainQuizQuestionMapper.mapCalledCount)

@@ -42,8 +42,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.dailyquiztest.R
-import com.example.dailyquiztest.domain.model.CategoriesTypes
-import com.example.dailyquiztest.domain.model.DifficultiesTypes
+import com.example.dailyquiztest.domain.model.Category
+import com.example.dailyquiztest.domain.model.Difficulty
 import com.example.dailyquiztest.domain.model.QuestionTypes
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.CommonCard
@@ -66,8 +66,8 @@ data class QuizUi(
     val totalQuestions: Int,
     val userAnswers: List<String> = listOf(),
     val isAnsweredCorrect: Boolean = false,
-    val category: CategoriesTypes,
-    val difficulty: DifficultiesTypes
+    val category: Category,
+    val difficulty: Difficulty
 ) : QuizUiState {
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -321,8 +321,8 @@ private fun LongQuizPreview() {
         correctAnswer = "i`m correct answer",
         questionType = QuestionTypes.MULTIPLE,
         totalQuestions = 5,
-        category = CategoriesTypes.CARTOON_AND_ANIMATIONS,
-        difficulty = DifficultiesTypes.EASY
+        category = Category.CARTOON_AND_ANIMATIONS,
+        difficulty = Difficulty.EASY
     ).Display(quizUserActions = QuizUserActions.previewQuizUserActions)
 }
 
@@ -340,7 +340,7 @@ private fun ShortQuizPreview() {
         correctAnswer = "i`m correct answer",
         questionType = QuestionTypes.MULTIPLE,
         totalQuestions = 5,
-        category = CategoriesTypes.CARTOON_AND_ANIMATIONS,
-        difficulty = DifficultiesTypes.EASY
+        category = Category.CARTOON_AND_ANIMATIONS,
+        difficulty = Difficulty.EASY
     ).Display(quizUserActions = QuizUserActions.previewQuizUserActions)
 }

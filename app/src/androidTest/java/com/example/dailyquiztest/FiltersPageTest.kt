@@ -4,8 +4,8 @@ import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.dailyquiztest.core.rememberTestNavController
-import com.example.dailyquiztest.domain.model.CategoriesTypes
-import com.example.dailyquiztest.domain.model.DifficultiesTypes
+import com.example.dailyquiztest.domain.model.Category
+import com.example.dailyquiztest.domain.model.Difficulty
 import com.example.dailyquiztest.pages.FiltersPage
 import com.example.dailyquiztest.presentation.features.quiz.QuizScreen
 import com.example.dailyquiztest.presentation.features.quiz.model.FiltersUi
@@ -34,14 +34,14 @@ class FiltersPageTest {
         restorationTester.setContent {
             val uiState = FiltersUi(
                 categories = listOf(
-                    CategoriesTypes.COMICS,
-                    CategoriesTypes.GENERAL_KNOWLEDGE,
-                    CategoriesTypes.BOARD_GAMES,
+                    Category.COMICS,
+                    Category.GENERAL_KNOWLEDGE,
+                    Category.BOARD_GAMES,
                 ),
                 difficulties = listOf(
-                    DifficultiesTypes.EASY,
-                    DifficultiesTypes.MEDIUM,
-                    DifficultiesTypes.HARD,
+                    Difficulty.EASY,
+                    Difficulty.MEDIUM,
+                    Difficulty.HARD,
                 ),
                 shouldShowError = false
             )

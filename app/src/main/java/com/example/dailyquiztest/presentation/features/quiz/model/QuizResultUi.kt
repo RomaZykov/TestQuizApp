@@ -29,8 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dailyquiztest.R
-import com.example.dailyquiztest.domain.model.CategoriesTypes
-import com.example.dailyquiztest.domain.model.DifficultiesTypes
+import com.example.dailyquiztest.domain.model.Category
+import com.example.dailyquiztest.domain.model.Difficulty
 import com.example.dailyquiztest.domain.model.QuestionTypes
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.StarsScore
@@ -298,8 +298,8 @@ fun QuizResultsPreview() {
                         },
                         totalQuestions = 10,
                         userAnswers = listOf("a"),
-                        category = CategoriesTypes.CARTOON_AND_ANIMATIONS,
-                        difficulty = DifficultiesTypes.EASY
+                        category = Category.CARTOON_AND_ANIMATIONS,
+                        difficulty = Difficulty.EASY
                     )
                 )
             }

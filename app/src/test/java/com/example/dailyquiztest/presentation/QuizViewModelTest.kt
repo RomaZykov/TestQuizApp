@@ -1,7 +1,7 @@
 package com.example.dailyquiztest.presentation
 
-import com.example.dailyquiztest.domain.model.CategoriesTypes
-import com.example.dailyquiztest.domain.model.DifficultiesTypes
+import com.example.dailyquiztest.domain.model.Category
+import com.example.dailyquiztest.domain.model.Difficulty
 import com.example.dailyquiztest.domain.model.QuestionTypes
 import com.example.dailyquiztest.fake.FakeWelcomeRouteProvider
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
@@ -69,7 +69,7 @@ class QuizViewModelTest {
         runTest(testDispatcher) {
             fakeQuizRepository.shouldSimulateFiveSecDelay = true
 
-            viewModel.prepareQuizGame(CategoriesTypes.FILM, DifficultiesTypes.HARD)
+            viewModel.prepareQuizGame(Category.FILM, Difficulty.HARD)
             advanceTimeBy(2500)
             assertEquals(
                 com.example.dailyquiztest.presentation.features.quiz.model.LoadingUi,
@@ -83,7 +83,7 @@ class QuizViewModelTest {
             advanceTimeBy(505)
 
             val expectedFinalState =
-                retrieveDummySimpleQuestionByIndex(0, CategoriesTypes.FILM, DifficultiesTypes.HARD)
+                retrieveDummySimpleQuestionByIndex(0, Category.FILM, Difficulty.HARD)
             assertEquals(expectedFinalState, stateFlow.value)
         }
 
@@ -92,11 +92,11 @@ class QuizViewModelTest {
         runTest {
             fakeQuizRepository.shouldSimulateError = true
 
-            viewModel.prepareQuizGame(CategoriesTypes.FILM, DifficultiesTypes.HARD)
+            viewModel.prepareQuizGame(Category.FILM, Difficulty.HARD)
 
             val expectedState = FiltersUi(
-                categories = CategoriesTypes.entries,
-                difficulties = DifficultiesTypes.entries,
+                categories = Category.entries,
+                difficulties = Difficulty.entries,
                 shouldShowError = true
             )
             assertEquals(expectedState, stateFlow.value)
@@ -118,8 +118,8 @@ class QuizViewModelTest {
             var currentNumQuestion = 0
             val expectedQuizResults = mutableListOf<QuizUi>()
             viewModel.prepareQuizGame(
-                CategoriesTypes.CARTOON_AND_ANIMATIONS,
-                DifficultiesTypes.EASY
+                Category.CARTOON_AND_ANIMATIONS,
+                Difficulty.EASY
             )
             repeat(4) {
                 val currentQuestion = retrieveDummyTrueFalseQuestionByIndex(currentNumQuestion)
@@ -159,15 +159,15 @@ class QuizViewModelTest {
             correctAnswer = dummyTrueFalseQuizes[index].correctAnswer,
             questionType = QuestionTypes.BOOLEAN,
             totalQuestions = 5,
-            category = CategoriesTypes.CARTOON_AND_ANIMATIONS,
-            difficulty = DifficultiesTypes.EASY
+            category = Category.CARTOON_AND_ANIMATIONS,
+            difficulty = Difficulty.EASY
         )
     }
 
     private fun retrieveDummySimpleQuestionByIndex(
         index: Int,
-        category: CategoriesTypes,
-        difficulty: DifficultiesTypes
+        category: Category,
+        difficulty: Difficulty
     ): QuizUi {
         return QuizUi(
             currentNumberQuestion = index,
