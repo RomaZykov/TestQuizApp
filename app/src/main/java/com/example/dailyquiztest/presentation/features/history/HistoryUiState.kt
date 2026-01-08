@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 interface HistoryUiState {
 
     @Composable
-    fun Display(onStartQuizClicked: () -> Unit, onDeleteClicked: (Int) -> Unit, onBackButtonClicked: () -> Unit)
+    fun Display(historyUserActions: HistoryUserActions)
 
     companion object {
         const val EMPTY_HISTORY_SCREEN = "emptyHistoryScreen"

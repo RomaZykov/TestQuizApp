@@ -14,13 +14,12 @@ import androidx.compose.ui.test.performTouchInput
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
 import com.example.dailyquiztest.core.dummyHistoryResults
-import com.example.dailyquiztest.domain.repository.HistoryQuizRepository
+import com.example.dailyquiztest.domain.repository.HistoryRepository
 import com.example.dailyquiztest.presentation.features.history.HistoryUiState
-import kotlinx.coroutines.test.runTest
 
 class HistoryPage(
     private val composeTestRule: ComposeTestRule,
-    private val fakeHistoryRepository: HistoryQuizRepository,
+    private val fakeHistoryRepository: HistoryRepository,
 ) : StringResources() {
 
     private val backButton =
@@ -67,13 +66,13 @@ class HistoryPage(
             .assertExists().assertIsDisplayed()
     }
 
-    fun initWithDummyHistories() = runTest {
+    suspend fun initWithDummyHistories() {
         dummyHistoryResults.forEach {
             fakeHistoryRepository.saveQuizResult(it)
         }
     }
 
-    fun longPressToDelete(id: Int) {
+    fun longPressToDeleteHistoryByIndex(id: Int) {
         val historyToDelete =
             composeTestRule.onNodeWithText(retrieveString(R.string.quiz_number_title, id + 1))
         historyToDelete.performScrollTo().assertExists().assertIsDisplayed().performTouchInput {

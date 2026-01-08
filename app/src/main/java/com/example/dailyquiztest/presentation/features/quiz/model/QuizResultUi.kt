@@ -29,13 +29,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dailyquiztest.R
-import com.example.dailyquiztest.domain.model.CategoriesTypes
-import com.example.dailyquiztest.domain.model.DifficultiesTypes
+import com.example.dailyquiztest.domain.model.Category
+import com.example.dailyquiztest.domain.model.Difficulty
 import com.example.dailyquiztest.domain.model.QuestionTypes
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.StarsScore
 import com.example.dailyquiztest.presentation.common.answers_group.AnswersSpecificTypeFactory
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
+import com.example.dailyquiztest.presentation.features.quiz.QuizUserActions
 import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -47,11 +48,7 @@ data class QuizResultUi(
 
     @Composable
     override fun Display(
-        onFiltersPhaseNextButtonClicked: (CategoriesTypes, DifficultiesTypes) -> Unit,
-        onNextClicked: (QuizUi) -> Unit,
-        onBackClicked: () -> Unit,
-        onResultClicked: (QuizUi) -> Unit,
-        onStartNewQuizClicked: () -> Unit
+        quizUserActions: QuizUserActions
     ) {
         Column(
             modifier = Modifier
@@ -78,7 +75,7 @@ data class QuizResultUi(
                     )
                 }
                 item {
-                    ResultActionCard(onStartNewQuizClicked)
+                    ResultActionCard(quizUserActions.onStartNewQuizClicked())
                 }
                 items(quizAnswers) {
                     QuizResultItem(it)
@@ -92,7 +89,7 @@ data class QuizResultUi(
                             .padding(bottom = 72.dp)
                             .padding(horizontal = 20.dp),
                         onClick = {
-                            onStartNewQuizClicked.invoke()
+                            quizUserActions.onStartNewQuizClicked().invoke()
                         },
                         text = R.string.start_again,
                         containerColors = ButtonDefaults.buttonColors().copy(
@@ -301,11 +298,11 @@ fun QuizResultsPreview() {
                         },
                         totalQuestions = 10,
                         userAnswers = listOf("a"),
-                        category = CategoriesTypes.CARTOON_AND_ANIMATIONS,
-                        difficulty = DifficultiesTypes.EASY
+                        category = Category.CARTOON_AND_ANIMATIONS,
+                        difficulty = Difficulty.EASY
                     )
                 )
             }
         }.toList()
-    ).Display({ _, _ -> }, {}, {}, {}) {}
+    ).Display(quizUserActions = QuizUserActions.previewQuizUserActions)
 }

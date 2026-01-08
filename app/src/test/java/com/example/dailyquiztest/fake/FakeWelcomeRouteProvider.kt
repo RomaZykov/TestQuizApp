@@ -1,4 +1,4 @@
-package com.example.dailyquiztest.core
+package com.example.dailyquiztest.fake
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController

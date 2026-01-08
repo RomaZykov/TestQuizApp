@@ -1,6 +1,5 @@
 package com.example.dailyquiztest.presentation.features.history.model
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -49,12 +48,13 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dailyquiztest.R
-import com.example.dailyquiztest.domain.model.CategoriesTypes
-import com.example.dailyquiztest.domain.model.DifficultiesTypes
+import com.example.dailyquiztest.domain.model.Category
+import com.example.dailyquiztest.domain.model.Difficulty
 import com.example.dailyquiztest.domain.model.QuizResult
 import com.example.dailyquiztest.presentation.common.StarsScore
 import com.example.dailyquiztest.presentation.common.UiLogo
 import com.example.dailyquiztest.presentation.features.history.HistoryUiState
+import com.example.dailyquiztest.presentation.features.history.HistoryUserActions
 import com.example.dailyquiztest.presentation.features.history.components.HistoryTopBar
 import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
 import kotlinx.coroutines.launch
@@ -64,9 +64,7 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Display(
-        onStartQuizClicked: () -> Unit,
-        onDeleteClicked: (Int) -> Unit,
-        onBackButtonClicked: () -> Unit
+        historyUserActions: HistoryUserActions
     ) {
         val dropDownMenuActive = rememberSaveable { mutableStateOf(false) }
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -81,7 +79,7 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
                 SnackbarHost(snackBarHostState)
             },
             topBar = {
-                HistoryTopBar(onBackButtonClicked = onBackButtonClicked, scrollBehavior)
+                HistoryTopBar(onBackButtonClicked = historyUserActions.onBackButtonClicked(), scrollBehavior)
             }
         ) { innerPadding ->
             Box(
@@ -97,7 +95,7 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
                 ) {
                     itemsIndexed(historyQuizResults) { i, result ->
                         QuizResultCard(result, dropDownMenuActive, snackBarHostState) {
-                            onDeleteClicked.invoke(result.id)
+                            historyUserActions.onDeleteClicked().invoke(result.id)
                         }
                     }
                     item {
@@ -174,13 +172,13 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
                         modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
                         text = stringResource(
                             R.string.category_result,
-                            result.categoriesTypes.name
+                            result.category.name
                         ),
                         style = DailyQuizTheme.typography.body,
                         fontSize = 12.sp
                     )
                     Text(
-                        stringResource(R.string.difficulty_result, result.difficultiesTypes.name),
+                        stringResource(R.string.difficulty_result, result.difficulty.name),
                         style = DailyQuizTheme.typography.body,
                         fontSize = 12.sp
                     )
@@ -233,35 +231,35 @@ fun HistoryUiPreview() {
             QuizResult(
                 0,
                 stars = 0,
-                categoriesTypes = CategoriesTypes.HISTORY,
-                difficultiesTypes = DifficultiesTypes.EASY,
+                category = Category.HISTORY,
+                difficulty = Difficulty.EASY,
                 lastTime = "14:54",
                 lastDate = "2014"
             ),
             QuizResult(
                 1,
                 stars = 5,
-                categoriesTypes = CategoriesTypes.HISTORY,
-                difficultiesTypes = DifficultiesTypes.EASY,
+                category = Category.HISTORY,
+                difficulty = Difficulty.EASY,
                 lastTime = "2014",
                 lastDate = "14:54"
             ),
             QuizResult(
                 2,
                 stars = 3,
-                categoriesTypes = CategoriesTypes.CARTOON_AND_ANIMATIONS,
-                difficultiesTypes = DifficultiesTypes.MEDIUM,
+                category = Category.CARTOON_AND_ANIMATIONS,
+                difficulty = Difficulty.MEDIUM,
                 lastTime = "2014",
                 lastDate = "14:54"
             ),
             QuizResult(
                 3,
                 stars = 2,
-                categoriesTypes = CategoriesTypes.CARTOON_AND_ANIMATIONS,
-                difficultiesTypes = DifficultiesTypes.HARD,
+                category = Category.CARTOON_AND_ANIMATIONS,
+                difficulty = Difficulty.HARD,
                 lastTime = "2014",
                 lastDate = "14:54"
             )
         )
-    ).Display({}, { _ -> }) { }
+    ).Display(historyUserActions = HistoryUserActions.previewHistoryUserActions)
 }

@@ -4,7 +4,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -12,11 +15,12 @@ import com.example.dailyquiztest.core.StringResources
 import com.example.dailyquiztest.core.dummyHistoryResults
 import com.example.dailyquiztest.domain.model.CategoriesTypes
 import com.example.dailyquiztest.domain.model.DifficultiesTypes
-import com.example.dailyquiztest.domain.repository.HistoryQuizRepository
+import com.example.dailyquiztest.domain.repository.HistoryRepository
 import com.example.dailyquiztest.domain.repository.QuizRepository
 import com.example.dailyquiztest.pages.FiltersPage
 import com.example.dailyquiztest.pages.HistoryPage
 import com.example.dailyquiztest.pages.QuizPage
+import com.example.dailyquiztest.pages.ResultPage
 import com.example.dailyquiztest.pages.WelcomePage
 import com.example.dailyquiztest.presentation.features.welcome.navigation.WelcomeRoute
 import com.example.dailyquiztest.presentation.main_navigation.MainNavigation
@@ -24,6 +28,8 @@ import com.example.dayliquiztest.HiltComponentActivity
 import com.example.testing.repository.FakeQuizRepository
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -42,10 +48,13 @@ class ScenarioTest : StringResources() {
     val composeTestRule = createAndroidComposeRule<HiltComponentActivity>()
 
     @Inject
-    lateinit var fakeHistoryRepository: HistoryQuizRepository
+    lateinit var fakeHistoryRepository: HistoryRepository
 
     @Inject
     lateinit var fakeQuizRepository: QuizRepository
+
+    @Inject
+    lateinit var testDispatcher: TestDispatcher
 
     private lateinit var welcomePage: WelcomePage
     private lateinit var historyPage: HistoryPage
@@ -74,27 +83,32 @@ class ScenarioTest : StringResources() {
 
     @Test
     fun checkHistoryScreen_whenNoHistories() {
+        welcomePage.assertPageDisplayed()
         welcomePage.clickHistoryButton()
-        historyPage.assertEmptyHistoriesDisplayed()
 
+        historyPage.assertEmptyHistoriesDisplayed()
         historyPage.clickBackButton()
+
         welcomePage.assertPageDisplayed()
     }
 
     @Test
-    fun startQuizFromHistoryPageWhenEmpty() {
+    fun startQuizFromHistoryPage_whenEmpty() {
+        welcomePage.assertPageDisplayed()
         welcomePage.clickHistoryButton()
-        historyPage.assertEmptyHistoriesDisplayed()
 
+        historyPage.assertEmptyHistoriesDisplayed()
         historyPage.clickStartQuizButtonWhenEmptyHistory()
+
         filtersPage.assertPageDisplayed()
     }
 
     @Test
-    fun fromWelcomeScreenToNonEmptyHistoryScreenThenBack() {
-        historyPage.initWithDummyHistories()
-
+    fun fromWelcomeScreen_toNonEmptyHistoryScreen_thenBack() = runTest {
+        welcomePage.assertPageDisplayed()
         welcomePage.clickHistoryButton()
+
+        historyPage.initWithDummyHistories()
         historyPage.assertNonEmptyHistoriesDisplayed()
 
         historyPage.clickBackButton()
@@ -111,7 +125,7 @@ class ScenarioTest : StringResources() {
 
         var totalHistories = dummyHistoryResults.size
         repeat(totalHistories) {
-            historyPage.longPressToDelete(totalHistories - 1)
+            historyPage.longPressToDeleteHistoryByIndex(totalHistories - 1)
             totalHistories--
         }
 
@@ -129,7 +143,7 @@ class ScenarioTest : StringResources() {
         historyPage.initWithDummyHistories()
         historyPage.assertNonEmptyHistoriesDisplayed()
 
-        historyPage.longPressToDelete(2)
+        historyPage.longPressToDeleteHistoryByIndex(2)
         historyPage.assertSnackBarAboutDeletingExist()
         historyPage.assertHistoryNonExistWithText("Quiz 3")
 
@@ -138,7 +152,7 @@ class ScenarioTest : StringResources() {
     }
 
     @Test
-    fun fromStartToFinishQuizWithCheckingHistory() = runTest {
+    fun fromStart_toFinishQuiz_withCheckingHistory() = runTest {
         welcomePage.assertPageDisplayed()
         welcomePage.clickStartButton()
 
@@ -175,7 +189,7 @@ class ScenarioTest : StringResources() {
     }
 
     @Test
-    fun showErrorMessageWhenStartingQuizWithNoConnection() = runTest {
+    fun showErrorMessage_whenStartingQuiz_withNoConnection() = runTest {
         (fakeQuizRepository as FakeQuizRepository).shouldSimulateError = true
 
         welcomePage.assertPageDisplayed()
@@ -189,7 +203,6 @@ class ScenarioTest : StringResources() {
         filtersPage.assertStartQuizButtonEnabled()
         filtersPage.clickStartQuizButton()
 
-
         filtersPage.assertPageDisplayed()
         filtersPage.errorSnackBarWasDisplayed()
 
@@ -200,8 +213,39 @@ class ScenarioTest : StringResources() {
         welcomePage.assertPageDisplayed()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class, ExperimentalTestApi::class)
     @Test
-    fun failHardQuizDueToTime() = runTest {
+    fun showLoadingPage_whenQuizIsNotPreparedForFiveSec() = runTest {
+        (fakeQuizRepository as FakeQuizRepository).shouldSimulateFiveSecDelay = true
+
+        welcomePage.assertPageDisplayed()
+        welcomePage.clickStartButton()
+
+        filtersPage.assertPageDisplayed()
+        filtersPage.assertStartQuizButtonNotEnabled()
+        filtersPage.chooseSomeDifficulty(DifficultiesTypes.HARD)
+        filtersPage.assertStartQuizButtonNotEnabled()
+        filtersPage.chooseSomeCategory(CategoriesTypes.BOARD_GAMES)
+        filtersPage.assertStartQuizButtonEnabled()
+        filtersPage.clickStartQuizButton()
+
+        testDispatcher.scheduler.advanceTimeBy(2500)
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithContentDescription("LoadingScreen").assertExists()
+            .assertIsDisplayed()
+        testDispatcher.scheduler.advanceTimeBy(2000)
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithContentDescription("LoadingScreen").assertExists()
+            .assertIsDisplayed()
+        // More than 5 sec
+        testDispatcher.scheduler.advanceTimeBy(600)
+        composeTestRule.waitForIdle()
+
+        quizPage.assertPageDisplayed()
+    }
+
+    @Test
+    fun failQuizOnHardDifficulty_whenNoTimeLeft() = runTest {
         welcomePage.assertPageDisplayed()
         welcomePage.clickStartButton()
 
@@ -226,7 +270,7 @@ class ScenarioTest : StringResources() {
     }
 
     @Test
-    fun finishQuizWhereAllOptionsAreTrueOrFalseWithFourCorrectAnswersOutFive() {
+    fun finishQuiz_whereAllOptionsAreTrueOrFalse_withFourCorrectAnswersOutOfFive() = runTest {
         (fakeQuizRepository as FakeQuizRepository).shouldSimulateOnlyTrueFalseOptions = true
 
         welcomePage.assertPageDisplayed()
@@ -257,7 +301,7 @@ class ScenarioTest : StringResources() {
     }
 
     @Test
-    fun finishQuizWhereAllOptionsAreTrueOrFalseWithAllInCorrectAnswers() {
+    fun finishQuiz_whereAllOptionsAreTrueOrFalse_withAllInCorrectAnswers() = runTest {
         (fakeQuizRepository as FakeQuizRepository).shouldSimulateOnlyTrueFalseOptions = true
 
         welcomePage.assertPageDisplayed()

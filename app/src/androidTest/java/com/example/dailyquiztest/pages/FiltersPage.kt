@@ -12,8 +12,8 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
-import com.example.dailyquiztest.domain.model.CategoriesTypes
-import com.example.dailyquiztest.domain.model.DifficultiesTypes
+import com.example.dailyquiztest.domain.model.Category
+import com.example.dailyquiztest.domain.model.Difficulty
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 
 class FiltersPage(private val composeTestRule: ComposeTestRule) :
@@ -40,16 +40,16 @@ class FiltersPage(private val composeTestRule: ComposeTestRule) :
             .assertIsDisplayed()
     }
 
-    fun chooseSomeCategory(someCategory: CategoriesTypes) {
+    fun chooseSomeCategory(someCategory: Category) {
         composeTestRule.onNodeWithText(retrieveString(R.string.category_menu_text))
             .assertIsDisplayed().performClick()
-        composeTestRule.onNodeWithText(someCategory.categoryName).performScrollTo().assertIsDisplayed().performClick()
+        composeTestRule.onNodeWithText(retrieveString(someCategory.textId)).performScrollTo().assertIsDisplayed().performClick()
     }
 
-    fun chooseSomeDifficulty(someDifficulty: DifficultiesTypes) {
+    fun chooseSomeDifficulty(someDifficulty: Difficulty) {
         composeTestRule.onNodeWithText(retrieveString(R.string.difficulty_menu_text))
             .assertIsDisplayed().performClick()
-        composeTestRule.onNodeWithText(someDifficulty.levelApi).assertIsDisplayed().performClick()
+        composeTestRule.onNodeWithText(someDifficulty.toString()).assertIsDisplayed().performClick()
     }
 
     fun clickStartQuizButton() {

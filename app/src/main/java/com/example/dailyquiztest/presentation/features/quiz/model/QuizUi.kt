@@ -42,8 +42,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.dailyquiztest.R
-import com.example.dailyquiztest.domain.model.CategoriesTypes
-import com.example.dailyquiztest.domain.model.DifficultiesTypes
+import com.example.dailyquiztest.domain.model.Category
+import com.example.dailyquiztest.domain.model.Difficulty
 import com.example.dailyquiztest.domain.model.QuestionTypes
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.CommonCard
@@ -51,6 +51,7 @@ import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
 import com.example.dailyquiztest.presentation.common.UiLogo
 import com.example.dailyquiztest.presentation.common.answers_group.AnswersSpecificTypeFactory
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
+import com.example.dailyquiztest.presentation.features.quiz.QuizUserActions
 import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -65,18 +66,14 @@ data class QuizUi(
     val totalQuestions: Int,
     val userAnswers: List<String> = listOf(),
     val isAnsweredCorrect: Boolean = false,
-    val category: CategoriesTypes,
-    val difficulty: DifficultiesTypes
+    val category: Category,
+    val difficulty: Difficulty
 ) : QuizUiState {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Display(
-        onFiltersPhaseNextButtonClicked: (CategoriesTypes, DifficultiesTypes) -> Unit,
-        onNextClicked: (QuizUi) -> Unit,
-        onBackClicked: () -> Unit,
-        onResultClicked: (QuizUi) -> Unit,
-        onStartNewQuizClicked: () -> Unit
+        quizUserActions: QuizUserActions
     ) {
         val finalUserAnswers =
             rememberSaveable(question) { mutableListOf(userAnswers.joinToString()) }
@@ -142,9 +139,9 @@ data class QuizUi(
                                 scope.launch {
                                     delay(2.seconds)
                                     if (currentNumberQuestion + 1 == totalQuestions) {
-                                        onResultClicked.invoke(updatedQuizUi)
+                                        quizUserActions.onResultClicked().invoke(updatedQuizUi)
                                     } else {
-                                        onNextClicked.invoke(updatedQuizUi)
+                                        quizUserActions.onNextClicked().invoke(updatedQuizUi)
                                     }
                                 }
                             },
@@ -168,7 +165,7 @@ data class QuizUi(
             }
         }
         if (shouldShowTimeIsOverDialog.value) {
-            TimeIsOverDialog(onStartNewQuizClicked)
+            TimeIsOverDialog(quizUserActions.onStartNewQuizClicked())
         }
     }
 
@@ -324,9 +321,9 @@ private fun LongQuizPreview() {
         correctAnswer = "i`m correct answer",
         questionType = QuestionTypes.MULTIPLE,
         totalQuestions = 5,
-        category = CategoriesTypes.CARTOON_AND_ANIMATIONS,
-        difficulty = DifficultiesTypes.EASY
-    ).Display({ _, _ -> }, { _ -> }, {}, {}) {}
+        category = Category.CARTOON_AND_ANIMATIONS,
+        difficulty = Difficulty.EASY
+    ).Display(quizUserActions = QuizUserActions.previewQuizUserActions)
 }
 
 @Composable
@@ -343,7 +340,7 @@ private fun ShortQuizPreview() {
         correctAnswer = "i`m correct answer",
         questionType = QuestionTypes.MULTIPLE,
         totalQuestions = 5,
-        category = CategoriesTypes.CARTOON_AND_ANIMATIONS,
-        difficulty = DifficultiesTypes.EASY
-    ).Display({ _, _ -> }, { _ -> }, {}, {}) {}
+        category = Category.CARTOON_AND_ANIMATIONS,
+        difficulty = Difficulty.EASY
+    ).Display(quizUserActions = QuizUserActions.previewQuizUserActions)
 }

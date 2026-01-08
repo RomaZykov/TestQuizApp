@@ -12,15 +12,6 @@ abstract class HistoryDataBase : RoomDatabase() {
     abstract fun historyDao(): HistoryDao
 }
 
-//@PrimaryKey(autoGenerate = true) @ColumnInfo(
-//    name = "quiz_number",
-//    defaultValue = "0"
-//) val quizResultNumber: Int,
-//@ColumnInfo(name = "stars") val stars: Int,
-//@ColumnInfo(name = "category") val category: String,
-//@ColumnInfo(name = "difficulty") val difficulty: String,
-//@ColumnInfo(name = "last_time") val lastTime: String,
-//@ColumnInfo(name = "last_date") val lastDate: String
 val MIGRATION_1_2 = object : Migration(1, 2) {
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL("ALTER TABLE history_db RENAME TO history_db_old")

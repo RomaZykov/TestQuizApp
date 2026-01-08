@@ -38,43 +38,41 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.dailyquiztest.R
-import com.example.dailyquiztest.domain.model.CategoriesTypes
-import com.example.dailyquiztest.domain.model.DifficultiesTypes
+import com.example.dailyquiztest.domain.model.Category
+import com.example.dailyquiztest.domain.model.Difficulty
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
-import com.example.dailyquiztest.presentation.common.UiLogo
 import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
+import com.example.dailyquiztest.presentation.common.UiLogo
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
+import com.example.dailyquiztest.presentation.features.quiz.QuizUserActions
 import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
 
 data class FiltersUi(
-    val categories: List<CategoriesTypes>,
-    val difficulties: List<DifficultiesTypes>,
+    val categories: List<Category>,
+    val difficulties: List<Difficulty>,
     val shouldShowError: Boolean
 ) : QuizUiState {
 
     @Composable
-    override fun Display(
-        onFiltersPhaseNextButtonClicked: (CategoriesTypes, DifficultiesTypes) -> Unit,
-        onNextClicked: (QuizUi) -> Unit,
-        onBackClicked: () -> Unit,
-        onResultClicked: (QuizUi) -> Unit,
-        onStartNewQuizClicked: () -> Unit
-    ) {
+    override fun Display(quizUserActions: QuizUserActions) {
         val shouldShowErrorToast = rememberSaveable { mutableStateOf(shouldShowError) }
         LaunchedEffect(shouldShowError) {
             shouldShowErrorToast.value = shouldShowError
         }
+
         val categoryLabel = stringResource(R.string.category_menu_text)
         val selectedCategory = rememberSaveable { mutableStateOf(categoryLabel) }
+
         val difficultyLabel = stringResource(R.string.difficulty_menu_text)
         val selectedDifficulty = rememberSaveable { mutableStateOf(difficultyLabel) }
+
         val startButtonEnabled =
             selectedCategory.value != categoryLabel && selectedDifficulty.value != difficultyLabel
         Scaffold(
             modifier = Modifier.semantics {
                 contentDescription = QuizUiState.FILTERS_SCREEN
             },
-            topBar = { FiltersTopBar(onBackClicked) }
+            topBar = { FiltersTopBar(quizUserActions.onBackClicked()) }
         ) { innerPadding ->
             Box(
                 modifier = Modifier
@@ -93,10 +91,10 @@ data class FiltersUi(
                 ) {
                     TitleText()
                     DescriptionText()
-                    Categories(categories, selectedCategory, categoryLabel)
-                    Difficulties(difficulties, selectedDifficulty, difficultyLabel)
+                    Categories(selectedCategory, categoryLabel)
+                    Difficulties(selectedDifficulty, difficultyLabel)
                     StartQuizButton(
-                        onFiltersPhaseNextButtonClicked,
+                        quizUserActions.onFiltersPhaseNextButtonClicked(),
                         selectedCategory.value,
                         selectedDifficulty.value,
                         startButtonEnabled
@@ -156,11 +154,9 @@ data class FiltersUi(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun Categories(
-        categories: List<CategoriesTypes>,
         selectedCategory: MutableState<String>,
         categoryLabel: String
     ) {
-        // TODO: DRY
         var expanded by rememberSaveable { mutableStateOf(false) }
         ExposedDropdownMenuBox(
             modifier = Modifier
@@ -177,7 +173,7 @@ data class FiltersUi(
                     .clickable {
                         expanded = true
                     },
-                value = selectedCategory.value,
+                value = selectedCategory.value.substringBefore(DELIMITER),
                 onValueChange = {
                     selectedCategory.value = it
                 },
@@ -195,12 +191,13 @@ data class FiltersUi(
 
             ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                 categories.forEach {
+                    val categoryText = stringResource(it.textId)
                     DropdownMenuItem(
                         text = {
-                            Text(it.categoryName)
+                            Text(categoryText)
                         },
                         onClick = {
-                            selectedCategory.value = it.categoryName
+                            selectedCategory.value = "$categoryText-${it.name}"
                             expanded = false
                         })
                 }
@@ -211,18 +208,16 @@ data class FiltersUi(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun Difficulties(
-        difficulties: List<DifficultiesTypes>,
         selectedDifficulty: MutableState<String>,
         difficultyLabel: String
     ) {
-        // TODO: DRY
-        var expanded by rememberSaveable { mutableStateOf(false) }
+        val expanded = rememberSaveable { mutableStateOf(false) }
         ExposedDropdownMenuBox(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp),
-            expanded = expanded,
-            onExpandedChange = { expanded = !expanded }
+            expanded = expanded.value,
+            onExpandedChange = { expanded.value = !expanded.value }
         ) {
             OutlinedTextField(
                 modifier = Modifier
@@ -230,9 +225,9 @@ data class FiltersUi(
                     .fillMaxWidth()
                     .padding(8.dp)
                     .clickable {
-                        expanded = true
+                        expanded.value = true
                     },
-                value = selectedDifficulty.value,
+                value = selectedDifficulty.value.substringBefore(DELIMITER),
                 onValueChange = {
                     selectedDifficulty.value = it
                 },
@@ -248,15 +243,18 @@ data class FiltersUi(
                 }
             )
 
-            ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            ExposedDropdownMenu(
+                expanded = expanded.value,
+                onDismissRequest = { expanded.value = false }) {
                 difficulties.forEach {
+                    val difficultyText = stringResource(it.textId)
                     DropdownMenuItem(
                         text = {
-                            Text(it.levelApi)
+                            Text(difficultyText)
                         },
                         onClick = {
-                            selectedDifficulty.value = it.levelApi
-                            expanded = false
+                            selectedDifficulty.value = "$difficultyText-${it.name}"
+                            expanded.value = false
                         })
                 }
             }
@@ -265,7 +263,7 @@ data class FiltersUi(
 
     @Composable
     private fun StartQuizButton(
-        onFiltersPhaseNextButtonClicked: (CategoriesTypes, DifficultiesTypes) -> Unit,
+        onNextButtonClicked: (Category, Difficulty) -> Unit,
         selectedCategory: String,
         selectedDifficulty: String,
         startButtonEnabled: Boolean
@@ -273,19 +271,23 @@ data class FiltersUi(
         ActionButtonWithText(
             enabled = startButtonEnabled,
             onClick = {
-                onFiltersPhaseNextButtonClicked.invoke(
-                    CategoriesTypes.from(selectedCategory),
-                    DifficultiesTypes.from(selectedDifficulty)
+                onNextButtonClicked.invoke(
+                    Category.valueOf(selectedCategory.substringAfter(DELIMITER)),
+                    Difficulty.valueOf(selectedDifficulty.substringAfter(DELIMITER))
                 )
             },
             text = R.string.start_quiz_button_text
         )
+    }
+
+    companion object {
+        const val DELIMITER = "-"
     }
 }
 
 @Preview(showSystemUi = true)
 @Composable
 fun FiltersPreview() {
-    FiltersUi(CategoriesTypes.entries.toList(), emptyList(), true)
-        .Display({ _, _ -> }, { _ -> }, {}, { _ -> }) {}
+    FiltersUi(Category.entries.toList(), emptyList(), true)
+        .Display(quizUserActions = QuizUserActions.previewQuizUserActions)
 }

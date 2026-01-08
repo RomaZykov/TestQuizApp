@@ -1,4 +1,4 @@
-package com.example.dailyquiztest
+package com.example.dailyquiztest.pages
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasClickAction
@@ -10,6 +10,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToIndex
+import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 
@@ -21,7 +22,7 @@ class ResultPage(private val composeTestRule: ComposeTestRule) : StringResources
         )
 
     fun assertPageDisplayed() {
-        composeTestRule.onNodeWithContentDescription(QuizUiState.RESULTS_SCREEN)
+        composeTestRule.onNodeWithContentDescription(QuizUiState.Companion.RESULTS_SCREEN)
             .assertExists()
             .assertIsDisplayed()
     }
@@ -36,7 +37,7 @@ class ResultPage(private val composeTestRule: ComposeTestRule) : StringResources
     }
 
     fun clickBottomStartAgainButton() {
-        composeTestRule.onNodeWithTag(QuizUiState.TEST_LAZY_RESULTS_ITEMS_COLUMN).performScrollToIndex(4)
+        composeTestRule.onNodeWithTag(QuizUiState.Companion.TEST_LAZY_RESULTS_ITEMS_COLUMN).performScrollToIndex(4)
         composeTestRule.onNodeWithContentDescription("bottom start again button", useUnmergedTree = true)
             .performScrollTo()
         clickStartAgainButton()

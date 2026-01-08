@@ -1,8 +1,8 @@
 package com.example.dailyquiztest.data.di
 
-import com.example.dailyquiztest.data.repository.HistoryQuizRepositoryImpl
+import com.example.dailyquiztest.data.repository.HistoryRepositoryImpl
 import com.example.dailyquiztest.data.repository.QuizRepositoryImpl
-import com.example.dailyquiztest.domain.repository.HistoryQuizRepository
+import com.example.dailyquiztest.domain.repository.HistoryRepository
 import com.example.dailyquiztest.domain.repository.QuizRepository
 import dagger.Binds
 import dagger.Module
@@ -14,7 +14,7 @@ import dagger.hilt.components.SingletonComponent
 abstract class DataModule {
 
     @Binds
-    abstract fun bindHistoryQuizRepository(impl: HistoryQuizRepositoryImpl): HistoryQuizRepository
+    abstract fun bindHistoryQuizRepository(impl: HistoryRepositoryImpl): HistoryRepository
 
     @Binds
     abstract fun bindQuizRepository(impl: QuizRepositoryImpl): QuizRepository
