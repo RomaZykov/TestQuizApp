@@ -1,7 +1,6 @@
 package com.example.dailyquiztest.data.repository
 
-import com.example.dailyquiztest.core.dummyHistoryResults
-import com.example.dailyquiztest.domain.model.QuizResult
+import com.example.testing.dummy.dummyHistoryResults
 import com.example.dailyquiztest.domain.repository.HistoryRepository
 import com.example.testing.data.local.FakeLocalHistoryDataSource
 import com.example.testing.data.mapper.FakeDomainToLocalQuizResultMapper

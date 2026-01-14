@@ -13,7 +13,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
-import com.example.dailyquiztest.core.dummyHistoryResults
+import com.example.testing.dummy.dummyHistoryResults
 import com.example.dailyquiztest.domain.repository.HistoryRepository
 import com.example.dailyquiztest.presentation.features.history.HistoryUiState
 
