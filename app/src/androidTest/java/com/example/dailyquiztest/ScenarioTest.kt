@@ -12,9 +12,9 @@ import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.dailyquiztest.core.StringResources
-import com.example.dailyquiztest.core.dummyHistoryResults
-import com.example.dailyquiztest.domain.model.CategoriesTypes
-import com.example.dailyquiztest.domain.model.DifficultiesTypes
+import com.example.testing.dummy.dummyHistoryResults
+import com.example.dailyquiztest.domain.model.Category
+import com.example.dailyquiztest.domain.model.Difficulty
 import com.example.dailyquiztest.domain.repository.HistoryRepository
 import com.example.dailyquiztest.domain.repository.QuizRepository
 import com.example.dailyquiztest.pages.FiltersPage
@@ -158,14 +158,14 @@ class ScenarioTest : StringResources() {
 
         filtersPage.assertPageDisplayed()
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeCategory(CategoriesTypes.VIDEO_GAMES)
+        filtersPage.chooseSomeCategory(Category.VIDEO_GAMES)
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeDifficulty(DifficultiesTypes.EASY)
+        filtersPage.chooseSomeDifficulty(Difficulty.EASY)
         filtersPage.assertStartQuizButtonEnabled()
         filtersPage.clickStartQuizButton()
 
         quizPage.assertPageDisplayed()
-        repeat(DifficultiesTypes.EASY.amountOfQuestions - 1) {
+        repeat(Difficulty.EASY.amountOfQuestions - 1) {
             quizPage.assertNextButtonNotEnabled()
             quizPage.chooseOption(true)
             quizPage.clickNextButton()
@@ -197,9 +197,9 @@ class ScenarioTest : StringResources() {
 
         filtersPage.assertPageDisplayed()
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeCategory(CategoriesTypes.VIDEO_GAMES)
+        filtersPage.chooseSomeCategory(Category.VIDEO_GAMES)
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeDifficulty(DifficultiesTypes.EASY)
+        filtersPage.chooseSomeDifficulty(Difficulty.EASY)
         filtersPage.assertStartQuizButtonEnabled()
         filtersPage.clickStartQuizButton()
 
@@ -223,9 +223,9 @@ class ScenarioTest : StringResources() {
 
         filtersPage.assertPageDisplayed()
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeDifficulty(DifficultiesTypes.HARD)
+        filtersPage.chooseSomeDifficulty(Difficulty.HARD)
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeCategory(CategoriesTypes.BOARD_GAMES)
+        filtersPage.chooseSomeCategory(Category.BOARD_GAMES)
         filtersPage.assertStartQuizButtonEnabled()
         filtersPage.clickStartQuizButton()
 
@@ -251,9 +251,9 @@ class ScenarioTest : StringResources() {
 
         filtersPage.assertPageDisplayed()
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeDifficulty(DifficultiesTypes.HARD)
+        filtersPage.chooseSomeDifficulty(Difficulty.HARD)
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeCategory(CategoriesTypes.BOARD_GAMES)
+        filtersPage.chooseSomeCategory(Category.BOARD_GAMES)
         filtersPage.assertStartQuizButtonEnabled()
         filtersPage.clickStartQuizButton()
 
@@ -276,8 +276,8 @@ class ScenarioTest : StringResources() {
         welcomePage.assertPageDisplayed()
         welcomePage.clickStartButton()
 
-        filtersPage.chooseSomeCategory(CategoriesTypes.FILM)
-        filtersPage.chooseSomeDifficulty(DifficultiesTypes.EASY)
+        filtersPage.chooseSomeCategory(Category.FILM)
+        filtersPage.chooseSomeDifficulty(Difficulty.EASY)
         filtersPage.clickStartQuizButton()
 
         repeat(4) {
@@ -307,8 +307,8 @@ class ScenarioTest : StringResources() {
         welcomePage.assertPageDisplayed()
         welcomePage.clickStartButton()
 
-        filtersPage.chooseSomeCategory(CategoriesTypes.COMICS)
-        filtersPage.chooseSomeDifficulty(DifficultiesTypes.EASY)
+        filtersPage.chooseSomeCategory(Category.COMICS)
+        filtersPage.chooseSomeDifficulty(Difficulty.EASY)
         filtersPage.clickStartQuizButton()
 
         repeat(4) {

@@ -1,10 +1,10 @@
 package com.example.dailyquiztest.presentation
 
-import com.example.dailyquiztest.core.dummyHistoryResults
-import com.example.dailyquiztest.domain.model.CategoriesTypes
-import com.example.dailyquiztest.domain.model.DifficultiesTypes
+import com.example.testing.dummy.dummyHistoryResults
+import com.example.dailyquiztest.domain.model.Category
+import com.example.dailyquiztest.domain.model.Difficulty
 import com.example.dailyquiztest.domain.model.QuizResult
-import com.example.dailyquiztest.fake.FakeQuizRouteProvider
+import com.example.dailyquiztest.testdoubles.FakeQuizRouteProvider
 import com.example.dailyquiztest.presentation.features.history.HistoryUiState
 import com.example.dailyquiztest.presentation.features.history.HistoryViewModel
 import com.example.dailyquiztest.presentation.features.history.model.EmptyHistoryUi
@@ -37,12 +37,12 @@ class HistoryViewModelTest {
         fakeHistoryRepository = FakeHistoryRepository()
         fakeQuizRouteProvider = FakeQuizRouteProvider()
         dispatchers = FakeDispatcherList(testDispatcher)
-        viewModel = HistoryViewModel.Base(
+        viewModel = HistoryViewModel(
             historyRepository = fakeHistoryRepository,
             quizRouteProvider = fakeQuizRouteProvider,
             dispatchers = dispatchers
         )
-        stateFlow = viewModel.historyUiStateFlow()
+        stateFlow = viewModel.uiState
     }
 
     @Test
@@ -105,8 +105,8 @@ class HistoryViewModelTest {
                 QuizResult(
                     id = 1,
                     stars = 0,
-                    categoriesTypes = CategoriesTypes.GENERAL_KNOWLEDGE,
-                    difficultiesTypes = DifficultiesTypes.EASY,
+                    category = Category.GENERAL_KNOWLEDGE,
+                    difficulty = Difficulty.EASY,
                     lastTime = "00:00",
                     lastDate = "2025"
                 )

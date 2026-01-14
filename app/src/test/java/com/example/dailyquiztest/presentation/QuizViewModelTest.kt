@@ -3,7 +3,7 @@ package com.example.dailyquiztest.presentation
 import com.example.dailyquiztest.domain.model.Category
 import com.example.dailyquiztest.domain.model.Difficulty
 import com.example.dailyquiztest.domain.model.QuestionTypes
-import com.example.dailyquiztest.fake.FakeWelcomeRouteProvider
+import com.example.dailyquiztest.testdoubles.FakeWelcomeRouteProvider
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.features.quiz.QuizViewModel
 import com.example.dailyquiztest.presentation.features.quiz.model.FiltersUi
