@@ -32,7 +32,7 @@ data class LocalQuizResult(
             quizResultNumber = this.quizResultNumber,
             stars = this.stars,
             category = Category.valueOf(this.category),
-            difficulty = Difficulty.valueOf(this.difficulty),
+            difficulty = Difficulty.valueOf(this.difficulty.uppercase()),
             lastTime = this.lastTime,
             lastDate = this.lastDate
         )
