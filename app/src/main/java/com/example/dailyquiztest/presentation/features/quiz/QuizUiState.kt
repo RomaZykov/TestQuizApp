@@ -12,6 +12,6 @@ interface QuizUiState {
         const val QUIZ_SCREEN = "QuizScreen"
         const val RESULTS_SCREEN = "ResultsScreen"
 
-        const val TEST_LAZY_RESULTS_ITEMS_COLUMN = "test_lazy_results_items_column"
+        const val RESULT_LAZY_LIST = "ResultLazyList"
     }
 }

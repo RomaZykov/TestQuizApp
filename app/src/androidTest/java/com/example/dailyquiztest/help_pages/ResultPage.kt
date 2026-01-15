@@ -1,8 +1,11 @@
-package com.example.dailyquiztest.pages
+package com.example.dailyquiztest.help_pages
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasScrollAction
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -10,6 +13,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToIndex
+import androidx.compose.ui.test.performScrollToNode
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
@@ -22,9 +26,16 @@ class ResultPage(private val composeTestRule: ComposeTestRule) : StringResources
         )
 
     fun assertPageDisplayed() {
-        composeTestRule.onNodeWithContentDescription(QuizUiState.Companion.RESULTS_SCREEN)
+        composeTestRule.onNodeWithContentDescription(QuizUiState.RESULTS_SCREEN)
             .assertExists()
             .assertIsDisplayed()
+    }
+
+    fun hasScrollOption() {
+        composeTestRule.onNode(
+            hasContentDescription(QuizUiState.RESULT_LAZY_LIST)
+                    and hasScrollAction()
+        )
     }
 
     fun clickStartAgainButton() {
@@ -37,9 +48,21 @@ class ResultPage(private val composeTestRule: ComposeTestRule) : StringResources
     }
 
     fun clickBottomStartAgainButton() {
-        composeTestRule.onNodeWithTag(QuizUiState.Companion.TEST_LAZY_RESULTS_ITEMS_COLUMN).performScrollToIndex(4)
-        composeTestRule.onNodeWithContentDescription("bottom start again button", useUnmergedTree = true)
+        composeTestRule.onNodeWithTag(QuizUiState.RESULT_LAZY_LIST)
+            .performScrollToIndex(4)
+        composeTestRule.onNodeWithContentDescription(
+            "bottom start again button",
+            useUnmergedTree = true
+        )
             .performScrollTo()
         clickStartAgainButton()
+    }
+
+    fun performScrollToItemWithText(questionTitle: String) {
+        composeTestRule.waitUntil {
+            composeTestRule.onNodeWithTag(QuizUiState.RESULT_LAZY_LIST)
+                .performScrollToNode(hasText(questionTitle))
+                .isDisplayed()
+        }
     }
 }
