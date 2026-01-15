@@ -1,9 +1,9 @@
-package com.example.dailyquiztest
+package com.example.dailyquiztest.pages
 
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.dailyquiztest.pages.HistoryPage
+import com.example.dailyquiztest.help_pages.HistoryPage
 import com.example.testing.repository.FakeHistoryRepository
 import org.junit.Before
 import org.junit.Rule

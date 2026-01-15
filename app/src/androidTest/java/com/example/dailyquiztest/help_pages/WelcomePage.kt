@@ -1,18 +1,15 @@
-package com.example.dailyquiztest.pages
+package com.example.dailyquiztest.help_pages
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
 import com.example.dailyquiztest.presentation.features.welcome.WelcomeUiState
-import com.example.dayliquiztest.HiltComponentActivity
 
 class WelcomePage(private val composeTestRule: ComposeTestRule) :
     StringResources() {

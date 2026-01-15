@@ -1,4 +1,4 @@
-package com.example.dailyquiztest.pages
+package com.example.dailyquiztest.help_pages
 
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
