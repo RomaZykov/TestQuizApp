@@ -55,9 +55,9 @@ data class FiltersUi(
 
     @Composable
     override fun Display(quizUserActions: QuizUserActions) {
-        val shouldShowErrorToast = rememberSaveable { mutableStateOf(shouldShowError) }
+        val shouldShowErrorBar = rememberSaveable { mutableStateOf(shouldShowError) }
         LaunchedEffect(shouldShowError) {
-            shouldShowErrorToast.value = shouldShowError
+            shouldShowErrorBar.value = shouldShowError
         }
 
         val categoryLabel = stringResource(R.string.category_menu_text)
@@ -100,7 +100,7 @@ data class FiltersUi(
                         startButtonEnabled
                     )
                 }
-                if (shouldShowErrorToast.value) {
+                if (shouldShowErrorBar.value) {
                     DisplaySnackBar()
                 }
             }

@@ -1,4 +1,4 @@
-package com.example.dailyquiztest
+package com.example.dailyquiztest.pages
 
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -6,7 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.dailyquiztest.core.rememberTestNavController
 import com.example.dailyquiztest.domain.model.Category
 import com.example.dailyquiztest.domain.model.Difficulty
-import com.example.dailyquiztest.pages.FiltersPage
+import com.example.dailyquiztest.help_pages.FiltersPage
 import com.example.dailyquiztest.presentation.features.quiz.QuizScreen
 import com.example.dailyquiztest.presentation.features.quiz.model.FiltersUi
 import org.junit.Before
@@ -30,18 +30,24 @@ class FiltersPageTest {
     }
 
     @Test
-    fun changeOrientation_onFiltersPage() {
+    fun changeOrientation_saveCorrectChoosing_onFiltersPage() {
         restorationTester.setContent {
             val uiState = FiltersUi(
                 categories = listOf(
                     Category.COMICS,
                     Category.GENERAL_KNOWLEDGE,
                     Category.BOARD_GAMES,
+                    Category.HISTORY,
+                    Category.ART,
+                    Category.VEHICLES,
+                    Category.SPORTS,
+                    Category.MYTHOLOGY,
+                    Category.VIDEO_GAMES
                 ),
                 difficulties = listOf(
                     Difficulty.EASY,
                     Difficulty.MEDIUM,
-                    Difficulty.HARD,
+                    Difficulty.HARD
                 ),
                 shouldShowError = false
             )
@@ -58,8 +64,12 @@ class FiltersPageTest {
 
         filtersPage.assertPageDisplayed()
 
-//        restorationTester.emulateSavedInstanceStateRestore()
+        filtersPage.chooseSomeCategory(Category.VIDEO_GAMES)
+        filtersPage.chooseSomeDifficulty(Difficulty.HARD)
 
-//        historyPage.assertNonEmptyHistoriesDisplayed()
+        restorationTester.emulateSavedInstanceStateRestore()
+
+        filtersPage.assertCategorySelected(Category.VIDEO_GAMES)
+        filtersPage.assertDifficultySelected(Difficulty.HARD)
     }
 }

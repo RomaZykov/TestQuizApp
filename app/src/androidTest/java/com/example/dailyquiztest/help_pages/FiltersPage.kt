@@ -1,4 +1,4 @@
-package com.example.dailyquiztest.pages
+package com.example.dailyquiztest.help_pages
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
@@ -61,5 +61,12 @@ class FiltersPage(private val composeTestRule: ComposeTestRule) :
         composeTestRule.onNodeWithText(retrieveString(R.string.error_message))
             .assertExists()
             .assertIsDisplayed()
+    }
+
+    fun assertCategorySelected(category: Category) {
+        composeTestRule.onNodeWithText(retrieveString(category.textId)).assertExists().assertIsDisplayed()
+    }
+    fun assertDifficultySelected(difficulty: Difficulty) {
+        composeTestRule.onNodeWithText(difficulty.toString(), ignoreCase = true).assertExists().assertIsDisplayed()
     }
 }
