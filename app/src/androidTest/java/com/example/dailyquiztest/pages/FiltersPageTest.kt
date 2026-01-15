@@ -66,26 +66,38 @@ class FiltersPageTest : StringResources() {
     @Test
     fun changeOrientation_saveCorrectChoosing_onFiltersPage() {
         filtersPage.assertPageDisplayed()
+        filtersPage.hasScrollOption()
 
+        filtersPage.assertStartQuizButtonNotEnabled()
         filtersPage.chooseSomeCategory(Category.VIDEO_GAMES)
+        filtersPage.assertStartQuizButtonNotEnabled()
         filtersPage.chooseSomeDifficulty(Difficulty.HARD)
+        filtersPage.assertStartQuizButtonEnabled()
 
         restorationTester.emulateSavedInstanceStateRestore()
 
         filtersPage.assertCategorySelected(Category.VIDEO_GAMES)
         filtersPage.assertDifficultySelected(Difficulty.HARD)
+        filtersPage.assertStartQuizButtonEnabled()
     }
 
     @Test
     fun changeOrientationWithInitialItems_showCorrect_onFiltersPage() {
         filtersPage.assertPageDisplayed()
+        filtersPage.hasScrollOption()
 
-        composeTestRule.onNodeWithText(retrieveString(R.string.category_menu_text)).assertExists().assertIsDisplayed()
-        composeTestRule.onNodeWithText(retrieveString(R.string.difficulty_menu_text)).assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithText(retrieveString(R.string.category_menu_text)).assertExists()
+            .assertIsDisplayed()
+        composeTestRule.onNodeWithText(retrieveString(R.string.difficulty_menu_text)).assertExists()
+            .assertIsDisplayed()
+        filtersPage.assertStartQuizButtonNotEnabled()
 
         restorationTester.emulateSavedInstanceStateRestore()
 
-        composeTestRule.onNodeWithText(retrieveString(R.string.category_menu_text)).assertExists().assertIsDisplayed()
-        composeTestRule.onNodeWithText(retrieveString(R.string.difficulty_menu_text)).assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithText(retrieveString(R.string.category_menu_text)).assertExists()
+            .assertIsDisplayed()
+        composeTestRule.onNodeWithText(retrieveString(R.string.difficulty_menu_text)).assertExists()
+            .assertIsDisplayed()
+        filtersPage.assertStartQuizButtonNotEnabled()
     }
 }
