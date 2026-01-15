@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -20,6 +22,9 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -30,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -53,6 +59,7 @@ data class FiltersUi(
     val shouldShowError: Boolean
 ) : QuizUiState {
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Display(quizUserActions: QuizUserActions) {
         val shouldShowErrorBar = rememberSaveable { mutableStateOf(shouldShowError) }
@@ -68,23 +75,28 @@ data class FiltersUi(
 
         val startButtonEnabled =
             selectedCategory.value != categoryLabel && selectedDifficulty.value != difficultyLabel
+
+        val scrollState = rememberScrollState()
+        val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
         Scaffold(
-            modifier = Modifier.semantics {
-                contentDescription = QuizUiState.FILTERS_SCREEN
-            },
-            topBar = { FiltersTopBar(quizUserActions.onBackClicked()) }
+            modifier = Modifier
+                .semantics {
+                    contentDescription = QuizUiState.FILTERS_SCREEN
+                }
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
+            topBar = { FiltersTopBar(quizUserActions.onBackClicked(), scrollBehavior) }
         ) { innerPadding ->
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(DailyQuizTheme.colorScheme.primary)
-                    .padding(innerPadding)
-                    .padding(top = DailyQuizTheme.dimensions.topPadding)
+                    .padding(top = innerPadding.calculateTopPadding())
+                    .verticalScroll(scrollState)
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(24.dp)
+                        .padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
                         .clip(RoundedCornerShape(40.dp))
                         .background(DailyQuizTheme.colorScheme.secondary),
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -109,14 +121,14 @@ data class FiltersUi(
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    private fun FiltersTopBar(onBackClicked: () -> Unit) {
+    private fun FiltersTopBar(onBackClicked: () -> Unit, scrollBehavior: TopAppBarScrollBehavior?) {
         TopAppBarDecorator(backButton = {
             IconButton({
                 onBackClicked.invoke()
             }) {
                 Image(painter = painterResource(R.drawable.arrow_back_icon), null)
             }
-        }) {
+        }, scrollBehavior = scrollBehavior) {
             UiLogo()
         }
     }
