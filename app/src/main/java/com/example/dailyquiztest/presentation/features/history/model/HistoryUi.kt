@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -38,6 +39,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -79,7 +81,10 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
                 SnackbarHost(snackBarHostState)
             },
             topBar = {
-                HistoryTopBar(onBackButtonClicked = historyUserActions.onBackButtonClicked(), scrollBehavior)
+                HistoryTopBar(
+                    onBackButtonClicked = historyUserActions.onBackButtonClicked(),
+                    scrollBehavior
+                )
             }
         ) { innerPadding ->
             Box(
@@ -89,9 +94,10 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
                     .padding(top = innerPadding.calculateTopPadding())
                     .alpha(if (dropDownMenuActive.value) 0.5f else 1f)
             ) {
+                val listState = rememberLazyListState()
                 LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().testTag(HistoryUiState.LAZY_HISTORY_LIST),
+                    state = listState
                 ) {
                     itemsIndexed(historyQuizResults) { i, result ->
                         QuizResultCard(result, dropDownMenuActive, snackBarHostState) {
