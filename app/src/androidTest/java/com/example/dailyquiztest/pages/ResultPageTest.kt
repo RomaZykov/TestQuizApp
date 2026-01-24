@@ -1,12 +1,16 @@
-package com.example.dailyquiztest
+package com.example.dailyquiztest.pages
 
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.dailyquiztest.core.rememberTestNavController
-import com.example.dailyquiztest.pages.ResultPage
+import com.example.dailyquiztest.help_pages.ResultPage
 import com.example.dailyquiztest.presentation.features.quiz.QuizScreen
 import com.example.dailyquiztest.presentation.features.quiz.model.QuizResultUi
+import com.example.testing.dummy.dummyQuizAnswers
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -28,10 +32,10 @@ class ResultPageTest {
     }
 
     @Test
-    fun changeOrientation_onFiltersPage() {
+    fun changeOrientation_onLazyList_showsCorrectSelectedItem() {
         restorationTester.setContent {
             val uiState = QuizResultUi(
-                quizAnswers = TODO()
+                quizAnswers = dummyQuizAnswers
             )
             QuizScreen(
                 uiState = uiState,
@@ -45,9 +49,22 @@ class ResultPageTest {
         }
 
         resultPage.assertPageDisplayed()
+        resultPage.hasScrollOption()
 
-//        restorationTester.emulateSavedInstanceStateRestore()
+        composeTestRule.onNodeWithText(dummyQuizAnswers.first().question)
+            .assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithText(dummyQuizAnswers.last().question)
+            .assertIsNotDisplayed()
 
-//        historyPage.assertNonEmptyHistoriesDisplayed()
+        restorationTester.emulateSavedInstanceStateRestore()
+
+        resultPage.performScrollToItemWithText(dummyQuizAnswers.last().question)
+
+        restorationTester.emulateSavedInstanceStateRestore()
+
+        composeTestRule.onNodeWithText(dummyQuizAnswers.last().question)
+            .assertExists().assertIsDisplayed()
+        resultPage.performScrollToItemWithText(dummyQuizAnswers.first().question)
+        composeTestRule.onNodeWithText(dummyQuizAnswers.first().question).assertExists().assertIsDisplayed()
     }
 }

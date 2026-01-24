@@ -1,25 +1,27 @@
-package com.example.dailyquiztest.pages
+package com.example.dailyquiztest.helpPages
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTouchInput
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
-import com.example.testing.dummy.dummyHistoryResults
 import com.example.dailyquiztest.domain.repository.HistoryRepository
 import com.example.dailyquiztest.presentation.features.history.HistoryUiState
+import com.example.testing.dummy.dummyHistoryResults
 
 class HistoryPage(
     private val composeTestRule: ComposeTestRule,
-    private val fakeHistoryRepository: HistoryRepository,
+    private val fakeHistoryRepository: HistoryRepository
 ) : StringResources() {
 
     private val backButton =
@@ -40,20 +42,33 @@ class HistoryPage(
                     and hasClickAction()
         )
 
+    fun assertHistoryTitleWithBackButtonDisplayed() {
+        backButton.assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithText(retrieveString(R.string.history_title_text))
+            .assertExists()
+            .assertIsDisplayed()
+    }
+
+    fun assertHistoryTitleWithBackButtonNotDisplayed() {
+        backButton.assertIsNotDisplayed()
+        composeTestRule.onNodeWithText(retrieveString(R.string.history_title_text))
+            .assertIsNotDisplayed()
+    }
+
     fun clickBackButton() {
-        backButton.assertIsDisplayed()
-        backButton.performClick()
+        backButton.assertExists().assertIsDisplayed().performClick()
+        composeTestRule.waitForIdle()
     }
 
     private fun clickDeleteButton() {
-        deleteButton.assertIsDisplayed()
-        deleteButton.performClick()
+        deleteButton.assertExists().assertIsDisplayed().performClick()
+        composeTestRule.waitForIdle()
     }
 
     fun clickStartQuizButtonWhenEmptyHistory() {
         assertEmptyHistoriesDisplayed()
-        startQuizButton.assertIsDisplayed()
-        startQuizButton.performClick()
+        startQuizButton.assertExists().assertIsDisplayed().performClick()
+        composeTestRule.waitForIdle()
     }
 
     fun assertEmptyHistoriesDisplayed() {
@@ -73,11 +88,15 @@ class HistoryPage(
     }
 
     fun longPressToDeleteHistoryByIndex(id: Int) {
-        val historyToDelete =
-            composeTestRule.onNodeWithText(retrieveString(R.string.quiz_number_title, id + 1))
-        historyToDelete.performScrollTo().assertExists().assertIsDisplayed().performTouchInput {
-            longClick()
-        }
+        composeTestRule.onNodeWithTag(HistoryUiState.LAZY_HISTORY_LIST).performScrollToNode(
+            hasText(retrieveString(R.string.quiz_number_title, id + 1))
+        )
+        composeTestRule.onNodeWithText(retrieveString(R.string.quiz_number_title, id + 1))
+            .assertExists()
+            .assertIsDisplayed()
+            .performTouchInput {
+                longClick(center, 500)
+            }
         clickDeleteButton()
     }
 
@@ -88,5 +107,6 @@ class HistoryPage(
 
     fun assertHistoryNonExistWithText(title: String) {
         composeTestRule.onNodeWithText(title).assertDoesNotExist()
+        composeTestRule.onNodeWithText(title).assertIsNotDisplayed()
     }
 }

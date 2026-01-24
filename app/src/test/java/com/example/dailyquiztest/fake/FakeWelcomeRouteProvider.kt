@@ -1,11 +1,11 @@
-package com.example.dailyquiztest.testdoubles
+package com.example.dailyquiztest.fake
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import com.example.dailyquiztest.presentation.main_navigation.HistoryRouteProvider
 import com.example.dailyquiztest.presentation.main_navigation.Route
+import com.example.dailyquiztest.presentation.main_navigation.WelcomeRouteProvider
 
-class FakeHistoryRouteProvider : HistoryRouteProvider {
+class FakeWelcomeRouteProvider : WelcomeRouteProvider {
         var wasRouteCalled = false
         override fun route(): Route {
             wasRouteCalled = true

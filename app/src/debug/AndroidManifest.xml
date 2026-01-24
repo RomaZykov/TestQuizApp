@@ -5,7 +5,6 @@
         <activity
             android:theme="@android:style/Theme.Material.Light.NoActionBar"
             android:name="com.example.dayliquiztest.HiltComponentActivity"
-            android:exported="false"
             />
     </application>
 </manifest>

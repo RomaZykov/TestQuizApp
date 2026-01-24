@@ -6,11 +6,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -50,54 +50,50 @@ data class QuizResultUi(
     override fun Display(
         quizUserActions: QuizUserActions
     ) {
-        Column(
+        val listState = rememberLazyListState()
+        LazyColumn(
             modifier = Modifier
                 .semantics {
                     contentDescription = QuizUiState.RESULTS_SCREEN
                 }
-                .fillMaxSize()
-                .background(DailyQuizTheme.colorScheme.primary)
+                .testTag(QuizUiState.RESULT_LAZY_LIST)
+                .fillMaxWidth()
+                .background(DailyQuizTheme.colorScheme.primary),
+            state = listState
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .testTag(QuizUiState.TEST_LAZY_RESULTS_ITEMS_COLUMN)
-                    .fillMaxWidth()
-                    .background(DailyQuizTheme.colorScheme.primary)
-            ) {
-                item {
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 42.dp),
-                        text = stringResource(R.string.result_title_text),
-                        style = DailyQuizTheme.typography.titleTopBar,
-                        textAlign = TextAlign.Center
-                    )
-                }
-                item {
-                    ResultActionCard(quizUserActions.onStartNewQuizClicked())
-                }
-                items(quizAnswers) {
-                    QuizResultItem(it)
-                }
-                item {
-                    ActionButtonWithText(
-                        modifier = Modifier
-                            .semantics {
-                                contentDescription = "bottom start again button"
-                            }
-                            .padding(bottom = 72.dp)
-                            .padding(horizontal = 20.dp),
-                        onClick = {
-                            quizUserActions.onStartNewQuizClicked().invoke()
-                        },
-                        text = R.string.start_again,
-                        containerColors = ButtonDefaults.buttonColors().copy(
-                            DailyQuizTheme.colorScheme.secondary
-                        ),
-                        textColors = DailyQuizTheme.colorScheme.tertiary
-                    )
-                }
+            item {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 42.dp),
+                    text = stringResource(R.string.result_title_text),
+                    style = DailyQuizTheme.typography.titleTopBar,
+                    textAlign = TextAlign.Center
+                )
+            }
+            item {
+                ResultActionCard(quizUserActions.onStartNewQuizClicked())
+            }
+            items(quizAnswers) {
+                QuizResultItem(it)
+            }
+            item {
+                ActionButtonWithText(
+                    modifier = Modifier
+                        .semantics {
+                            contentDescription = "bottom start again button"
+                        }
+                        .padding(bottom = 72.dp)
+                        .padding(horizontal = 20.dp),
+                    onClick = {
+                        quizUserActions.onStartNewQuizClicked().invoke()
+                    },
+                    text = R.string.start_again,
+                    containerColors = ButtonDefaults.buttonColors().copy(
+                        DailyQuizTheme.colorScheme.secondary
+                    ),
+                    textColors = DailyQuizTheme.colorScheme.tertiary
+                )
             }
         }
     }

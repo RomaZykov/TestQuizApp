@@ -10,5 +10,7 @@ interface HistoryUiState {
     companion object {
         const val EMPTY_HISTORY_SCREEN = "emptyHistoryScreen"
         const val NON_EMPTY_HISTORY_SCREEN = "nonEmptyHistoryScreen"
+
+        const val LAZY_HISTORY_LIST = "lazyHistoryList"
     }
 }

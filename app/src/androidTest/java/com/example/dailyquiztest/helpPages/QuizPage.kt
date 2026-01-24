@@ -1,4 +1,4 @@
-package com.example.dailyquiztest.pages
+package com.example.dailyquiztest.helpPages
 
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
@@ -24,7 +24,7 @@ import com.example.testing.repository.FakeQuizRepository
 
 class QuizPage(
     private val composeTestRule: ComposeTestRule,
-    private val fakeQuizRepository: QuizRepository,
+    private val fakeQuizRepository: QuizRepository
 ) : StringResources() {
 
     private val dummyQuizesToIterate: ArrayDeque<QuizQuestion> by lazy {
@@ -59,6 +59,7 @@ class QuizPage(
 
     fun clickStartAgainButton() {
         startAgainButton.assertIsDisplayed().assertIsEnabled().performClick()
+        composeTestRule.waitForIdle()
     }
 
     fun clickNextButton() {
@@ -80,7 +81,11 @@ class QuizPage(
     }
 
     fun assertNextButtonNotEnabled() {
-        nextButton.assertIsDisplayed().assertIsNotEnabled()
+        nextButton.performScrollTo().assertIsDisplayed().assertIsNotEnabled()
+    }
+
+    fun assertNextButtonEnabled() {
+        nextButton.performScrollTo().assertIsDisplayed().assertIsEnabled()
     }
 
     fun chooseOption(shouldChooseCorrect: Boolean) {
