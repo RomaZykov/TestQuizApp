@@ -34,7 +34,7 @@ interface AnswersSpecificTypeFactory {
                 QuestionTypes.BOOLEAN -> {
                     RadioButtonGroup(
                         question = question,
-                        correctOption = correctAnswers.first().toBoolean(),
+                        isCorrectOption = correctAnswers.first().toBoolean(),
                         checkedEnabled = checkedEnabled,
                         actionButtonEnabled,
                         if (userAnswers.first().isNotEmpty()) {

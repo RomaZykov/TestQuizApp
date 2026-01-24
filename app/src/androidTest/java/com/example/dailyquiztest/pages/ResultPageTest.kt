@@ -1,30 +1,28 @@
 package com.example.dailyquiztest.pages
 
+import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.StateRestorationTester
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.dailyquiztest.core.rememberTestNavController
-import com.example.dailyquiztest.help_pages.ResultPage
+import com.example.dailyquiztest.helpPages.ResultPage
 import com.example.dailyquiztest.presentation.features.quiz.QuizScreen
 import com.example.dailyquiztest.presentation.features.quiz.model.QuizResultUi
-import com.example.testing.dummy.dummyQuizAnswers
+import com.example.testing.dummy.stubQuizAnswers
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 class ResultPageTest {
-
     @get:Rule
-    val composeTestRule = createComposeRule()
+    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     private lateinit var resultPage: ResultPage
 
-    private val restorationTester: StateRestorationTester = StateRestorationTester(composeTestRule)
+    private val restorationTester: StateRestorationTester =
+        StateRestorationTester(composeTestRule)
 
     @Before
     fun setUp() {
@@ -32,10 +30,10 @@ class ResultPageTest {
     }
 
     @Test
-    fun changeOrientation_onLazyList_showsCorrectSelectedItem() {
+    fun resetState_onLazyList_showsCorrectPreviouslySelectedItem() {
         restorationTester.setContent {
             val uiState = QuizResultUi(
-                quizAnswers = dummyQuizAnswers
+                quizAnswers = stubQuizAnswers
             )
             QuizScreen(
                 uiState = uiState,
@@ -51,20 +49,21 @@ class ResultPageTest {
         resultPage.assertPageDisplayed()
         resultPage.hasScrollOption()
 
-        composeTestRule.onNodeWithText(dummyQuizAnswers.first().question)
+        composeTestRule.onNodeWithText(stubQuizAnswers.first().question)
             .assertExists().assertIsDisplayed()
-        composeTestRule.onNodeWithText(dummyQuizAnswers.last().question)
+        composeTestRule.onNodeWithText(stubQuizAnswers.last().question)
             .assertIsNotDisplayed()
 
         restorationTester.emulateSavedInstanceStateRestore()
 
-        resultPage.performScrollToItemWithText(dummyQuizAnswers.last().question)
+        resultPage.performScrollToItemWithText(stubQuizAnswers.last().question)
 
         restorationTester.emulateSavedInstanceStateRestore()
 
-        composeTestRule.onNodeWithText(dummyQuizAnswers.last().question)
+        composeTestRule.onNodeWithText(stubQuizAnswers.last().question)
             .assertExists().assertIsDisplayed()
-        resultPage.performScrollToItemWithText(dummyQuizAnswers.first().question)
-        composeTestRule.onNodeWithText(dummyQuizAnswers.first().question).assertExists().assertIsDisplayed()
+        resultPage.performScrollToItemWithText(stubQuizAnswers.first().question)
+        composeTestRule.onNodeWithText(stubQuizAnswers.first().question).assertExists()
+            .assertIsDisplayed()
     }
 }

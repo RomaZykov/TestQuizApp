@@ -47,9 +47,7 @@ data class QuizResultUi(
 ) : QuizUiState {
 
     @Composable
-    override fun Display(
-        quizUserActions: QuizUserActions
-    ) {
+    override fun Display(quizUserActions: QuizUserActions) {
         val listState = rememberLazyListState()
         LazyColumn(
             modifier = Modifier
@@ -83,8 +81,7 @@ data class QuizResultUi(
                         .semantics {
                             contentDescription = "bottom start again button"
                         }
-                        .padding(bottom = 72.dp)
-                        .padding(horizontal = 20.dp),
+                        .padding(start = 20.dp, end = 20.dp, bottom = 72.dp),
                     onClick = {
                         quizUserActions.onStartNewQuizClicked().invoke()
                     },
@@ -147,9 +144,9 @@ data class QuizResultUi(
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
                 CalculatedScoreResult()
             }
-            ActionButtonWithText(onClick = {
+            ActionButtonWithText(text = R.string.start_again, onClick = {
                 onStartNewQuizClicked.invoke()
-            }, text = R.string.start_again)
+            })
         }
     }
 

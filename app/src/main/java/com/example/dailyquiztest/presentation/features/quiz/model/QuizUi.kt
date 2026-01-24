@@ -248,7 +248,7 @@ data class QuizUi(
         correctAnswers: List<String>,
         inCorrectAnswers: List<String>,
         actionButtonEnabled: MutableState<Boolean>,
-        nextQuizDelay: Boolean,
+        shouldShowBorderWithDelay: Boolean,
         updateUserAnswers: (List<String>, Boolean) -> Unit
     ) {
         val quizOptions = AnswersSpecificTypeFactory.Base(
@@ -259,7 +259,7 @@ data class QuizUi(
             apiType = questionType,
             question = question
         )
-        quizOptions.createGroup().DisplayGroup(nextQuizDelay, updateQuiz = { selectedOptions ->
+        quizOptions.createGroup().DisplayGroup(shouldShowBorderWithDelay, updateQuiz = { selectedOptions ->
             updateUserAnswers.invoke(
                 selectedOptions.filter { it.isNotEmpty() },
                 selectedOptions.filter { it.isNotEmpty() }.size == 1 && selectedOptions.contains(

@@ -26,7 +26,7 @@ import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
 
 internal class RadioButtonGroup(
     private val question: String,
-    private val correctOption: Boolean,
+    private val isCorrectOption: Boolean,
     private val checkedEnabled: Boolean,
     private val actionButtonEnabled: MutableState<Boolean>,
     private val userAnswer: Boolean? = null,
@@ -66,10 +66,10 @@ internal class RadioButtonGroup(
                             role = Role.RadioButton
                         )
                         .then(
-                            if (shouldShowBorder && (isOptionSelected || correctOption == option)
+                            if (shouldShowBorder && (isOptionSelected || isCorrectOption == option)
                             ) Modifier.border(
                                 2.dp,
-                                if (correctOption == option) {
+                                if (isCorrectOption == option) {
                                     DailyQuizTheme.colorScheme.onSurface
                                 } else {
                                     DailyQuizTheme.colorScheme.error
