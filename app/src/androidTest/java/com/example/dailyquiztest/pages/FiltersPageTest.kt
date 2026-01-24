@@ -10,7 +10,7 @@ import com.example.dailyquiztest.core.StringResources
 import com.example.dailyquiztest.core.rememberTestNavController
 import com.example.dailyquiztest.domain.model.Category
 import com.example.dailyquiztest.domain.model.Difficulty
-import com.example.dailyquiztest.help_pages.FiltersPage
+import com.example.dailyquiztest.helpPages.FiltersPage
 import com.example.dailyquiztest.presentation.features.quiz.QuizScreen
 import com.example.dailyquiztest.presentation.features.quiz.model.FiltersUi
 import org.junit.Before
@@ -33,22 +33,8 @@ class FiltersPageTest : StringResources() {
         filtersPage = FiltersPage(composeTestRule)
         restorationTester.setContent {
             val uiState = FiltersUi(
-                categories = listOf(
-                    Category.COMICS,
-                    Category.GENERAL_KNOWLEDGE,
-                    Category.BOARD_GAMES,
-                    Category.HISTORY,
-                    Category.ART,
-                    Category.VEHICLES,
-                    Category.SPORTS,
-                    Category.MYTHOLOGY,
-                    Category.VIDEO_GAMES
-                ),
-                difficulties = listOf(
-                    Difficulty.EASY,
-                    Difficulty.MEDIUM,
-                    Difficulty.HARD
-                ),
+                categories = Category.entries,
+                difficulties = Difficulty.entries,
                 shouldShowError = false
             )
             QuizScreen(
@@ -64,7 +50,7 @@ class FiltersPageTest : StringResources() {
     }
 
     @Test
-    fun changeOrientation_saveCorrectChoosing_onFiltersPage() {
+    fun changeOrientation_saveCorrectChoosing() {
         filtersPage.assertPageDisplayed()
         filtersPage.hasScrollOption()
 
@@ -82,7 +68,7 @@ class FiltersPageTest : StringResources() {
     }
 
     @Test
-    fun changeOrientationWithInitialItems_showCorrect_onFiltersPage() {
+    fun changeOrientationWithInitialItems_showCorrectContent() {
         filtersPage.assertPageDisplayed()
         filtersPage.hasScrollOption()
 

@@ -1,4 +1,4 @@
-package com.example.dailyquiztest.help_pages
+package com.example.dailyquiztest.helpPages
 
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
@@ -30,17 +30,16 @@ class FiltersPage(private val composeTestRule: ComposeTestRule) :
         )
 
     fun assertStartQuizButtonNotEnabled() {
-        startButton.assertIsDisplayed()
-        startButton.assertIsNotEnabled()
+        startButton.assertIsDisplayed().assertIsNotEnabled()
     }
 
     fun assertStartQuizButtonEnabled() {
-        startButton.assertIsDisplayed()
-        startButton.assertIsEnabled()
+        startButton.performScrollTo().assertIsDisplayed().assertIsEnabled()
     }
 
     fun assertPageDisplayed() {
-        composeTestRule.onNodeWithContentDescription(QuizUiState.FILTERS_SCREEN).assertExists()
+        composeTestRule.onNodeWithContentDescription(QuizUiState.FILTERS_SCREEN)
+            .assertExists()
             .assertIsDisplayed()
     }
 
@@ -58,8 +57,9 @@ class FiltersPage(private val composeTestRule: ComposeTestRule) :
     }
 
     fun clickStartQuizButton() {
-        startButton.assertIsDisplayed()
+        startButton.performScrollTo().assertIsDisplayed()
         startButton.performClick()
+        composeTestRule.waitForIdle()
     }
 
     fun errorSnackBarWasDisplayed() {
