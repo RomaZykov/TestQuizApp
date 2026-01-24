@@ -5,7 +5,10 @@ import com.example.dailyquiztest.domain.model.Difficulty
 import com.example.dailyquiztest.domain.model.QuestionTypes
 import com.example.dailyquiztest.presentation.features.quiz.model.QuizUi
 
-val dummyQuizAnswers = listOf(
+/**
+ * Size of quiz answers = [15]
+ */
+val stubQuizAnswers = listOf(
     QuizUi(
         currentNumberQuestion = 1,
         question = "Test question 1",
