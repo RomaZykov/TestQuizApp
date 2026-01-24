@@ -2,7 +2,7 @@ package com.example.testing.repository
 
 import com.example.dailyquiztest.domain.model.QuizQuestion
 import com.example.dailyquiztest.domain.repository.QuizRepository
-import com.example.testing.dummy.dummyQuizes
+import com.example.testing.dummy.stubQuizes
 import com.example.testing.dummy.dummyTrueFalseQuizes
 import kotlinx.coroutines.delay
 import javax.inject.Inject
@@ -28,7 +28,7 @@ class FakeQuizRepository @Inject constructor() : QuizRepository {
             val source = if (shouldSimulateOnlyTrueFalseOptions) {
                 dummyTrueFalseQuizes
             } else {
-                dummyQuizes
+                stubQuizes
             }
             savedQuizes.addAll(source.take(amount))
             Result.success(savedQuizes)
