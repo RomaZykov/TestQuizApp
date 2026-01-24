@@ -56,7 +56,7 @@ class HistoryRepositoryTest {
             historyRepository.saveQuizResult(it)
         }
 
-        assertEquals(5, fakeDomainToLocalQuizResultMapper.mapCalledCount)
+        assertEquals(7, fakeDomainToLocalQuizResultMapper.mapCalledCount)
         assertEquals(0, fakeLocalToDomainQuizResultMapper.mapCalledCount)
 
         dummyHistoryResults.forEach {
