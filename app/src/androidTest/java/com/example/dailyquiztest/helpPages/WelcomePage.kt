@@ -1,12 +1,14 @@
-package com.example.dailyquiztest.help_pages
+package com.example.dailyquiztest.helpPages
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
 import com.example.dailyquiztest.presentation.features.welcome.WelcomeUiState
@@ -27,17 +29,21 @@ class WelcomePage(private val composeTestRule: ComposeTestRule) :
         )
 
     fun clickHistoryButton() {
-        historyButton.assertExists()
+        historyButton.assertExists().assertIsDisplayed()
         historyButton.performClick()
     }
 
     fun clickStartButton() {
-        startButton.assertIsDisplayed()
+        startButton.assertExists().performScrollTo().assertIsDisplayed()
         startButton.performClick()
     }
 
+    fun assertHistoryButtonDisplayed() = historyButton.assertExists().assertIsDisplayed()
+    fun assertHistoryButtonNotDisplayed() = historyButton.assertExists().assertIsNotDisplayed()
+    fun assertStartQuizButtonDisplayed() = startButton.assertExists().assertIsDisplayed()
+
     fun assertPageDisplayed() {
-        composeTestRule.onNodeWithContentDescription(WelcomeUiState.INITIAL_WELCOME_SCREEN).assertExists()
-            .assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription(WelcomeUiState.INITIAL_WELCOME_SCREEN)
+            .assertExists().assertIsDisplayed()
     }
 }
