@@ -38,9 +38,6 @@ import com.example.dailyquiztest.presentation.common.answers_group.AnswersSpecif
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.features.quiz.QuizUserActions
 import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 data class QuizResultUi(
     private val quizAnswers: List<QuizUi>
@@ -129,7 +126,7 @@ data class QuizResultUi(
                     .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                StarsScore(calculatedStarsScoreResult = calculatedStarsScoreResult())
+                StarsScore(calculatedStarsScoreResult = calculateStarsScoreResult())
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
                 Text(
                     stringResource(
@@ -206,7 +203,7 @@ data class QuizResultUi(
     }
 
     private fun titleAndDescription(): Pair<Int, Int> {
-        return when (calculatedScorePercentage()) {
+        return when (calculateScorePercentage()) {
             in 0 until 20 -> Pair(
                 R.string.zero_stars_title,
                 R.string.zero_stars_desc
@@ -240,13 +237,13 @@ data class QuizResultUi(
     }
 
     private fun totalCorrectAnswers() = quizAnswers.count { it.isAnsweredCorrect }
-    private fun calculatedScorePercentage() =
+    private fun calculateScorePercentage() =
         totalCorrectAnswers() * 100 / quizAnswers.first().totalQuestions
 
-    fun calculatedStarsScoreResult(): Int {
+    fun calculateStarsScoreResult(): Int {
         val percentagesList = listOf(20, 40, 60, 80, 100)
         var starsCounter = 0
-        val calculatedScore = calculatedScorePercentage()
+        val calculatedScore = calculateScorePercentage()
         for (e in percentagesList) {
             if (calculatedScore >= e) {
                 starsCounter++
@@ -257,19 +254,19 @@ data class QuizResultUi(
         return starsCounter
     }
 
-    fun dateFinished(): String {
-        val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("dd MMMM", Locale("ru"))
-        val formatted = current.format(formatter)
-        return formatted
-    }
-
-    fun timeFinished(): String {
-        val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("HH:mm")
-        val formatted = current.format(formatter)
-        return formatted
-    }
+//    fun dateFinished(): String {
+//        val current = LocalDateTime.now()
+//        val formatter = DateTimeFormatter.ofPattern("dd MMMM", Locale("ru"))
+//        val formatted = current.format(formatter)
+//        return formatted
+//    }
+//
+//    fun timeFinished(): String {
+//        val current = LocalDateTime.now()
+//        val formatter = DateTimeFormatter.ofPattern("HH:mm")
+//        val formatted = current.format(formatter)
+//        return formatted
+//    }
 }
 
 @Preview(showSystemUi = true)

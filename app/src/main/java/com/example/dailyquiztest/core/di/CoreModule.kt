@@ -1,5 +1,6 @@
 package com.example.dailyquiztest.core.di
 
+import com.example.dailyquiztest.core.FormattedDate
 import com.example.dailyquiztest.core.StringProvider
 import dagger.Binds
 import dagger.Module
@@ -14,4 +15,8 @@ abstract class CommonModule {
     @Binds
     @Singleton
     abstract fun bindsResources(resources: StringProvider.Base): StringProvider
+
+    @Binds
+    @Singleton
+    abstract fun bindsFormattedDate(formattedDate: FormattedDate.Base): FormattedDate
 }
