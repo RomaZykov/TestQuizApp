@@ -63,8 +63,9 @@ class QuizViewModel @Inject constructor(
                         question = quizQuestion.question,
                         incorrectAnswers = quizQuestion.incorrectAnswers,
                         correctAnswer = quizQuestion.correctAnswer,
-                        questionType = QuestionTypes.entries.find { types -> types.typeApi == quizQuestion.type }
-                            ?: QuestionTypes.BOOLEAN,
+                        questionType = QuestionTypes.Boolean(),
+//                        questionType = QuestionTypes.entries.find { types -> types.typeApi == quizQuestion.type }
+//                            ?: QuestionTypes.BOOLEAN,
                         totalQuestions = it.size,
                         category = category,
                         difficulty = difficulty

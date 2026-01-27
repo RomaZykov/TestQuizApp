@@ -52,7 +52,7 @@ import com.example.dailyquiztest.presentation.common.UiLogo
 import com.example.dailyquiztest.presentation.common.answers_group.AnswersSpecificTypeFactory
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.features.quiz.QuizUserActions
-import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
+import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
@@ -258,7 +258,7 @@ data class QuizUi(
             inCorrectAnswers = inCorrectAnswers,
             checkedEnabled = true,
             actionButtonEnabled = actionButtonEnabled,
-            apiType = questionType,
+            questionTypes = questionType,
             question = question
         )
         quizOptions.createGroup()

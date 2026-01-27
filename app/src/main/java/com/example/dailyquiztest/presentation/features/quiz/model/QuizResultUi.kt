@@ -37,7 +37,7 @@ import com.example.dailyquiztest.presentation.common.StarsScore
 import com.example.dailyquiztest.presentation.common.answers_group.AnswersSpecificTypeFactory
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.features.quiz.QuizUserActions
-import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
+import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 
 data class QuizResultUi(
     private val quizAnswers: List<QuizUi>
@@ -190,7 +190,7 @@ data class QuizResultUi(
             )
             Column {
                 val quizOptions = AnswersSpecificTypeFactory.Base(
-                    apiType = quiz.questionType,
+                    questionTypes = quiz.questionType,
                     question = quiz.question,
                     correctAnswers = listOf(quiz.correctAnswer),
                     inCorrectAnswers = quiz.incorrectAnswers,

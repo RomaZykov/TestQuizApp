@@ -9,7 +9,7 @@ interface AnswersSpecificTypeFactory {
     fun createGroup(): AnswersGroup
 
     class Base(
-        private val apiType: QuestionTypes,
+        private val questionTypes: QuestionTypes,
         private val question: String,
         private val correctAnswers: List<String>,
         private val inCorrectAnswers: List<String>,
@@ -19,8 +19,8 @@ interface AnswersSpecificTypeFactory {
     ) : AnswersSpecificTypeFactory {
 
         override fun createGroup(): AnswersGroup {
-            return when (apiType) {
-                QuestionTypes.MULTIPLE -> {
+            return when (questionTypes) {
+                is QuestionTypes.Multiple -> {
                     CheckboxGroup(
                         question,
                         correctAnswers,
@@ -31,7 +31,7 @@ interface AnswersSpecificTypeFactory {
                     )
                 }
 
-                QuestionTypes.BOOLEAN -> {
+                is QuestionTypes.Boolean -> {
                     RadioButtonGroup(
                         question = question,
                         isCorrectOption = correctAnswers.first().toBoolean(),
@@ -43,6 +43,10 @@ interface AnswersSpecificTypeFactory {
                             null
                         }
                     )
+                }
+
+                else -> {
+                    throw IllegalArgumentException("Unknown question type: ${questionTypes.typeApi}")
                 }
             }
         }
