@@ -1,6 +1,7 @@
 package com.example.dailyquiztest.data.model.network
 
 import com.example.dailyquiztest.R
+import com.example.dailyquiztest.core.Const
 import com.example.dailyquiztest.core.StringProvider
 import com.example.dailyquiztest.data.model.network.model.NetworkQuizQuestion
 import java.net.UnknownHostException
@@ -26,7 +27,7 @@ interface NetworkQuizQuestionsDataSource {
             return try {
                 val questionsResponse = quizApi.fetchQuizQuestions(amount, category, difficulty)
                 val code = questionsResponse.body()!!.responseCode
-                if (code != SUCCESS_CODE) {
+                if (code.toString() != SuccessCode.toString()) {
                     throw UnknownHostException(
                         stringProvider.string(
                             R.string.network_error_exception,
@@ -42,7 +43,5 @@ interface NetworkQuizQuestionsDataSource {
         }
     }
 
-    private companion object {
-        private const val SUCCESS_CODE = 0
-    }
+    private object SuccessCode : Const.Base(0.toString())
 }
