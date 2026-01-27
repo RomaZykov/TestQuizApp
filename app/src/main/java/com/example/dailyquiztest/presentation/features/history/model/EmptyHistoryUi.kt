@@ -35,7 +35,7 @@ object EmptyHistoryUi : HistoryUiState {
     ) {
         Scaffold(
             modifier = Modifier.semantics {
-                contentDescription = HistoryUiState.EMPTY_HISTORY_SCREEN
+                contentDescription = HistoryUiState.EmptyHistoryContDesc.toString()
             },
             topBar = {
                 HistoryTopBar(historyUserActions.onBackButtonClicked())

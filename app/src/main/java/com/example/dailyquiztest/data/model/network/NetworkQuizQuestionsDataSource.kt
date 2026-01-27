@@ -42,7 +42,7 @@ interface NetworkQuizQuestionsDataSource {
         }
     }
 
-    companion object {
-        const val SUCCESS_CODE = 0
+    private companion object {
+        private const val SUCCESS_CODE = 0
     }
 }

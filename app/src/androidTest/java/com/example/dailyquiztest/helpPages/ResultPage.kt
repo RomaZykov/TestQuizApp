@@ -26,14 +26,14 @@ class ResultPage(private val composeTestRule: ComposeTestRule) : StringResources
         )
 
     fun assertPageDisplayed() {
-        composeTestRule.onNodeWithContentDescription(QuizUiState.RESULTS_SCREEN)
+        composeTestRule.onNodeWithContentDescription(QuizUiState.ResultsContDesc.toString())
             .assertExists()
             .assertIsDisplayed()
     }
 
     fun hasScrollOption() {
         composeTestRule.onNode(
-            hasTestTag(QuizUiState.RESULT_LAZY_LIST)
+            hasTestTag(QuizUiState.ResultsLazyList.toString())
                     and hasScrollAction()
         )
     }
@@ -49,7 +49,7 @@ class ResultPage(private val composeTestRule: ComposeTestRule) : StringResources
     }
 
     fun clickBottomStartAgainButton() {
-        composeTestRule.onNodeWithTag(QuizUiState.RESULT_LAZY_LIST).performScrollToNode(
+        composeTestRule.onNodeWithTag(QuizUiState.ResultsLazyList.toString()).performScrollToNode(
             hasContentDescription("bottom start again button")
         )
         composeTestRule.onNodeWithContentDescription("bottom start again button")
@@ -59,7 +59,7 @@ class ResultPage(private val composeTestRule: ComposeTestRule) : StringResources
 
     fun performScrollToItemWithText(questionTitle: String) {
         composeTestRule.waitUntil {
-            composeTestRule.onNodeWithTag(QuizUiState.RESULT_LAZY_LIST)
+            composeTestRule.onNodeWithTag(QuizUiState.ResultsLazyList.toString())
                 .performScrollToNode(hasText(questionTitle))
                 .isDisplayed()
         }

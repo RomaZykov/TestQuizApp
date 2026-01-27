@@ -1,17 +1,16 @@
 package com.example.dailyquiztest.presentation.features.quiz
 
 import androidx.compose.runtime.Composable
+import com.example.dailyquiztest.core.Const
 
 interface QuizUiState {
 
     @Composable
     fun Display(quizUserActions: QuizUserActions)
 
-    companion object {
-        const val FILTERS_SCREEN = "FiltersScreen"
-        const val QUIZ_SCREEN = "QuizScreen"
-        const val RESULTS_SCREEN = "ResultsScreen"
+    object FiltersContDesc : Const.Base("filtersScreen")
+    object QuizContDesc : Const.Base("quizScreen")
+    object ResultsContDesc : Const.Base("resultsScreen")
 
-        const val RESULT_LAZY_LIST = "ResultLazyList"
-    }
+    object ResultsLazyList : Const.Base("ResultLazyList")
 }

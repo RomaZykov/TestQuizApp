@@ -78,9 +78,11 @@ data class QuizUi(
         val finalUserAnswers =
             rememberSaveable(question) { mutableListOf(userAnswers.joinToString()) }
         val finalAnswersCorrect = rememberSaveable(question) { mutableStateOf(isAnsweredCorrect) }
+
         val actionButtonEnabled = rememberSaveable(question) { mutableStateOf(false) }
         val shouldShowTimeIsOverDialog = remember { mutableStateOf(false) }
         val shouldShowBorder = rememberSaveable(question) { mutableStateOf(false) }
+
         val scrollState = rememberScrollState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
         val scope = rememberCoroutineScope()
@@ -98,7 +100,7 @@ data class QuizUi(
             },
             modifier = Modifier
                 .semantics {
-                    contentDescription = QuizUiState.QUIZ_SCREEN
+                    contentDescription = QuizUiState.QuizContDesc.toString()
                 }
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { innerPadding ->
@@ -259,14 +261,15 @@ data class QuizUi(
             apiType = questionType,
             question = question
         )
-        quizOptions.createGroup().DisplayGroup(shouldShowBorderWithDelay, updateQuiz = { selectedOptions ->
-            updateUserAnswers.invoke(
-                selectedOptions.filter { it.isNotEmpty() },
-                selectedOptions.filter { it.isNotEmpty() }.size == 1 && selectedOptions.contains(
-                    correctAnswer
+        quizOptions.createGroup()
+            .DisplayGroup(shouldShowBorderWithDelay, updateQuiz = { selectedOptions ->
+                updateUserAnswers.invoke(
+                    selectedOptions.filter { it.isNotEmpty() },
+                    selectedOptions.filter { it.isNotEmpty() }.size == 1 && selectedOptions.contains(
+                        correctAnswer
+                    )
                 )
-            )
-        })
+            })
     }
 }
 

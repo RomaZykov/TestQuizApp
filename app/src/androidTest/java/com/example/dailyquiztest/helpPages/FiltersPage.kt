@@ -38,7 +38,7 @@ class FiltersPage(private val composeTestRule: ComposeTestRule) :
     }
 
     fun assertPageDisplayed() {
-        composeTestRule.onNodeWithContentDescription(QuizUiState.FILTERS_SCREEN)
+        composeTestRule.onNodeWithContentDescription(QuizUiState.FiltersContDesc.toString())
             .assertExists()
             .assertIsDisplayed()
     }
@@ -79,7 +79,7 @@ class FiltersPage(private val composeTestRule: ComposeTestRule) :
     }
 
     fun hasScrollOption() {
-        composeTestRule.onNodeWithContentDescription(QuizUiState.FILTERS_SCREEN)
+        composeTestRule.onNodeWithContentDescription(QuizUiState.FiltersContDesc.toString())
             .onChildren().onFirst().assert(
                 hasScrollAction()
             )

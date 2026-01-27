@@ -51,7 +51,7 @@ class HistoryPageTest : StringResources() {
     fun changeOrientation_showsAllHistoriesBeforeChanging() {
         historyPage.assertNonEmptyHistoriesDisplayed()
 
-        composeTestRule.onNodeWithTag(HistoryUiState.LAZY_HISTORY_LIST).performScrollToNode(
+        composeTestRule.onNodeWithTag(HistoryUiState.HistoryLazyList.toString()).performScrollToNode(
             hasText(
                 retrieveString(
                     R.string.quiz_number_title,

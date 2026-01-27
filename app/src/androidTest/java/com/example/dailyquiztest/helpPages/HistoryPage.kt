@@ -72,12 +72,12 @@ class HistoryPage(
     }
 
     fun assertEmptyHistoriesDisplayed() {
-        composeTestRule.onNodeWithContentDescription(HistoryUiState.EMPTY_HISTORY_SCREEN)
+        composeTestRule.onNodeWithContentDescription(HistoryUiState.EmptyHistoryContDesc.toString())
             .assertExists().assertIsDisplayed()
     }
 
     fun assertNonEmptyHistoriesDisplayed() {
-        composeTestRule.onNodeWithContentDescription(HistoryUiState.NON_EMPTY_HISTORY_SCREEN)
+        composeTestRule.onNodeWithContentDescription(HistoryUiState.NonEmptyHistoryContDesc.toString())
             .assertExists().assertIsDisplayed()
     }
 
@@ -88,7 +88,7 @@ class HistoryPage(
     }
 
     fun longPressToDeleteHistoryByIndex(id: Int) {
-        composeTestRule.onNodeWithTag(HistoryUiState.LAZY_HISTORY_LIST).performScrollToNode(
+        composeTestRule.onNodeWithTag(HistoryUiState.HistoryLazyList.toString()).performScrollToNode(
             hasText(retrieveString(R.string.quiz_number_title, id + 1))
         )
         composeTestRule.onNodeWithText(retrieveString(R.string.quiz_number_title, id + 1))

@@ -52,7 +52,7 @@ class QuizPage(
         )
 
     fun assertPageDisplayed() {
-        composeTestRule.onNodeWithContentDescription(QuizUiState.QUIZ_SCREEN)
+        composeTestRule.onNodeWithContentDescription(QuizUiState.QuizContDesc.toString())
             .assertExists()
             .assertIsDisplayed()
     }

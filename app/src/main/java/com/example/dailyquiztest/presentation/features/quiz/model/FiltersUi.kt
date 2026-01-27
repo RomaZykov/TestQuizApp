@@ -81,7 +81,7 @@ data class FiltersUi(
         Scaffold(
             modifier = Modifier
                 .semantics {
-                    contentDescription = QuizUiState.FILTERS_SCREEN
+                    contentDescription = QuizUiState.FiltersContDesc.toString()
                 }
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = { FiltersTopBar(quizUserActions.onBackClicked(), scrollBehavior) }
@@ -292,8 +292,8 @@ data class FiltersUi(
         )
     }
 
-    companion object {
-        const val DELIMITER = "-"
+    private companion object {
+        private const val DELIMITER = "-"
     }
 }
 

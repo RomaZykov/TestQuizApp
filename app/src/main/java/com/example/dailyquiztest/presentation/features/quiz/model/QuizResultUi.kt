@@ -49,9 +49,9 @@ data class QuizResultUi(
         LazyColumn(
             modifier = Modifier
                 .semantics {
-                    contentDescription = QuizUiState.RESULTS_SCREEN
+                    contentDescription = QuizUiState.ResultsContDesc.toString()
                 }
-                .testTag(QuizUiState.RESULT_LAZY_LIST)
+                .testTag(QuizUiState.ResultsLazyList.toString())
                 .fillMaxWidth()
                 .background(DailyQuizTheme.colorScheme.primary),
             state = listState

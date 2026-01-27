@@ -1,16 +1,15 @@
 package com.example.dailyquiztest.presentation.features.history
 
 import androidx.compose.runtime.Composable
+import com.example.dailyquiztest.core.Const
 
 interface HistoryUiState {
 
     @Composable
     fun Display(historyUserActions: HistoryUserActions)
 
-    companion object {
-        const val EMPTY_HISTORY_SCREEN = "emptyHistoryScreen"
-        const val NON_EMPTY_HISTORY_SCREEN = "nonEmptyHistoryScreen"
+    object EmptyHistoryContDesc : Const.Base("emptyHistoryScreen")
+    object NonEmptyHistoryContDesc : Const.Base("nonEmptyHistoryScreen")
 
-        const val LAZY_HISTORY_LIST = "lazyHistoryList"
-    }
+    object HistoryLazyList : Const.Base("HistoryLazyList")
 }

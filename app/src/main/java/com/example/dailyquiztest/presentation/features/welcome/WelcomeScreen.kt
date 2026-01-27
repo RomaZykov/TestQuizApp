@@ -39,6 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.dailyquiztest.R
+import com.example.dailyquiztest.core.Const
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
 import com.example.dailyquiztest.presentation.common.UiLogo
@@ -71,7 +72,7 @@ fun WelcomeScreen(
         TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     Scaffold(
         modifier = Modifier
-            .semantics { contentDescription = WelcomeUiState.INITIAL_WELCOME_SCREEN }
+            .semantics { contentDescription = Const.WelcomeContDesc.toString() }
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             WelcomeAppBar(onHistoryButtonClicked = {

@@ -10,8 +10,8 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.example.dailyquiztest.R
+import com.example.dailyquiztest.core.Const
 import com.example.dailyquiztest.core.StringResources
-import com.example.dailyquiztest.presentation.features.welcome.WelcomeUiState
 
 class WelcomePage(private val composeTestRule: ComposeTestRule) :
     StringResources() {
@@ -43,7 +43,7 @@ class WelcomePage(private val composeTestRule: ComposeTestRule) :
     fun assertStartQuizButtonDisplayed() = startButton.assertExists().assertIsDisplayed()
 
     fun assertPageDisplayed() {
-        composeTestRule.onNodeWithContentDescription(WelcomeUiState.INITIAL_WELCOME_SCREEN)
+        composeTestRule.onNodeWithContentDescription(Const.WelcomeContDesc.toString())
             .assertExists().assertIsDisplayed()
     }
 }

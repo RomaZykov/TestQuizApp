@@ -12,6 +12,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.test.swipeUp
+import com.example.dailyquiztest.core.Const
 import com.example.dailyquiztest.core.StringResources
 import com.example.dailyquiztest.domain.model.Category
 import com.example.dailyquiztest.domain.model.Difficulty
@@ -25,7 +26,6 @@ import com.example.dailyquiztest.helpPages.WelcomePage
 import com.example.dailyquiztest.presentation.MainActivity
 import com.example.dailyquiztest.presentation.features.history.HistoryUiState
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
-import com.example.dailyquiztest.presentation.features.welcome.WelcomeUiState
 import com.example.testing.dummy.dummyHistoryResults
 import com.example.testing.dummy.stubQuizAnswers
 import com.example.testing.dummy.stubQuizes
@@ -224,11 +224,13 @@ class ScenarioTest : StringResources() {
 
         testDispatcher.scheduler.advanceTimeBy(2500)
         composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithContentDescription("LoadingScreen").assertExists()
+        composeTestRule.onNodeWithContentDescription(Const.LoadingContDesc.toString())
+            .assertExists()
             .assertIsDisplayed()
         testDispatcher.scheduler.advanceTimeBy(2000)
         composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithContentDescription("LoadingScreen").assertExists()
+        composeTestRule.onNodeWithContentDescription(Const.LoadingContDesc.toString())
+            .assertExists()
             .assertIsDisplayed()
         // More than 5 sec
         testDispatcher.scheduler.advanceTimeBy(600)
@@ -334,7 +336,7 @@ class ScenarioTest : StringResources() {
         composeTestRule.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithContentDescription(WelcomeUiState.INITIAL_WELCOME_SCREEN)
+        composeTestRule.onNodeWithContentDescription(Const.WelcomeContDesc.toString())
             .performTouchInput {
                 repeat(5) {
                     swipeUp()
@@ -352,7 +354,7 @@ class ScenarioTest : StringResources() {
         welcomePage.assertPageDisplayed()
         welcomePage.assertHistoryButtonNotDisplayed()
 
-        composeTestRule.onNodeWithContentDescription(WelcomeUiState.INITIAL_WELCOME_SCREEN)
+        composeTestRule.onNodeWithContentDescription(Const.WelcomeContDesc.toString())
             .performTouchInput {
                 repeat(5) {
                     swipeDown()
@@ -380,7 +382,7 @@ class ScenarioTest : StringResources() {
         historyPage.assertNonEmptyHistoriesDisplayed()
         historyPage.assertHistoryTitleWithBackButtonDisplayed()
 
-        composeTestRule.onNodeWithContentDescription(HistoryUiState.NON_EMPTY_HISTORY_SCREEN)
+        composeTestRule.onNodeWithContentDescription(HistoryUiState.NonEmptyHistoryContDesc.toString())
             .performTouchInput {
                 repeat(5) {
                     swipeUp()
@@ -403,7 +405,7 @@ class ScenarioTest : StringResources() {
         historyPage.assertNonEmptyHistoriesDisplayed()
         historyPage.assertHistoryTitleWithBackButtonNotDisplayed()
 
-        composeTestRule.onNodeWithContentDescription(HistoryUiState.NON_EMPTY_HISTORY_SCREEN)
+        composeTestRule.onNodeWithContentDescription(HistoryUiState.NonEmptyHistoryContDesc.toString())
             .performTouchInput {
                 repeat(5) {
                     swipeDown()
@@ -432,7 +434,7 @@ class ScenarioTest : StringResources() {
         filtersPage.assertDifficultySelected(Difficulty.EASY)
         filtersPage.assertStartQuizButtonEnabled()
 
-        composeTestRule.onNodeWithContentDescription(QuizUiState.FILTERS_SCREEN)
+        composeTestRule.onNodeWithContentDescription(QuizUiState.FiltersContDesc.toString())
             .performTouchInput {
                 repeat(5) {
                     swipeUp()
@@ -442,7 +444,7 @@ class ScenarioTest : StringResources() {
         composeTestRule.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithContentDescription(QuizUiState.FILTERS_SCREEN)
+        composeTestRule.onNodeWithContentDescription(QuizUiState.FiltersContDesc.toString())
             .performTouchInput {
                 repeat(5) {
                     swipeDown()
@@ -471,14 +473,14 @@ class ScenarioTest : StringResources() {
             .performClick()
         quizPage.assertNextButtonEnabled()
 
-        composeTestRule.onNodeWithContentDescription(QuizUiState.QUIZ_SCREEN)
+        composeTestRule.onNodeWithContentDescription(QuizUiState.QuizContDesc.toString())
             .performTouchInput {
                 repeat(5) {
                     swipeUp()
                 }
             }
 
-        composeTestRule.onNodeWithContentDescription(QuizUiState.QUIZ_SCREEN)
+        composeTestRule.onNodeWithContentDescription(QuizUiState.QuizContDesc.toString())
             .performTouchInput {
                 repeat(5) {
                     swipeDown()
@@ -511,7 +513,7 @@ class ScenarioTest : StringResources() {
         composeTestRule.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithContentDescription(QuizUiState.RESULTS_SCREEN)
+        composeTestRule.onNodeWithContentDescription(QuizUiState.ResultsContDesc.toString())
             .performTouchInput {
                 repeat(5) {
                     swipeUp()
