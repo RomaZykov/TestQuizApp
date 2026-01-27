@@ -3,7 +3,7 @@ package com.example.dailyquiztest.presentation
 import com.example.dailyquiztest.domain.model.Category
 import com.example.dailyquiztest.domain.model.Difficulty
 import com.example.dailyquiztest.domain.model.QuestionTypes
-import com.example.dailyquiztest.fake.FakeFormattedDate
+import com.example.dailyquiztest.fake.FakeFormatDate
 import com.example.dailyquiztest.fake.FakeWelcomeRouteProvider
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.features.quiz.QuizViewModel
@@ -35,7 +35,7 @@ class QuizViewModelTest {
     private lateinit var fakeQuizRepository: FakeQuizRepository
     private lateinit var fakeHistoryRepository: FakeHistoryRepository
     private lateinit var fakeWelcomeRouteProvider: FakeWelcomeRouteProvider
-    private lateinit var fakeFormattedDate: FakeFormattedDate
+    private lateinit var fakeFormatDate: FakeFormatDate
     private lateinit var dispatchers: FakeDispatcherList
     private lateinit var stateFlow: StateFlow<QuizUiState>
 
@@ -46,7 +46,7 @@ class QuizViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        fakeFormattedDate = FakeFormattedDate()
+        fakeFormatDate = FakeFormatDate()
         fakeQuizRepository = FakeQuizRepository()
         fakeHistoryRepository = FakeHistoryRepository()
         fakeWelcomeRouteProvider = FakeWelcomeRouteProvider()
@@ -56,7 +56,7 @@ class QuizViewModelTest {
             historyRepository = fakeHistoryRepository,
             welcomeRouteProvider = fakeWelcomeRouteProvider,
             dispatcherList = dispatchers,
-            fakeFormattedDate
+            fakeFormatDate
         )
         stateFlow = viewModel.uiState
     }

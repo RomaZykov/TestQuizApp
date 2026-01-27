@@ -2,7 +2,7 @@ package com.example.dailyquiztest.data.model.network
 
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.Const
-import com.example.dailyquiztest.core.StringProvider
+import com.example.dailyquiztest.core.ProvideString
 import com.example.dailyquiztest.data.model.network.model.NetworkQuizQuestion
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -17,7 +17,7 @@ interface NetworkQuizQuestionsDataSource {
 
     class Base @Inject constructor(
         private val quizApi: QuizApi,
-        private val stringProvider: StringProvider
+        private val provideString: ProvideString
     ) : NetworkQuizQuestionsDataSource {
         override suspend fun retrieveQuizQuestions(
             amount: Int,
@@ -29,7 +29,7 @@ interface NetworkQuizQuestionsDataSource {
                 val code = questionsResponse.body()!!.responseCode
                 if (code.toString() != SuccessCode.toString()) {
                     throw UnknownHostException(
-                        stringProvider.string(
+                        provideString.string(
                             R.string.network_error_exception,
                             code
                         )

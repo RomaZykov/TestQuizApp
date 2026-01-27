@@ -5,11 +5,11 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.Inject
 
-interface FormattedDate {
+interface FormatDate {
     fun timeFinished(): String
     fun dateFinished(): String
 
-    class Base @Inject constructor() : FormattedDate {
+    class Base @Inject constructor() : FormatDate {
         override fun dateFinished(): String {
             val current = LocalDateTime.now()
             val formatter = DateTimeFormatter.ofPattern("dd MMMM", Locale.getDefault())

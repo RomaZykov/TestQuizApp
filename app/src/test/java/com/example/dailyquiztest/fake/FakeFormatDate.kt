@@ -1,8 +1,8 @@
 package com.example.dailyquiztest.fake
 
-import com.example.dailyquiztest.core.FormattedDate
+import com.example.dailyquiztest.core.FormatDate
 
-class FakeFormattedDate : FormattedDate {
+class FakeFormatDate : FormatDate {
 
     override fun dateFinished(): String {
         return "2025"

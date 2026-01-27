@@ -3,7 +3,7 @@ package com.example.dailyquiztest.presentation.features.quiz
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dailyquiztest.core.DispatcherList
-import com.example.dailyquiztest.core.FormattedDate
+import com.example.dailyquiztest.core.FormatDate
 import com.example.dailyquiztest.domain.model.Category
 import com.example.dailyquiztest.domain.model.Difficulty
 import com.example.dailyquiztest.domain.model.QuestionTypes
@@ -30,7 +30,7 @@ class QuizViewModel @Inject constructor(
     private val historyRepository: HistoryRepository,
     private val welcomeRouteProvider: WelcomeRouteProvider,
     private val dispatcherList: DispatcherList,
-    private val formattedDate: FormattedDate
+    private val formattedDate: FormatDate
 ) : ViewModel(), CoreVMActions {
 
     private val uiStateMutable = MutableStateFlow<QuizUiState>(
