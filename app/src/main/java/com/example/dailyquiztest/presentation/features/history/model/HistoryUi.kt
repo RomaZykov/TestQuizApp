@@ -58,7 +58,7 @@ import com.example.dailyquiztest.presentation.common.UiLogo
 import com.example.dailyquiztest.presentation.features.history.HistoryUiState
 import com.example.dailyquiztest.presentation.features.history.HistoryUserActions
 import com.example.dailyquiztest.presentation.features.history.components.HistoryTopBar
-import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
+import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 import kotlinx.coroutines.launch
 
 data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState {

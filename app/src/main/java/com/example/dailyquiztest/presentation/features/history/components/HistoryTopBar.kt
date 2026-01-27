@@ -10,7 +10,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
-import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
+import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

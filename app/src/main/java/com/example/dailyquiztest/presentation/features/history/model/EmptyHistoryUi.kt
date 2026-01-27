@@ -25,7 +25,7 @@ import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.features.history.HistoryUiState
 import com.example.dailyquiztest.presentation.features.history.HistoryUserActions
 import com.example.dailyquiztest.presentation.features.history.components.HistoryTopBar
-import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
+import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 
 object EmptyHistoryUi : HistoryUiState {
     @OptIn(ExperimentalMaterial3Api::class)

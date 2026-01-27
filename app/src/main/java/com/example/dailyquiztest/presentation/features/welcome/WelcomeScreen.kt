@@ -45,7 +45,7 @@ import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
 import com.example.dailyquiztest.presentation.common.UiLogo
 import com.example.dailyquiztest.presentation.main_navigation.Route
 import com.example.dailyquiztest.presentation.main_navigation.navigateIfResumed
-import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
+import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 
 @Composable
 fun WelcomeScreenNav(

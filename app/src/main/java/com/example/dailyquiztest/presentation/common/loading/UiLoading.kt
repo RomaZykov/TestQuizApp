@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.example.dailyquiztest.core.Const
 import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
 import com.example.dailyquiztest.presentation.common.UiLogo
-import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
+import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

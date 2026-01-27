@@ -1,4 +1,4 @@
-package com.example.dailyquiztest.presentation.ui.theme
+package com.example.dailyquiztest.presentation.ui
 
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.unit.Dp

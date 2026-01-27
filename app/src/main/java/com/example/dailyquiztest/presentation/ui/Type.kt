@@ -1,4 +1,4 @@
-package com.example.dailyquiztest.presentation.ui.theme
+package com.example.dailyquiztest.presentation.ui
 
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color

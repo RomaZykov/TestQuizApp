@@ -1,4 +1,4 @@
-package com.example.dailyquiztest.presentation.ui.theme
+package com.example.dailyquiztest.presentation.ui
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
