@@ -68,13 +68,13 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
     override fun Display(
         historyUserActions: HistoryUserActions
     ) {
-        val dropDownMenuActive = rememberSaveable { mutableStateOf(false) }
-        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+        val scrollBehavior =
+            TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
         val snackBarHostState = remember { SnackbarHostState() }
         Scaffold(
             modifier = Modifier
                 .semantics {
-                    contentDescription = HistoryUiState.NON_EMPTY_HISTORY_SCREEN
+                    contentDescription = HistoryUiState.NonEmptyHistoryContDesc.toString()
                 }
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
             snackbarHost = {
@@ -87,6 +87,7 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
                 )
             }
         ) { innerPadding ->
+            val dropDownMenuActive = rememberSaveable { mutableStateOf(false) }
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -96,11 +97,13 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
             ) {
                 val listState = rememberLazyListState()
                 LazyColumn(
-                    modifier = Modifier.fillMaxWidth().testTag(HistoryUiState.LAZY_HISTORY_LIST),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(HistoryUiState.HistoryLazyList.toString()),
                     state = listState
                 ) {
-                    itemsIndexed(historyQuizResults) { i, result ->
-                        QuizResultCard(result, dropDownMenuActive, snackBarHostState) {
+                    itemsIndexed(historyQuizResults) { _, result ->
+                        HistoryCard(result, dropDownMenuActive, snackBarHostState) {
                             historyUserActions.onDeleteClicked().invoke(result.id)
                         }
                     }
@@ -115,7 +118,7 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
     }
 
     @Composable
-    private fun QuizResultCard(
+    private fun HistoryCard(
         result: QuizResult,
         dropDownMenuActive: MutableState<Boolean>,
         snackBarHostState: SnackbarHostState,
@@ -123,7 +126,6 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
     ) {
         val shouldShowDeleteMenu = rememberSaveable { mutableStateOf(false) }
         val haptics = LocalHapticFeedback.current
-        val scope = rememberCoroutineScope()
         Box(modifier = Modifier.alpha(if (dropDownMenuActive.value && !shouldShowDeleteMenu.value) 0.5f else 1f)) {
             Column(
                 modifier = Modifier
@@ -132,9 +134,9 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
                     .clip(RoundedCornerShape(40.dp))
                     .combinedClickable(
                         onLongClick = {
+                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                             shouldShowDeleteMenu.value = true
                             dropDownMenuActive.value = true
-                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                         },
                         onClick = {}
                     )
@@ -174,57 +176,74 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    val categoryStringName = stringResource(result.category.textId)
                     Text(
                         modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
                         text = stringResource(
                             R.string.category_result,
-                            result.category.name
+                            categoryStringName
                         ),
                         style = DailyQuizTheme.typography.body,
                         fontSize = 12.sp
                     )
                     Text(
-                        stringResource(R.string.difficulty_result, result.difficulty.name),
+                        stringResource(R.string.difficulty_result, result.difficulty.toString()),
                         style = DailyQuizTheme.typography.body,
                         fontSize = 12.sp
                     )
                 }
             }
             if (shouldShowDeleteMenu.value) {
-                DropdownMenu(
-                    modifier = Modifier
-                        .width(230.dp)
-                        .background(DailyQuizTheme.colorScheme.secondary),
-                    expanded = shouldShowDeleteMenu.value,
-                    onDismissRequest = {
+                DeleteMenu(
+                    shouldShowDeleteMenu,
+                    dropDownMenuActive,
+                    snackBarHostState,
+                    onDeleteClicked
+                )
+            }
+        }
+    }
+
+    @Composable
+    private fun DeleteMenu(
+        shouldShowDeleteMenu: MutableState<Boolean>,
+        dropDownMenuActive: MutableState<Boolean>,
+        snackBarHostState: SnackbarHostState,
+        onDeleteClicked: () -> Unit
+    ) {
+        DropdownMenu(
+            modifier = Modifier
+                .width(230.dp)
+                .background(DailyQuizTheme.colorScheme.secondary),
+            expanded = shouldShowDeleteMenu.value,
+            onDismissRequest = {
+                shouldShowDeleteMenu.value = false
+                dropDownMenuActive.value = false
+            },
+            shape = RoundedCornerShape(24.dp),
+            offset = DpOffset(24.dp, 0.dp)
+        ) {
+            val message = stringResource(R.string.delete_retry)
+            val scope = rememberCoroutineScope()
+            DropdownMenuItem(
+                text = {
+                    Text(stringResource(R.string.delete_text))
+                },
+                onClick = {
+                    onDeleteClicked.invoke()
+                    scope.launch {
+                        snackBarHostState.showSnackbar(message)
                         shouldShowDeleteMenu.value = false
                         dropDownMenuActive.value = false
-                    },
-                    shape = RoundedCornerShape(24.dp),
-                    offset = DpOffset(24.dp, 0.dp)
-                ) {
-                    val message = stringResource(R.string.delete_retry)
-                    DropdownMenuItem(
-                        text = {
-                            Text(stringResource(R.string.delete_text))
-                        },
-                        onClick = {
-                            onDeleteClicked.invoke()
-                            scope.launch {
-                                snackBarHostState.showSnackbar(message)
-                            }
-                            shouldShowDeleteMenu.value = false
-                            dropDownMenuActive.value = false
-                        },
-                        leadingIcon = {
-                            Image(
-                                painter = painterResource(R.drawable.trash_icon),
-                                contentDescription = null
-                            )
-                        },
+                    }
+                },
+                leadingIcon = {
+                    Image(
+                        painter = painterResource(R.drawable.trash_icon),
+                        contentDescription = null
                     )
-                }
-            }
+                },
+            )
         }
     }
 }
@@ -267,5 +286,5 @@ fun HistoryUiPreview() {
                 lastDate = "14:54"
             )
         )
-    ).Display(historyUserActions = HistoryUserActions.previewHistoryUserActions)
+    ).Display(historyUserActions = HistoryUserActions.ForPreview)
 }

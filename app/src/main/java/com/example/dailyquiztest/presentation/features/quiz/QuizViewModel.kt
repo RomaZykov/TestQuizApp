@@ -35,8 +35,8 @@ class QuizViewModel @Inject constructor(
 
     private val uiStateMutable = MutableStateFlow<QuizUiState>(
         FiltersUi(
-            categories = Category.entries.toList(),
-            difficulties = Difficulty.entries.toList(),
+            categories = Category.entries,
+            difficulties = Difficulty.entries,
             shouldShowError = false
         )
     )
