@@ -3,14 +3,15 @@ package com.example.dailyquiztest.presentation
 import com.example.dailyquiztest.domain.model.Category
 import com.example.dailyquiztest.domain.model.Difficulty
 import com.example.dailyquiztest.domain.model.QuestionTypes
-import com.example.dailyquiztest.testdoubles.FakeWelcomeRouteProvider
+import com.example.dailyquiztest.fake.FakeFormattedDate
+import com.example.dailyquiztest.fake.FakeWelcomeRouteProvider
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.features.quiz.QuizViewModel
 import com.example.dailyquiztest.presentation.features.quiz.model.FiltersUi
 import com.example.dailyquiztest.presentation.features.quiz.model.QuizResultUi
 import com.example.dailyquiztest.presentation.features.quiz.model.QuizUi
 import com.example.testing.di.FakeDispatcherList
-import com.example.testing.dummy.dummyQuizes
+import com.example.testing.dummy.stubQuizes
 import com.example.testing.dummy.dummyTrueFalseQuizes
 import com.example.testing.repository.FakeHistoryRepository
 import com.example.testing.repository.FakeQuizRepository
@@ -34,6 +35,7 @@ class QuizViewModelTest {
     private lateinit var fakeQuizRepository: FakeQuizRepository
     private lateinit var fakeHistoryRepository: FakeHistoryRepository
     private lateinit var fakeWelcomeRouteProvider: FakeWelcomeRouteProvider
+    private lateinit var fakeFormattedDate: FakeFormattedDate
     private lateinit var dispatchers: FakeDispatcherList
     private lateinit var stateFlow: StateFlow<QuizUiState>
 
@@ -44,6 +46,7 @@ class QuizViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     fun setup() {
         Dispatchers.setMain(testDispatcher)
+        fakeFormattedDate = FakeFormattedDate()
         fakeQuizRepository = FakeQuizRepository()
         fakeHistoryRepository = FakeHistoryRepository()
         fakeWelcomeRouteProvider = FakeWelcomeRouteProvider()
@@ -52,7 +55,8 @@ class QuizViewModelTest {
             quizRepository = fakeQuizRepository,
             historyRepository = fakeHistoryRepository,
             welcomeRouteProvider = fakeWelcomeRouteProvider,
-            dispatcherList = dispatchers
+            dispatcherList = dispatchers,
+            fakeFormattedDate
         )
         stateFlow = viewModel.uiState
     }
@@ -83,7 +87,7 @@ class QuizViewModelTest {
             advanceTimeBy(505)
 
             val expectedFinalState =
-                retrieveDummySimpleQuestionByIndex(0, Category.FILM, Difficulty.HARD)
+                retrieveStubQuestionByIndex(0, Category.FILM, Difficulty.HARD)
             assertEquals(expectedFinalState, stateFlow.value)
         }
 
@@ -164,17 +168,17 @@ class QuizViewModelTest {
         )
     }
 
-    private fun retrieveDummySimpleQuestionByIndex(
+    private fun retrieveStubQuestionByIndex(
         index: Int,
         category: Category,
         difficulty: Difficulty
     ): QuizUi {
         return QuizUi(
             currentNumberQuestion = index,
-            question = dummyQuizes[index].question,
-            incorrectAnswers = dummyQuizes[index].incorrectAnswers,
-            correctAnswer = dummyQuizes[index].correctAnswer,
-            questionType = QuestionTypes.entries.find { it.typeApi == dummyQuizes[index].type }
+            question = stubQuizes[index].question,
+            incorrectAnswers = stubQuizes[index].incorrectAnswers,
+            correctAnswer = stubQuizes[index].correctAnswer,
+            questionType = QuestionTypes.entries.find { it.typeApi == stubQuizes[index].type }
                 ?: QuestionTypes.BOOLEAN,
             totalQuestions = difficulty.amountOfQuestions,
             category = category,

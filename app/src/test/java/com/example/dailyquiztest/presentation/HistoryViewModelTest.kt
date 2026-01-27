@@ -4,7 +4,7 @@ import com.example.testing.dummy.dummyHistoryResults
 import com.example.dailyquiztest.domain.model.Category
 import com.example.dailyquiztest.domain.model.Difficulty
 import com.example.dailyquiztest.domain.model.QuizResult
-import com.example.dailyquiztest.testdoubles.FakeQuizRouteProvider
+import com.example.dailyquiztest.fake.FakeQuizRouteProvider
 import com.example.dailyquiztest.presentation.features.history.HistoryUiState
 import com.example.dailyquiztest.presentation.features.history.HistoryViewModel
 import com.example.dailyquiztest.presentation.features.history.model.EmptyHistoryUi
@@ -79,7 +79,7 @@ class HistoryViewModelTest {
         assertFalse(dispatchers.wasUiCalled)
 
         var countOfHistory = 0
-        repeat(5) {
+        repeat(7) {
             viewModel.deleteQuizHistory(countOfHistory++)
         }
 
@@ -99,6 +99,8 @@ class HistoryViewModelTest {
         viewModel.deleteQuizHistory(4)
         viewModel.deleteQuizHistory(2)
         viewModel.deleteQuizHistory(3)
+        viewModel.deleteQuizHistory(5)
+        viewModel.deleteQuizHistory(6)
 
         val expectedUiState = HistoryUi(
             listOf(
