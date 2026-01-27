@@ -294,5 +294,5 @@ fun QuizResultsPreview() {
                 )
             }
         }.toList()
-    ).Display(quizUserActions = QuizUserActions.previewQuizUserActions)
+    ).Display(quizUserActions = QuizUserActions.ForPreview)
 }

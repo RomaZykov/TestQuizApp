@@ -79,5 +79,5 @@ object EmptyHistoryUi : HistoryUiState {
 @Preview(showSystemUi = true)
 @Composable
 fun EmptyHistoryPreview() {
-    EmptyHistoryUi.Display(HistoryUserActions.previewHistoryUserActions)
+    EmptyHistoryUi.Display(HistoryUserActions.ForPreview)
 }

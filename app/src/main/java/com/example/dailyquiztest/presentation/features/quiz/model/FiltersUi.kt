@@ -300,6 +300,6 @@ data class FiltersUi(
 @Preview(showSystemUi = true)
 @Composable
 fun FiltersPreview() {
-    FiltersUi(Category.entries.toList(), emptyList(), true)
-        .Display(quizUserActions = QuizUserActions.previewQuizUserActions)
+    FiltersUi(Category.entries, emptyList(), true)
+        .Display(quizUserActions = QuizUserActions.ForPreview)
 }

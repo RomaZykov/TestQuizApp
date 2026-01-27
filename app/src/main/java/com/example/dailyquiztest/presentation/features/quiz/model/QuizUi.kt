@@ -326,7 +326,7 @@ private fun LongQuizPreview() {
         totalQuestions = 5,
         category = Category.CARTOON_AND_ANIMATIONS,
         difficulty = Difficulty.EASY
-    ).Display(quizUserActions = QuizUserActions.previewQuizUserActions)
+    ).Display(quizUserActions = QuizUserActions.ForPreview)
 }
 
 @Composable
@@ -345,5 +345,5 @@ private fun ShortQuizPreview() {
         totalQuestions = 5,
         category = Category.CARTOON_AND_ANIMATIONS,
         difficulty = Difficulty.EASY
-    ).Display(quizUserActions = QuizUserActions.previewQuizUserActions)
+    ).Display(quizUserActions = QuizUserActions.ForPreview)
 }

@@ -11,18 +11,12 @@ interface QuizUserActions {
     fun onResultClicked(): (QuizUi) -> Unit
     fun onStartNewQuizClicked(): () -> Unit
 
-    companion object {
-        val previewQuizUserActions = object : QuizUserActions {
-            override fun onBackClicked(): () -> Unit = {}
-
-            override fun onFiltersPhaseNextButtonClicked(): (Category, Difficulty) -> Unit =
-                { _, _ -> }
-
-            override fun onNextClicked(): (QuizUi) -> Unit = {}
-
-            override fun onResultClicked(): (QuizUi) -> Unit = {}
-
-            override fun onStartNewQuizClicked(): () -> Unit = {}
-        }
+    object ForPreview : QuizUserActions {
+        override fun onBackClicked(): () -> Unit = {}
+        override fun onFiltersPhaseNextButtonClicked(): (Category, Difficulty) -> Unit =
+            { _, _ -> }
+        override fun onNextClicked(): (QuizUi) -> Unit = {}
+        override fun onResultClicked(): (QuizUi) -> Unit = {}
+        override fun onStartNewQuizClicked(): () -> Unit = {}
     }
 }

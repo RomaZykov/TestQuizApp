@@ -7,13 +7,9 @@ interface HistoryUserActions {
 
     fun onBackButtonClicked(): () -> Unit
 
-    companion object {
-        val previewHistoryUserActions = object : HistoryUserActions {
-            override fun onBackButtonClicked(): () -> Unit = {}
-
-            override fun onDeleteClicked(): (Int) -> Unit = {}
-
-            override fun onStartQuizClicked(): () -> Unit = {}
-        }
+    object ForPreview : HistoryUserActions {
+        override fun onBackButtonClicked(): () -> Unit = {}
+        override fun onDeleteClicked(): (Int) -> Unit = {}
+        override fun onStartQuizClicked(): () -> Unit = {}
     }
 }
