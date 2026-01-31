@@ -1,13 +1,16 @@
 package com.example.testing.data.network
 
+import com.example.dailyquiztest.R
 import com.example.dailyquiztest.data.model.network.NetworkQuizQuestionsDataSource
+import com.example.dailyquiztest.data.model.network.exception.NoInternetConnection
+import com.example.dailyquiztest.data.model.network.exception.ServiceUnavailableException
 import com.example.dailyquiztest.data.model.network.model.NetworkQuizQuestion
 import com.example.dailyquiztest.domain.model.Category
 import com.example.dailyquiztest.domain.model.Difficulty
-import java.net.UnknownHostException
 
 class FakeNetworkQuizQuestionsDataSource : NetworkQuizQuestionsDataSource {
     var shouldSimulateNetworkError = false
+    var shouldSimulateServiceUnavailableError = false
 
     override suspend fun retrieveQuizQuestions(
         amount: Int,
@@ -15,7 +18,9 @@ class FakeNetworkQuizQuestionsDataSource : NetworkQuizQuestionsDataSource {
         difficulty: String
     ): Result<List<NetworkQuizQuestion>> {
         return if (shouldSimulateNetworkError) {
-            Result.failure(UnknownHostException())
+            Result.failure(NoInternetConnection("No connection"))
+        } else if (shouldSimulateServiceUnavailableError) {
+            Result.failure(ServiceUnavailableException("Service unavailable"))
         } else {
             val result =
                 networkQuestions.filter { it.key.first == category && it.key.second.toString() == difficulty }.values.first()

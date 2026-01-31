@@ -6,21 +6,22 @@ import com.example.dailyquiztest.core.DispatcherList
 import com.example.dailyquiztest.core.FormatDate
 import com.example.dailyquiztest.domain.model.Category
 import com.example.dailyquiztest.domain.model.Difficulty
-import com.example.dailyquiztest.domain.model.QuestionTypes
 import com.example.dailyquiztest.domain.model.QuizResult
 import com.example.dailyquiztest.domain.repository.HistoryRepository
 import com.example.dailyquiztest.domain.repository.QuizRepository
+import com.example.dailyquiztest.presentation.features.quiz.model.small_screen.ErrorUiState
 import com.example.dailyquiztest.presentation.features.quiz.model.FiltersUi
 import com.example.dailyquiztest.presentation.features.quiz.model.LoadingUi
 import com.example.dailyquiztest.presentation.features.quiz.model.QuizResultUi
 import com.example.dailyquiztest.presentation.features.quiz.model.QuizUi
+import com.example.dailyquiztest.presentation.features.quiz.model.small_screen.DialogUiState
 import com.example.dailyquiztest.presentation.main_navigation.Route
 import com.example.dailyquiztest.presentation.main_navigation.WelcomeRouteProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,9 +36,7 @@ class QuizViewModel @Inject constructor(
 
     private val uiStateMutable = MutableStateFlow<QuizUiState>(
         FiltersUi(
-            categories = Category.entries,
-            difficulties = Difficulty.entries,
-            shouldShowError = false
+            errorSnackBar = ErrorUiState.EmptyUi,
         )
     )
     val uiState: StateFlow<QuizUiState>
@@ -50,8 +49,8 @@ class QuizViewModel @Inject constructor(
         category: Category,
         difficulty: Difficulty
     ) {
-        uiStateMutable.value = LoadingUi
         viewModelScope.launch(dispatcherList.io()) {
+            uiStateMutable.value = LoadingUi
             quizRepository.retrieveQuizQuestions(
                 amount = difficulty.amountOfQuestions,
                 category = category.apiId,
@@ -63,21 +62,21 @@ class QuizViewModel @Inject constructor(
                         question = quizQuestion.question,
                         incorrectAnswers = quizQuestion.incorrectAnswers,
                         correctAnswer = quizQuestion.correctAnswer,
-                        questionType = QuestionTypes.Boolean(),
-//                        questionType = QuestionTypes.entries.find { types -> types.typeApi == quizQuestion.type }
-//                            ?: QuestionTypes.BOOLEAN,
+                        questionType = quizQuestion.type,
                         totalQuestions = it.size,
                         category = category,
-                        difficulty = difficulty
+                        difficulty = difficulty,
+                        timerDialogUi = DialogUiState.NoDialog
                     )
                 })
                 uiStateMutable.value = questions[currentQuizQuestion]
             }.onFailure {
-                uiStateMutable.value = FiltersUi(
-                    categories = Category.entries,
-                    difficulties = Difficulty.entries,
-                    true
+                val filtersUi = FiltersUi(
+                    errorSnackBar = ErrorUiState.ErrorUi(it.message ?: "")
                 )
+                uiStateMutable.value = filtersUi
+                delay(2000)
+                uiStateMutable.value = filtersUi.copy(errorSnackBar = ErrorUiState.EmptyUi)
             }
         }
     }
@@ -87,12 +86,12 @@ class QuizViewModel @Inject constructor(
     }
 
     override fun retrieveNextAnswer() {
-        uiStateMutable.update { questions[++currentQuizQuestion] }
+        uiStateMutable.value = questions[++currentQuizQuestion]
     }
 
     override fun showResult() {
         val resultScreen = QuizResultUi(quizAnswers = questions)
-        uiStateMutable.update { resultScreen }
+        uiStateMutable.value = resultScreen
         viewModelScope.launch(dispatcherList.io()) {
             historyRepository.saveQuizResult(
                 QuizResult(
@@ -104,6 +103,10 @@ class QuizViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+    override fun timerProgress() {
+        TODO("Not yet implemented")
     }
 
     override fun navigateToWelcome(toWelcome: (Route) -> Unit) {
@@ -125,6 +128,8 @@ interface CoreVMActions {
         category: Category,
         difficulty: Difficulty
     )
+
+    fun timerProgress()
 
     fun navigateToWelcome(toWelcome: (Route) -> Unit)
 }

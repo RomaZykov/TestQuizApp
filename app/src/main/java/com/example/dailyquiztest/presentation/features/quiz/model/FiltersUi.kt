@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,13 +19,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,33 +48,30 @@ import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
 import com.example.dailyquiztest.presentation.common.UiLogo
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.features.quiz.QuizUserActions
+import com.example.dailyquiztest.presentation.features.quiz.model.small_screen.ErrorUiState
 import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 
 data class FiltersUi(
-    val categories: List<Category>,
-    val difficulties: List<Difficulty>,
-    val shouldShowError: Boolean
+    private val categories: List<Category> = Category.entries,
+    private val difficulties: List<Difficulty> = Difficulty.entries,
+    private val errorSnackBar: ErrorUiState
 ) : QuizUiState {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    override fun Display(quizUserActions: QuizUserActions) {
-        val shouldShowErrorBar = rememberSaveable { mutableStateOf(shouldShowError) }
-        LaunchedEffect(shouldShowError) {
-            shouldShowErrorBar.value = shouldShowError
-        }
-
+    override fun Display(timerProgress: () -> Unit, quizUserActions: QuizUserActions) {
         val categoryLabel = stringResource(R.string.category_menu_text)
-        val selectedCategory = rememberSaveable { mutableStateOf(categoryLabel) }
+        val selectedCategory = rememberSaveable(categories) { mutableStateOf(categoryLabel) }
 
         val difficultyLabel = stringResource(R.string.difficulty_menu_text)
-        val selectedDifficulty = rememberSaveable { mutableStateOf(difficultyLabel) }
+        val selectedDifficulty = rememberSaveable(difficulties) { mutableStateOf(difficultyLabel) }
 
         val startButtonEnabled =
             selectedCategory.value != categoryLabel && selectedDifficulty.value != difficultyLabel
 
         val scrollState = rememberScrollState()
-        val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+        val scrollBehavior =
+            TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
         Scaffold(
             modifier = Modifier
                 .semantics {
@@ -112,9 +106,7 @@ data class FiltersUi(
                         startButtonEnabled
                     )
                 }
-                if (shouldShowErrorBar.value) {
-                    DisplaySnackBar()
-                }
+                errorSnackBar.Display(modifier = Modifier.align(Alignment.BottomCenter))
             }
         }
     }
@@ -130,19 +122,6 @@ data class FiltersUi(
             }
         }, scrollBehavior = scrollBehavior) {
             UiLogo()
-        }
-    }
-
-    @Composable
-    private fun BoxScope.DisplaySnackBar() {
-        Snackbar(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .padding(24.dp),
-            shape = RoundedCornerShape(16.dp)
-        ) {
-            Text(stringResource(R.string.error_message))
         }
     }
 
@@ -203,13 +182,13 @@ data class FiltersUi(
 
             ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                 categories.forEach {
-                    val categoryText = stringResource(it.textId)
+                    val categoryTextFromRes = stringResource(it.textId)
                     DropdownMenuItem(
                         text = {
-                            Text(categoryText)
+                            Text(categoryTextFromRes)
                         },
                         onClick = {
-                            selectedCategory.value = "$categoryText-${it.name}"
+                            selectedCategory.value = "$categoryTextFromRes-${it.name}"
                             expanded = false
                         })
                 }
@@ -259,13 +238,13 @@ data class FiltersUi(
                 expanded = expanded.value,
                 onDismissRequest = { expanded.value = false }) {
                 difficulties.forEach {
-                    val difficultyText = stringResource(it.textId)
+                    val difficultyTextFromRes = stringResource(it.textId)
                     DropdownMenuItem(
                         text = {
-                            Text(difficultyText)
+                            Text(difficultyTextFromRes)
                         },
                         onClick = {
-                            selectedDifficulty.value = "$difficultyText-${it.name}"
+                            selectedDifficulty.value = "$difficultyTextFromRes-${it.name}"
                             expanded.value = false
                         })
                 }
@@ -300,6 +279,6 @@ data class FiltersUi(
 @Preview(showSystemUi = true)
 @Composable
 fun FiltersPreview() {
-    FiltersUi(Category.entries, emptyList(), true)
-        .Display(quizUserActions = QuizUserActions.ForPreview)
+    FiltersUi(Category.entries, emptyList(), ErrorUiState.ErrorUi("Some error!"))
+        .Display(timerProgress = {}, quizUserActions = QuizUserActions.ForPreview)
 }

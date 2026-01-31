@@ -1,14 +1,17 @@
 package com.example.testing.repository
 
+import com.example.dailyquiztest.data.model.network.exception.NoInternetConnection
+import com.example.dailyquiztest.data.model.network.exception.ServiceUnavailableException
 import com.example.dailyquiztest.domain.model.QuizQuestion
 import com.example.dailyquiztest.domain.repository.QuizRepository
-import com.example.testing.dummy.stubQuizes
 import com.example.testing.dummy.dummyTrueFalseQuizes
+import com.example.testing.dummy.stubQuizes
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class FakeQuizRepository @Inject constructor() : QuizRepository {
-    var shouldSimulateError = false
+    var shouldSimulateNetworkError = false
+    var shouldSimulateServiceUnavailableError = false
     var shouldSimulateOnlyTrueFalseOptions = false
     var shouldSimulateFiveSecDelay = false
 
@@ -19,8 +22,10 @@ class FakeQuizRepository @Inject constructor() : QuizRepository {
         category: Int,
         difficulty: String
     ): Result<List<QuizQuestion>> {
-        return if (shouldSimulateError) {
-            Result.failure(Exception())
+        return if (shouldSimulateNetworkError) {
+            Result.failure(NoInternetConnection("Check your connection!"))
+        } else if (shouldSimulateServiceUnavailableError) {
+            Result.failure(ServiceUnavailableException("Error with code: 1"))
         } else {
             if (shouldSimulateFiveSecDelay) {
                 delay(5000)

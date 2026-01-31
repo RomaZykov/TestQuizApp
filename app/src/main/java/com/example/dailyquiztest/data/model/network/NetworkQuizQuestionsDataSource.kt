@@ -1,10 +1,8 @@
 package com.example.dailyquiztest.data.model.network
 
-import com.example.dailyquiztest.R
-import com.example.dailyquiztest.core.Const
-import com.example.dailyquiztest.core.ProvideString
+import com.example.dailyquiztest.core.exception.QuizHandleError
+import com.example.dailyquiztest.data.model.network.exception.ServiceUnavailableException
 import com.example.dailyquiztest.data.model.network.model.NetworkQuizQuestion
-import java.net.UnknownHostException
 import javax.inject.Inject
 
 interface NetworkQuizQuestionsDataSource {
@@ -17,7 +15,7 @@ interface NetworkQuizQuestionsDataSource {
 
     class Base @Inject constructor(
         private val quizApi: QuizApi,
-        private val provideString: ProvideString
+        private val handleException: QuizHandleError,
     ) : NetworkQuizQuestionsDataSource {
         override suspend fun retrieveQuizQuestions(
             amount: Int,
@@ -27,21 +25,18 @@ interface NetworkQuizQuestionsDataSource {
             return try {
                 val questionsResponse = quizApi.fetchQuizQuestions(amount, category, difficulty)
                 val code = questionsResponse.body()!!.responseCode
-                if (code.toString() != SuccessCode.toString()) {
-                    throw UnknownHostException(
-                        provideString.string(
-                            R.string.network_error_exception,
-                            code
-                        )
-                    )
+                if (code != SUCCESS_CODE) {
+                    throw ServiceUnavailableException(code.toString())
                 }
                 val questions = questionsResponse.body()!!.result!!
                 Result.success(questions)
-            } catch (e: UnknownHostException) {
-                Result.failure(e)
+            } catch (e: Exception) {
+                Result.failure(handleException.handle(e))
             }
         }
     }
 
-    private object SuccessCode : Const.Base(0.toString())
+    private companion object {
+        private const val SUCCESS_CODE = 0
+    }
 }
