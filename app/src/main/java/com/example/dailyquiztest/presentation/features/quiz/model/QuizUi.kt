@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,14 +19,9 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,12 +33,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.domain.model.Category
 import com.example.dailyquiztest.domain.model.Difficulty
-import com.example.dailyquiztest.domain.model.QuestionTypes
+import com.example.dailyquiztest.domain.model.QuestionType
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.CommonCard
 import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
@@ -52,6 +44,7 @@ import com.example.dailyquiztest.presentation.common.UiLogo
 import com.example.dailyquiztest.presentation.common.answers_group.AnswersSpecificTypeFactory
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.features.quiz.QuizUserActions
+import com.example.dailyquiztest.presentation.features.quiz.model.small_screen.DialogUiState
 import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -62,25 +55,23 @@ data class QuizUi(
     val question: String,
     val incorrectAnswers: List<String>,
     val correctAnswer: String,
-    val questionType: QuestionTypes,
+    val questionType: QuestionType,
     val totalQuestions: Int,
     val userAnswers: List<String> = listOf(),
     val isAnsweredCorrect: Boolean = false,
     val category: Category,
-    val difficulty: Difficulty
+    val difficulty: Difficulty,
+    val timerDialogUi: DialogUiState
 ) : QuizUiState {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    override fun Display(
-        quizUserActions: QuizUserActions
-    ) {
+    override fun Display(timerProgress: () -> Unit, quizUserActions: QuizUserActions) {
         val finalUserAnswers =
             rememberSaveable(question) { mutableListOf(userAnswers.joinToString()) }
         val finalAnswersCorrect = rememberSaveable(question) { mutableStateOf(isAnsweredCorrect) }
 
         val actionButtonEnabled = rememberSaveable(question) { mutableStateOf(false) }
-        val shouldShowTimeIsOverDialog = remember { mutableStateOf(false) }
         val shouldShowBorder = rememberSaveable(question) { mutableStateOf(false) }
 
         val scrollState = rememberScrollState()
@@ -92,6 +83,7 @@ data class QuizUi(
                 shouldShowBorder.value = false
             }
         }
+
         Scaffold(
             topBar = {
                 TopAppBarDecorator(scrollBehavior) {
@@ -117,7 +109,7 @@ data class QuizUi(
                             .background(DailyQuizTheme.colorScheme.secondary),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        TimerProgress(shouldShowTimeIsOverDialog)
+//                        TimerProgress(shouldShowTimeIsOverDialog)
                         NumberOfQuestions(currentNumberQuestion, totalQuestions)
                         Question(question)
                         QuizOptions(
@@ -166,23 +158,23 @@ data class QuizUi(
                 )
             }
         }
-        if (shouldShowTimeIsOverDialog.value) {
-            TimeIsOverDialog(quizUserActions.onStartNewQuizClicked())
+        timerDialogUi.Display {
+            quizUserActions.onStartNewQuizClicked().invoke()
         }
     }
 
     @Composable
     private fun TimerProgress(shouldShowTimeIsOverDialog: MutableState<Boolean>) {
-        var ticks by rememberSaveable { mutableIntStateOf(0) }
-        val currentProgress = remember { mutableFloatStateOf(0f) }
-        LaunchedEffect(Unit) {
-            while (ticks < difficulty.timeToComplete / 1000) {
-                delay(1.seconds)
-                ticks++
-                currentProgress.floatValue = (ticks.toFloat() / (difficulty.timeToComplete / 1000))
-            }
-            shouldShowTimeIsOverDialog.value = true
-        }
+//        var ticks by rememberSaveable { mutableIntStateOf(0) }
+//        val currentProgress = remember { mutableFloatStateOf(0f) }
+//        LaunchedEffect(Unit) {
+//            while (ticks < difficulty.timeToComplete / 1000) {
+//                delay(1.seconds)
+//                ticks++
+//                currentProgress.floatValue = (ticks.toFloat() / (difficulty.timeToComplete / 1000))
+//            }
+//            shouldShowTimeIsOverDialog.value = true
+//        }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -197,13 +189,13 @@ data class QuizUi(
                 Text(
                     text = stringResource(
                         R.string.time_counter,
-                        ticks / 60,
-                        ticks % 60
+//                        ticks / 60,
+//                        ticks % 60
                     )
                 )
-                val totalMinutes = difficulty.timeToComplete / 1000 / 60
-                val totalSeconds = difficulty.timeToComplete / 1000 % 60
-                Text(text = stringResource(R.string.time_counter, totalMinutes, totalSeconds))
+//                val totalMinutes = difficulty.timeToComplete / 1000 / 60
+//                val totalSeconds = difficulty.timeToComplete / 1000 % 60
+//                Text(text = stringResource(R.string.time_counter, totalMinutes, totalSeconds))
             }
             LinearProgressIndicator(
                 modifier = Modifier
@@ -214,7 +206,8 @@ data class QuizUi(
                 color = DailyQuizTheme.colorScheme.tertiary,
                 drawStopIndicator = {},
                 progress = {
-                    currentProgress.floatValue
+                    0f
+//                    currentProgress.floatValue
                 }
             )
         }
@@ -258,7 +251,7 @@ data class QuizUi(
             inCorrectAnswers = inCorrectAnswers,
             checkedEnabled = true,
             actionButtonEnabled = actionButtonEnabled,
-            questionTypes = questionType,
+            questionType = questionType,
             question = question
         )
         quizOptions.createGroup()
@@ -274,42 +267,6 @@ data class QuizUi(
 }
 
 @Composable
-private fun TimeIsOverDialog(onStartNewQuizClicked: () -> Unit) {
-    Dialog(
-        onDismissRequest = {}, properties = DialogProperties(
-            usePlatformDefaultWidth = false
-        )
-    ) {
-        CommonCard {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(modifier = Modifier.padding(top = 24.dp))
-                Text(
-                    stringResource(R.string.time_is_over_title),
-                    style = DailyQuizTheme.typography.title
-                )
-                Text(
-                    modifier = Modifier
-                        .padding(vertical = 12.dp, horizontal = 24.dp),
-                    text = stringResource(R.string.time_is_over_desc),
-                    textAlign = TextAlign.Center
-                )
-                ActionButtonWithText(text = R.string.start_again) {
-                    onStartNewQuizClicked.invoke()
-                }
-            }
-        }
-    }
-}
-
-@Composable
-@Preview(showSystemUi = true)
-private fun DialogPreview() {
-    TimeIsOverDialog {}
-}
-
-@Composable
 @Preview(showSystemUi = true)
 private fun LongQuizPreview() {
     QuizUi(
@@ -322,11 +279,12 @@ private fun LongQuizPreview() {
             "Test 4"
         ),
         correctAnswer = "i`m correct answer",
-        questionType = QuestionTypes.MULTIPLE,
+        questionType = QuestionType.MULTIPLE,
         totalQuestions = 5,
         category = Category.CARTOON_AND_ANIMATIONS,
-        difficulty = Difficulty.EASY
-    ).Display(quizUserActions = QuizUserActions.ForPreview)
+        difficulty = Difficulty.EASY,
+        timerDialogUi = DialogUiState.NoDialog
+    ).Display(timerProgress = {}, quizUserActions = QuizUserActions.ForPreview)
 }
 
 @Composable
@@ -341,9 +299,10 @@ private fun ShortQuizPreview() {
             "4"
         ),
         correctAnswer = "i`m correct answer",
-        questionType = QuestionTypes.MULTIPLE,
+        questionType = QuestionType.MULTIPLE,
         totalQuestions = 5,
         category = Category.CARTOON_AND_ANIMATIONS,
-        difficulty = Difficulty.EASY
-    ).Display(quizUserActions = QuizUserActions.ForPreview)
+        difficulty = Difficulty.EASY,
+        timerDialogUi = DialogUiState.NoDialog
+    ).Display(timerProgress = {}, quizUserActions = QuizUserActions.ForPreview)
 }

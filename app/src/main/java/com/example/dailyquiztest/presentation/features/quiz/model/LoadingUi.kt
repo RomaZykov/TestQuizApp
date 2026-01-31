@@ -9,6 +9,7 @@ object LoadingUi : QuizUiState {
 
     @Composable
     override fun Display(
+        timerProgress: () -> Unit,
         quizUserActions: QuizUserActions
     ) {
         UiLoading()

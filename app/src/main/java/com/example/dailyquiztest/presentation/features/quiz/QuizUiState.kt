@@ -6,7 +6,7 @@ import com.example.dailyquiztest.core.Const
 interface QuizUiState {
 
     @Composable
-    fun Display(quizUserActions: QuizUserActions)
+    fun Display(timerProgress: () -> Unit, quizUserActions: QuizUserActions)
 
     object FiltersContDesc : Const.Base("filtersScreen")
     object QuizContDesc : Const.Base("quizScreen")

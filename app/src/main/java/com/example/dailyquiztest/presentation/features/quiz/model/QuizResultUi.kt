@@ -31,12 +31,13 @@ import androidx.compose.ui.unit.sp
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.domain.model.Category
 import com.example.dailyquiztest.domain.model.Difficulty
-import com.example.dailyquiztest.domain.model.QuestionTypes
+import com.example.dailyquiztest.domain.model.QuestionType
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.StarsScore
 import com.example.dailyquiztest.presentation.common.answers_group.AnswersSpecificTypeFactory
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.features.quiz.QuizUserActions
+import com.example.dailyquiztest.presentation.features.quiz.model.small_screen.DialogUiState
 import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 
 data class QuizResultUi(
@@ -44,7 +45,7 @@ data class QuizResultUi(
 ) : QuizUiState {
 
     @Composable
-    override fun Display(quizUserActions: QuizUserActions) {
+    override fun Display(timerProgress: () -> Unit, quizUserActions: QuizUserActions) {
         val listState = rememberLazyListState()
         LazyColumn(
             modifier = Modifier
@@ -190,7 +191,7 @@ data class QuizResultUi(
             )
             Column {
                 val quizOptions = AnswersSpecificTypeFactory.Base(
-                    questionTypes = quiz.questionType,
+                    questionType = quiz.questionType,
                     question = quiz.question,
                     correctAnswers = listOf(quiz.correctAnswer),
                     inCorrectAnswers = quiz.incorrectAnswers,
@@ -253,20 +254,6 @@ data class QuizResultUi(
         }
         return starsCounter
     }
-
-//    fun dateFinished(): String {
-//        val current = LocalDateTime.now()
-//        val formatter = DateTimeFormatter.ofPattern("dd MMMM", Locale("ru"))
-//        val formatted = current.format(formatter)
-//        return formatted
-//    }
-//
-//    fun timeFinished(): String {
-//        val current = LocalDateTime.now()
-//        val formatter = DateTimeFormatter.ofPattern("HH:mm")
-//        val formatted = current.format(formatter)
-//        return formatted
-//    }
 }
 
 @Preview(showSystemUi = true)
@@ -282,17 +269,18 @@ fun QuizResultsPreview() {
                         incorrectAnswers = listOf("a", "b", "c"),
                         correctAnswer = "d",
                         questionType = if (it % 2 == 0) {
-                            QuestionTypes.MULTIPLE
+                            QuestionType.MULTIPLE
                         } else {
-                            QuestionTypes.BOOLEAN
+                            QuestionType.BOOLEAN
                         },
                         totalQuestions = 10,
                         userAnswers = listOf("a"),
                         category = Category.CARTOON_AND_ANIMATIONS,
-                        difficulty = Difficulty.EASY
+                        difficulty = Difficulty.EASY,
+                        timerDialogUi = DialogUiState.NoDialog
                     )
                 )
             }
         }.toList()
-    ).Display(quizUserActions = QuizUserActions.ForPreview)
+    ).Display(timerProgress = {}, quizUserActions = QuizUserActions.ForPreview)
 }

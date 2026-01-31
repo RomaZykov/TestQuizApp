@@ -8,7 +8,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.example.dailyquiztest.core.rememberTestNavController
 import com.example.dailyquiztest.helpPages.ResultPage
-import com.example.dailyquiztest.presentation.features.quiz.QuizScreen
+import com.example.dailyquiztest.presentation.features.quiz.QuizScreenUi
 import com.example.dailyquiztest.presentation.features.quiz.model.QuizResultUi
 import com.example.testing.dummy.stubQuizAnswers
 import org.junit.Before
@@ -35,9 +35,10 @@ class ResultPageTest {
             val uiState = QuizResultUi(
                 quizAnswers = stubQuizAnswers
             )
-            QuizScreen(
+            QuizScreenUi(
                 uiState = uiState,
                 navController = rememberTestNavController(),
+                timerProgress = {},
                 prepareQuizGame = { _, _ -> },
                 saveQuizAnswer = {},
                 retrieveNextAnswer = {},

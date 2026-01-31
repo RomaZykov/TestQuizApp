@@ -10,10 +10,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.dailyquiztest.core.rememberTestNavController
 import com.example.dailyquiztest.domain.model.Category
 import com.example.dailyquiztest.domain.model.Difficulty
-import com.example.dailyquiztest.domain.model.QuestionTypes
+import com.example.dailyquiztest.domain.model.QuestionType
 import com.example.dailyquiztest.helpPages.QuizPage
-import com.example.dailyquiztest.presentation.features.quiz.QuizScreen
+import com.example.dailyquiztest.presentation.features.quiz.QuizScreenUi
 import com.example.dailyquiztest.presentation.features.quiz.model.QuizUi
+import com.example.dailyquiztest.presentation.features.quiz.model.small_screen.DialogUiState
 import com.example.testing.repository.FakeQuizRepository
 import org.junit.Before
 import org.junit.Rule
@@ -43,14 +44,16 @@ class QuizPageTest {
                 question = "Test question",
                 incorrectAnswers = listOf("b", "c", "d"),
                 correctAnswer = "a",
-                questionType = QuestionTypes.MULTIPLE,
+                questionType = QuestionType.MULTIPLE,
                 totalQuestions = 5,
                 category = Category.CARTOON_AND_ANIMATIONS,
-                difficulty = Difficulty.MEDIUM
+                difficulty = Difficulty.MEDIUM,
+                timerDialogUi = DialogUiState.NoDialog
             )
-            QuizScreen(
+            QuizScreenUi(
                 uiState = uiState,
                 navController = rememberTestNavController(),
+                timerProgress = {},
                 prepareQuizGame = { _, _ -> },
                 saveQuizAnswer = {},
                 retrieveNextAnswer = {},
@@ -78,14 +81,16 @@ class QuizPageTest {
                 question = "Test question",
                 incorrectAnswers = listOf("b", "c", "d"),
                 correctAnswer = "a",
-                questionType = QuestionTypes.MULTIPLE,
+                questionType = QuestionType.MULTIPLE,
                 totalQuestions = 5,
                 category = Category.CARTOON_AND_ANIMATIONS,
-                difficulty = Difficulty.MEDIUM
+                difficulty = Difficulty.MEDIUM,
+                timerDialogUi = DialogUiState.NoDialog
             )
-            QuizScreen(
+            QuizScreenUi(
                 uiState = uiState,
                 navController = rememberTestNavController(),
+                timerProgress = {},
                 prepareQuizGame = { _, _ -> },
                 saveQuizAnswer = {},
                 retrieveNextAnswer = {},
@@ -122,14 +127,16 @@ class QuizPageTest {
                 question = "Test question",
                 incorrectAnswers = listOf("false"),
                 correctAnswer = "true",
-                questionType = QuestionTypes.BOOLEAN,
+                questionType = QuestionType.BOOLEAN,
                 totalQuestions = 5,
                 category = Category.CARTOON_AND_ANIMATIONS,
-                difficulty = Difficulty.HARD
+                difficulty = Difficulty.HARD,
+                timerDialogUi = DialogUiState.NoDialog
             )
-            QuizScreen(
+            QuizScreenUi(
                 uiState = uiState,
                 navController = rememberTestNavController(),
+                timerProgress = {},
                 prepareQuizGame = { _, _ -> },
                 saveQuizAnswer = {},
                 retrieveNextAnswer = {},

@@ -12,15 +12,16 @@ import com.example.dailyquiztest.presentation.main_navigation.Route
 import com.example.dailyquiztest.presentation.main_navigation.navigateIfResumed
 
 @Composable
-fun QuizScreenNav(
+fun QuizScreen(
     navController: NavController,
     viewModel: QuizViewModel = hiltViewModel<QuizViewModel>()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    QuizScreen(
+    QuizScreenUi(
         uiState,
         navController,
+        viewModel::timerProgress,
         viewModel::prepareQuizGame,
         viewModel::saveQuizAnswer,
         viewModel::retrieveNextAnswer,
@@ -30,16 +31,17 @@ fun QuizScreenNav(
 }
 
 @Composable
-fun QuizScreen(
+fun QuizScreenUi(
     uiState: QuizUiState,
     navController: NavController,
+    timerProgress: () -> Unit,
     prepareQuizGame: (category: Category, difficulty: Difficulty) -> Unit,
     saveQuizAnswer: (quizUi: QuizUi) -> Unit,
     retrieveNextAnswer: () -> Unit,
     showResult: () -> Unit,
     navigateToWelcome: (toWelcome: (Route) -> Unit) -> Unit
 ) {
-    uiState.Display(quizUserActions = object : QuizUserActions {
+    uiState.Display(timerProgress, quizUserActions = object : QuizUserActions {
         override fun onBackClicked(): () -> Unit = {
             navController.popBackStack()
         }
