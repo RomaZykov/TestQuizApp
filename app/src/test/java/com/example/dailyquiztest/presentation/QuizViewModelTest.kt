@@ -2,17 +2,20 @@ package com.example.dailyquiztest.presentation
 
 import com.example.dailyquiztest.domain.model.Category
 import com.example.dailyquiztest.domain.model.Difficulty
-import com.example.dailyquiztest.domain.model.QuestionTypes
+import com.example.dailyquiztest.domain.model.QuestionType
 import com.example.dailyquiztest.fake.FakeFormatDate
 import com.example.dailyquiztest.fake.FakeWelcomeRouteProvider
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.features.quiz.QuizViewModel
 import com.example.dailyquiztest.presentation.features.quiz.model.FiltersUi
+import com.example.dailyquiztest.presentation.features.quiz.model.LoadingUi
 import com.example.dailyquiztest.presentation.features.quiz.model.QuizResultUi
 import com.example.dailyquiztest.presentation.features.quiz.model.QuizUi
+import com.example.dailyquiztest.presentation.features.quiz.model.small_screen.DialogUiState
+import com.example.dailyquiztest.presentation.features.quiz.model.small_screen.ErrorUiState
 import com.example.testing.di.FakeDispatcherList
-import com.example.testing.dummy.stubQuizes
 import com.example.testing.dummy.dummyTrueFalseQuizes
+import com.example.testing.dummy.stubQuizes
 import com.example.testing.repository.FakeHistoryRepository
 import com.example.testing.repository.FakeQuizRepository
 import kotlinx.coroutines.Dispatchers
@@ -76,12 +79,12 @@ class QuizViewModelTest {
             viewModel.prepareQuizGame(Category.FILM, Difficulty.HARD)
             advanceTimeBy(2500)
             assertEquals(
-                com.example.dailyquiztest.presentation.features.quiz.model.LoadingUi,
+                LoadingUi,
                 stateFlow.value
             )
             advanceTimeBy(2000)
             assertEquals(
-                com.example.dailyquiztest.presentation.features.quiz.model.LoadingUi,
+                LoadingUi,
                 stateFlow.value
             )
             advanceTimeBy(505)
@@ -92,16 +95,27 @@ class QuizViewModelTest {
         }
 
     @Test
-    fun `show failed filterState when there are some problems to advance in quiz stage`() =
+    fun `show failed filterState when there is NoConnection error`() =
         runTest {
-            fakeQuizRepository.shouldSimulateError = true
+            fakeQuizRepository.shouldSimulateNetworkError = true
 
             viewModel.prepareQuizGame(Category.FILM, Difficulty.HARD)
 
             val expectedState = FiltersUi(
-                categories = Category.entries,
-                difficulties = Difficulty.entries,
-                shouldShowError = true
+                errorSnackBar = ErrorUiState.ErrorUi("Check your connection!"),
+            )
+            assertEquals(expectedState, stateFlow.value)
+        }
+
+    @Test
+    fun `show failed filterState when there is ServiceUnavailable error`() =
+        runTest {
+            fakeQuizRepository.shouldSimulateServiceUnavailableError = true
+
+            viewModel.prepareQuizGame(Category.FILM, Difficulty.HARD)
+
+            val expectedState = FiltersUi(
+                errorSnackBar = ErrorUiState.ErrorUi("Error with code: 1"),
             )
             assertEquals(expectedState, stateFlow.value)
         }
@@ -161,10 +175,11 @@ class QuizViewModelTest {
             question = dummyTrueFalseQuizes[index].question,
             incorrectAnswers = dummyTrueFalseQuizes[index].incorrectAnswers,
             correctAnswer = dummyTrueFalseQuizes[index].correctAnswer,
-            questionType = QuestionTypes.BOOLEAN,
+            questionType = QuestionType.BOOLEAN,
             totalQuestions = 5,
             category = Category.CARTOON_AND_ANIMATIONS,
-            difficulty = Difficulty.EASY
+            difficulty = Difficulty.EASY,
+            timerDialogUi = DialogUiState.NoDialog
         )
     }
 
@@ -178,11 +193,12 @@ class QuizViewModelTest {
             question = stubQuizes[index].question,
             incorrectAnswers = stubQuizes[index].incorrectAnswers,
             correctAnswer = stubQuizes[index].correctAnswer,
-            questionType = QuestionTypes.entries.find { it.typeApi == stubQuizes[index].type }
-                ?: QuestionTypes.BOOLEAN,
+            questionType = QuestionType.entries.find { it == stubQuizes[index].type }
+                ?: QuestionType.BOOLEAN,
             totalQuestions = difficulty.amountOfQuestions,
             category = category,
-            difficulty = difficulty
+            difficulty = difficulty,
+            timerDialogUi = DialogUiState.NoDialog
         )
     }
 }
