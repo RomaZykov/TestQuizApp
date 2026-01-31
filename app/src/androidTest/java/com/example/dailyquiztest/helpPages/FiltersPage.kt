@@ -3,6 +3,7 @@ package com.example.dailyquiztest.helpPages
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasScrollAction
@@ -62,10 +63,16 @@ class FiltersPage(private val composeTestRule: ComposeTestRule) :
         composeTestRule.waitForIdle()
     }
 
-    fun errorSnackBarWasDisplayed() {
-        composeTestRule.onNodeWithText(retrieveString(R.string.error_message))
+    fun errorSnackBarWasDisplayedWithText(exceptionText: String) {
+        composeTestRule.onNodeWithText(exceptionText, substring = true)
             .assertExists()
             .assertIsDisplayed()
+    }
+
+    fun errorSnackBarNotDisplayedWithText(exceptionText: String) {
+        composeTestRule.onNodeWithText(exceptionText, substring = true)
+            .assertIsNotDisplayed()
+            .assertDoesNotExist()
     }
 
     fun assertCategorySelected(category: Category) {

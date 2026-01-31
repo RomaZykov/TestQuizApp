@@ -11,8 +11,9 @@ import com.example.dailyquiztest.core.rememberTestNavController
 import com.example.dailyquiztest.domain.model.Category
 import com.example.dailyquiztest.domain.model.Difficulty
 import com.example.dailyquiztest.helpPages.FiltersPage
-import com.example.dailyquiztest.presentation.features.quiz.QuizScreen
+import com.example.dailyquiztest.presentation.features.quiz.QuizScreenUi
 import com.example.dailyquiztest.presentation.features.quiz.model.FiltersUi
+import com.example.dailyquiztest.presentation.features.quiz.model.small_screen.ErrorUiState
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -35,11 +36,12 @@ class FiltersPageTest : StringResources() {
             val uiState = FiltersUi(
                 categories = Category.entries,
                 difficulties = Difficulty.entries,
-                shouldShowError = false
+                ErrorUiState.EmptyUi
             )
-            QuizScreen(
+            QuizScreenUi(
                 uiState = uiState,
                 navController = rememberTestNavController(),
+                timerProgress = {},
                 prepareQuizGame = { _, _ -> },
                 saveQuizAnswer = {},
                 retrieveNextAnswer = {},

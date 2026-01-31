@@ -181,9 +181,10 @@ class ScenarioTest : StringResources() {
         historyPage.assertNonEmptyHistoriesDisplayed()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun showErrorMessage_whenStartingQuiz_withNoConnection() = runTest {
-        (fakeQuizRepository as FakeQuizRepository).shouldSimulateError = true
+        (fakeQuizRepository as FakeQuizRepository).shouldSimulateNetworkError = true
 
         welcomePage.assertPageDisplayed()
         welcomePage.clickStartButton()
@@ -197,7 +198,49 @@ class ScenarioTest : StringResources() {
         filtersPage.clickStartQuizButton()
 
         filtersPage.assertPageDisplayed()
-        filtersPage.errorSnackBarWasDisplayed()
+        filtersPage.errorSnackBarWasDisplayedWithText(retrieveString(R.string.no_connection_exception))
+        testDispatcher.scheduler.advanceTimeBy(1000)
+        composeTestRule.waitForIdle()
+        filtersPage.errorSnackBarWasDisplayedWithText(retrieveString(R.string.no_connection_exception))
+        testDispatcher.scheduler.advanceTimeBy(1005)
+        composeTestRule.waitForIdle()
+        filtersPage.errorSnackBarNotDisplayedWithText(retrieveString(R.string.no_connection_exception))
+        filtersPage.assertCategorySelected(Category.VIDEO_GAMES)
+        filtersPage.assertDifficultySelected(Difficulty.EASY)
+
+        composeTestRule.activityRule.scenario.onActivity { activity ->
+            activity.onBackPressedDispatcher.onBackPressed()
+        }
+
+        welcomePage.assertPageDisplayed()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun showErrorMessage_whenStartingQuiz_withServiceUnavailable() = runTest {
+        (fakeQuizRepository as FakeQuizRepository).shouldSimulateServiceUnavailableError = true
+
+        welcomePage.assertPageDisplayed()
+        welcomePage.clickStartButton()
+
+        filtersPage.assertPageDisplayed()
+        filtersPage.assertStartQuizButtonNotEnabled()
+        filtersPage.chooseSomeCategory(Category.VIDEO_GAMES)
+        filtersPage.assertStartQuizButtonNotEnabled()
+        filtersPage.chooseSomeDifficulty(Difficulty.EASY)
+        filtersPage.assertStartQuizButtonEnabled()
+        filtersPage.clickStartQuizButton()
+
+        filtersPage.assertPageDisplayed()
+        filtersPage.errorSnackBarWasDisplayedWithText(retrieveString(R.string.service_unavailable_exception, "1"))
+        testDispatcher.scheduler.advanceTimeBy(1000)
+        composeTestRule.waitForIdle()
+        filtersPage.errorSnackBarWasDisplayedWithText(retrieveString(R.string.service_unavailable_exception, "1"))
+        testDispatcher.scheduler.advanceTimeBy(1005)
+        composeTestRule.waitForIdle()
+        filtersPage.errorSnackBarNotDisplayedWithText(retrieveString(R.string.service_unavailable_exception, "1"))
+        filtersPage.assertCategorySelected(Category.VIDEO_GAMES)
+        filtersPage.assertDifficultySelected(Difficulty.EASY)
 
         composeTestRule.activityRule.scenario.onActivity { activity ->
             activity.onBackPressedDispatcher.onBackPressed()
