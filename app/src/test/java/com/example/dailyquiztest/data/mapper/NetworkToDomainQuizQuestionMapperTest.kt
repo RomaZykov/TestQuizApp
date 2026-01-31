@@ -1,6 +1,6 @@
 package com.example.dailyquiztest.data.mapper
 
-import com.example.dailyquiztest.domain.model.QuestionTypes
+import com.example.dailyquiztest.domain.model.QuestionType
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -12,18 +12,18 @@ class NetworkToDomainQuizQuestionMapperTest {
         val question = "test question"
         val incorrectAnswers = listOf("True")
         val correctAnswer = "False"
-        val type = QuestionTypes.BOOLEAN
+        val type = QuestionType.BOOLEAN
 
         val result = mapper.mappedValue(
             question = question,
             incorrectAnswers = incorrectAnswers,
             correctAnswer = correctAnswer,
-            type = type.typeApi
+            type = type.toString()
         )
 
         assertEquals(question, result.question)
         assertEquals(listOf("true"), result.incorrectAnswers)
         assertEquals("false", result.correctAnswer)
-        assertEquals(QuestionTypes.BOOLEAN.typeApi, result.type)
+        assertEquals(QuestionType.BOOLEAN, result.type)
     }
 }

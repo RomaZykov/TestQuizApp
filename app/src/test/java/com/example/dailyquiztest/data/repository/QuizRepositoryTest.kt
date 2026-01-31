@@ -2,6 +2,7 @@ package com.example.dailyquiztest.data.repository
 
 import com.example.dailyquiztest.domain.model.Category
 import com.example.dailyquiztest.domain.model.Difficulty
+import com.example.dailyquiztest.domain.model.QuestionType
 import com.example.dailyquiztest.domain.model.QuizQuestion
 import com.example.dailyquiztest.domain.repository.QuizRepository
 import com.example.testing.data.mapper.FakeNetworkToDomainQuizQuestionMapper
@@ -58,31 +59,31 @@ class QuizRepositoryTest {
         assertEquals(
             listOf(
                 QuizQuestion(
-                    type = "multiple",
+                    type = QuestionType.MULTIPLE,
                     question = "Question 1",
                     correctAnswer = "correct",
                     incorrectAnswers = listOf("inCorrect 1", "inCorrect 2", "inCorrect 3")
                 ),
                 QuizQuestion(
-                    type = "multiple",
+                    type = QuestionType.MULTIPLE,
                     question = "Question 2",
                     correctAnswer = "correct",
                     incorrectAnswers = listOf("inCorrect 1", "inCorrect 2", "inCorrect 3")
                 ),
                 QuizQuestion(
-                    type = "multiple",
+                    type = QuestionType.MULTIPLE,
                     question = "Question 3",
                     correctAnswer = "correct",
                     incorrectAnswers = listOf("inCorrect 1", "inCorrect 2", "inCorrect 3")
                 ),
                 QuizQuestion(
-                    type = "boolean",
+                    type = QuestionType.BOOLEAN,
                     question = "Question 4",
                     correctAnswer = "True",
                     incorrectAnswers = listOf("False")
                 ),
                 QuizQuestion(
-                    type = "boolean",
+                    type = QuestionType.BOOLEAN,
                     question = "Question 5",
                     correctAnswer = "False",
                     incorrectAnswers = listOf("True")

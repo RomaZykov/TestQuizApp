@@ -1,6 +1,7 @@
 package com.example.testing.data.mapper
 
 import com.example.dailyquiztest.data.model.network.model.NetworkQuizQuestion
+import com.example.dailyquiztest.domain.model.QuestionType
 import com.example.dailyquiztest.domain.model.QuizQuestion
 
 class FakeNetworkToDomainQuizQuestionMapper : NetworkQuizQuestion.Mapper<QuizQuestion> {
@@ -17,7 +18,7 @@ class FakeNetworkToDomainQuizQuestionMapper : NetworkQuizQuestion.Mapper<QuizQue
             question = question,
             incorrectAnswers = incorrectAnswers,
             correctAnswer = correctAnswer,
-            type = type
+            type = QuestionType.entries.find { it.typeApi == type } ?: QuestionType.UNKNOWN
         )
     }
 }
