@@ -16,13 +16,16 @@ import androidx.compose.ui.test.performTouchInput
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
 import com.example.dailyquiztest.domain.repository.HistoryRepository
-import com.example.dailyquiztest.presentation.features.history.HistoryUiState
-import com.example.testing.dummy.dummyHistoryResults
+import com.example.testing.stub.stubHistories
 
 class HistoryPage(
     private val composeTestRule: ComposeTestRule,
     private val fakeHistoryRepository: HistoryRepository
 ) : StringResources() {
+
+    val historyLazyListTag = "history lazy list"
+    val nonEmptyContentDesc = "non empty history screen"
+    val emptyContentDesc = "empty history screen"
 
     private val backButton =
         composeTestRule.onNode(
@@ -39,6 +42,7 @@ class HistoryPage(
     private val deleteButton =
         composeTestRule.onNode(
             hasText(retrieveString(R.string.delete_text))
+
                     and hasClickAction()
         )
 
@@ -72,23 +76,23 @@ class HistoryPage(
     }
 
     fun assertEmptyHistoriesDisplayed() {
-        composeTestRule.onNodeWithContentDescription(HistoryUiState.EmptyHistoryContDesc.toString())
+        composeTestRule.onNodeWithContentDescription(emptyContentDesc)
             .assertExists().assertIsDisplayed()
     }
 
     fun assertNonEmptyHistoriesDisplayed() {
-        composeTestRule.onNodeWithContentDescription(HistoryUiState.NonEmptyHistoryContDesc.toString())
+        composeTestRule.onNodeWithContentDescription(nonEmptyContentDesc)
             .assertExists().assertIsDisplayed()
     }
 
     suspend fun initWithDummyHistories() {
-        dummyHistoryResults.forEach {
+        stubHistories.forEach {
             fakeHistoryRepository.saveQuizResult(it)
         }
     }
 
     fun longPressToDeleteHistoryByIndex(id: Int) {
-        composeTestRule.onNodeWithTag(HistoryUiState.HistoryLazyList.toString()).performScrollToNode(
+        composeTestRule.onNodeWithTag(historyLazyListTag).performScrollToNode(
             hasText(retrieveString(R.string.quiz_number_title, id + 1))
         )
         composeTestRule.onNodeWithText(retrieveString(R.string.quiz_number_title, id + 1))

@@ -17,12 +17,13 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
+import com.example.dailyquiztest.domain.model.CategoryDomain
+import com.example.dailyquiztest.domain.model.DifficultyDomain
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 
-class FiltersPage(private val composeTestRule: ComposeTestRule) :
-    StringResources() {
+class FiltersPage(private val composeTestRule: ComposeTestRule) : StringResources() {
+
+    val mainContentDesc = "filters screen"
 
     private val startButton =
         composeTestRule.onNode(
@@ -39,22 +40,22 @@ class FiltersPage(private val composeTestRule: ComposeTestRule) :
     }
 
     fun assertPageDisplayed() {
-        composeTestRule.onNodeWithContentDescription(QuizUiState.FiltersContDesc.toString())
+        composeTestRule.onNodeWithContentDescription(mainContentDesc)
             .assertExists()
             .assertIsDisplayed()
     }
 
-    fun chooseSomeCategory(someCategory: Category) {
+    fun chooseSomeCategory(someCategoryDomain: CategoryDomain) {
         composeTestRule.onNodeWithText(retrieveString(R.string.category_menu_text))
             .assertIsDisplayed().performClick()
-        composeTestRule.onNodeWithText(retrieveString(someCategory.textId)).performScrollTo()
+        composeTestRule.onNodeWithText(retrieveString(someCategoryDomain.textId)).performScrollTo()
             .assertIsDisplayed().performClick()
     }
 
-    fun chooseSomeDifficulty(someDifficulty: Difficulty) {
+    fun chooseSomeDifficulty(someDifficultyDomain: DifficultyDomain) {
         composeTestRule.onNodeWithText(retrieveString(R.string.difficulty_menu_text))
             .assertIsDisplayed().performClick()
-        composeTestRule.onNodeWithText(someDifficulty.toString()).assertIsDisplayed().performClick()
+        composeTestRule.onNodeWithText(someDifficultyDomain.toString()).assertIsDisplayed().performClick()
     }
 
     fun clickStartQuizButton() {
@@ -75,18 +76,18 @@ class FiltersPage(private val composeTestRule: ComposeTestRule) :
             .assertDoesNotExist()
     }
 
-    fun assertCategorySelected(category: Category) {
-        composeTestRule.onNodeWithText(retrieveString(category.textId)).assertExists()
+    fun assertCategorySelected(categoryDomain: CategoryDomain) {
+        composeTestRule.onNodeWithText(retrieveString(categoryDomain.textId)).assertExists()
             .assertIsDisplayed()
     }
 
-    fun assertDifficultySelected(difficulty: Difficulty) {
-        composeTestRule.onNodeWithText(difficulty.toString(), ignoreCase = true).assertExists()
+    fun assertDifficultySelected(difficultyDomain: DifficultyDomain) {
+        composeTestRule.onNodeWithText(difficultyDomain.toString(), ignoreCase = true).assertExists()
             .assertIsDisplayed()
     }
 
     fun hasScrollOption() {
-        composeTestRule.onNodeWithContentDescription(QuizUiState.FiltersContDesc.toString())
+        composeTestRule.onNodeWithContentDescription(mainContentDesc)
             .onChildren().onFirst().assert(
                 hasScrollAction()
             )

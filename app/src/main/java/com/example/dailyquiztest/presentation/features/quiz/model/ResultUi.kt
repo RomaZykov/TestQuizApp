@@ -29,18 +29,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dailyquiztest.R
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
-import com.example.dailyquiztest.domain.model.QuestionType
+import com.example.dailyquiztest.domain.model.CategoryDomain
+import com.example.dailyquiztest.domain.model.DifficultyDomain
+import com.example.dailyquiztest.domain.model.QuestionTypeDomain
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.StarsScore
 import com.example.dailyquiztest.presentation.common.answers_group.AnswersSpecificTypeFactory
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.features.quiz.QuizUserActions
-import com.example.dailyquiztest.presentation.features.quiz.model.small_screen.DialogUiState
 import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 
-data class QuizResultUi(
+data class ResultUi(
     private val quizAnswers: List<QuizUi>
 ) : QuizUiState {
 
@@ -50,9 +49,9 @@ data class QuizResultUi(
         LazyColumn(
             modifier = Modifier
                 .semantics {
-                    contentDescription = QuizUiState.ResultsContDesc.toString()
+                    contentDescription = "result screen"
                 }
-                .testTag(QuizUiState.ResultsLazyList.toString())
+                .testTag("result lazy list")
                 .fillMaxWidth()
                 .background(DailyQuizTheme.colorScheme.primary),
             state = listState
@@ -165,7 +164,7 @@ data class QuizResultUi(
                 Text(
                     text = stringResource(
                         R.string.questions_count,
-                        quiz.currentNumberQuestion + 1,
+                        quiz.number + 1,
                         quiz.totalQuestions
                     ),
                     style = DailyQuizTheme.typography.numberOfQuestions,
@@ -191,7 +190,7 @@ data class QuizResultUi(
             )
             Column {
                 val quizOptions = AnswersSpecificTypeFactory.Base(
-                    questionType = quiz.questionType,
+                    questionTypeDomain = quiz.questionTypeDomain,
                     question = quiz.question,
                     correctAnswers = listOf(quiz.correctAnswer),
                     inCorrectAnswers = quiz.incorrectAnswers,
@@ -259,25 +258,24 @@ data class QuizResultUi(
 @Preview(showSystemUi = true)
 @Composable
 fun QuizResultsPreview() {
-    QuizResultUi(
+    ResultUi(
         mutableListOf<QuizUi>().apply {
             repeat(10) {
                 this.add(
                     QuizUi(
-                        currentNumberQuestion = it,
+                        number = it,
                         question = "Test title $it",
                         incorrectAnswers = listOf("a", "b", "c"),
                         correctAnswer = "d",
-                        questionType = if (it % 2 == 0) {
-                            QuestionType.MULTIPLE
+                        questionTypeDomain = if (it % 2 == 0) {
+                            QuestionTypeDomain.MULTIPLE
                         } else {
-                            QuestionType.BOOLEAN
+                            QuestionTypeDomain.BOOLEAN
                         },
                         totalQuestions = 10,
                         userAnswers = listOf("a"),
-                        category = Category.CARTOON_AND_ANIMATIONS,
-                        difficulty = Difficulty.EASY,
-                        timerDialogUi = DialogUiState.NoDialog
+                        categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
+                        difficultyDomain = DifficultyDomain.EASY
                     )
                 )
             }

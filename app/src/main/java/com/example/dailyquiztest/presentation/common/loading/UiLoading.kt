@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import com.example.dailyquiztest.core.Const
 import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
 import com.example.dailyquiztest.presentation.common.UiLogo
 import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
@@ -22,7 +21,7 @@ import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 fun UiLoading() {
     Scaffold(
         modifier = Modifier.semantics {
-            contentDescription = Const.LoadingContDesc.toString()
+            contentDescription = "loading screen"
         },
         topBar = {
             TopAppBarDecorator {}

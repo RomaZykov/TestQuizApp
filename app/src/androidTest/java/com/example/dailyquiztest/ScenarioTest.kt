@@ -12,10 +12,9 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.test.swipeUp
-import com.example.dailyquiztest.core.Const
 import com.example.dailyquiztest.core.StringResources
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
+import com.example.dailyquiztest.domain.model.CategoryDomain
+import com.example.dailyquiztest.domain.model.DifficultyDomain
 import com.example.dailyquiztest.domain.repository.HistoryRepository
 import com.example.dailyquiztest.domain.repository.QuizRepository
 import com.example.dailyquiztest.helpPages.FiltersPage
@@ -24,11 +23,9 @@ import com.example.dailyquiztest.helpPages.QuizPage
 import com.example.dailyquiztest.helpPages.ResultPage
 import com.example.dailyquiztest.helpPages.WelcomePage
 import com.example.dailyquiztest.presentation.MainActivity
-import com.example.dailyquiztest.presentation.features.history.HistoryUiState
-import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
-import com.example.testing.dummy.dummyHistoryResults
-import com.example.testing.dummy.stubQuizAnswers
-import com.example.testing.dummy.stubQuizes
+import com.example.testing.stub.stubHistories
+import com.example.testing.stub.stubQuizAnswers
+import com.example.testing.stub.stubQuizes
 import com.example.testing.repository.FakeQuizRepository
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -63,6 +60,8 @@ class ScenarioTest : StringResources() {
     private lateinit var quizPage: QuizPage
     private lateinit var resultPage: ResultPage
     private lateinit var filtersPage: FiltersPage
+
+    private val loadingScreenContentDesc = "loading screen"
 
     @Before
     fun setUp() {
@@ -116,7 +115,7 @@ class ScenarioTest : StringResources() {
         historyPage.initWithDummyHistories()
         historyPage.assertNonEmptyHistoriesDisplayed()
 
-        var totalHistories = dummyHistoryResults.size
+        var totalHistories = stubHistories.size
         repeat(totalHistories) {
             historyPage.longPressToDeleteHistoryByIndex(totalHistories - 1)
             totalHistories--
@@ -151,14 +150,14 @@ class ScenarioTest : StringResources() {
 
         filtersPage.assertPageDisplayed()
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeCategory(Category.VIDEO_GAMES)
+        filtersPage.chooseSomeCategory(CategoryDomain.VIDEO_GAMES)
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeDifficulty(Difficulty.EASY)
+        filtersPage.chooseSomeDifficulty(DifficultyDomain.EASY)
         filtersPage.assertStartQuizButtonEnabled()
         filtersPage.clickStartQuizButton()
 
         quizPage.assertPageDisplayed()
-        repeat(Difficulty.EASY.amountOfQuestions - 1) {
+        repeat(DifficultyDomain.EASY.amountOfQuestions - 1) {
             quizPage.assertNextButtonNotEnabled()
             quizPage.chooseOption(true)
             quizPage.clickNextButton()
@@ -191,9 +190,9 @@ class ScenarioTest : StringResources() {
 
         filtersPage.assertPageDisplayed()
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeCategory(Category.VIDEO_GAMES)
+        filtersPage.chooseSomeCategory(CategoryDomain.VIDEO_GAMES)
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeDifficulty(Difficulty.EASY)
+        filtersPage.chooseSomeDifficulty(DifficultyDomain.EASY)
         filtersPage.assertStartQuizButtonEnabled()
         filtersPage.clickStartQuizButton()
 
@@ -205,8 +204,8 @@ class ScenarioTest : StringResources() {
         testDispatcher.scheduler.advanceTimeBy(1005)
         composeTestRule.waitForIdle()
         filtersPage.errorSnackBarNotDisplayedWithText(retrieveString(R.string.no_connection_exception))
-        filtersPage.assertCategorySelected(Category.VIDEO_GAMES)
-        filtersPage.assertDifficultySelected(Difficulty.EASY)
+        filtersPage.assertCategorySelected(CategoryDomain.VIDEO_GAMES)
+        filtersPage.assertDifficultySelected(DifficultyDomain.EASY)
 
         composeTestRule.activityRule.scenario.onActivity { activity ->
             activity.onBackPressedDispatcher.onBackPressed()
@@ -225,9 +224,9 @@ class ScenarioTest : StringResources() {
 
         filtersPage.assertPageDisplayed()
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeCategory(Category.VIDEO_GAMES)
+        filtersPage.chooseSomeCategory(CategoryDomain.VIDEO_GAMES)
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeDifficulty(Difficulty.EASY)
+        filtersPage.chooseSomeDifficulty(DifficultyDomain.EASY)
         filtersPage.assertStartQuizButtonEnabled()
         filtersPage.clickStartQuizButton()
 
@@ -239,8 +238,8 @@ class ScenarioTest : StringResources() {
         testDispatcher.scheduler.advanceTimeBy(1005)
         composeTestRule.waitForIdle()
         filtersPage.errorSnackBarNotDisplayedWithText(retrieveString(R.string.service_unavailable_exception, "1"))
-        filtersPage.assertCategorySelected(Category.VIDEO_GAMES)
-        filtersPage.assertDifficultySelected(Difficulty.EASY)
+        filtersPage.assertCategorySelected(CategoryDomain.VIDEO_GAMES)
+        filtersPage.assertDifficultySelected(DifficultyDomain.EASY)
 
         composeTestRule.activityRule.scenario.onActivity { activity ->
             activity.onBackPressedDispatcher.onBackPressed()
@@ -259,20 +258,20 @@ class ScenarioTest : StringResources() {
 
         filtersPage.assertPageDisplayed()
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeDifficulty(Difficulty.HARD)
+        filtersPage.chooseSomeDifficulty(DifficultyDomain.HARD)
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeCategory(Category.BOARD_GAMES)
+        filtersPage.chooseSomeCategory(CategoryDomain.BOARD_GAMES)
         filtersPage.assertStartQuizButtonEnabled()
         filtersPage.clickStartQuizButton()
 
         testDispatcher.scheduler.advanceTimeBy(2500)
         composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithContentDescription(Const.LoadingContDesc.toString())
+        composeTestRule.onNodeWithContentDescription(loadingScreenContentDesc)
             .assertExists()
             .assertIsDisplayed()
         testDispatcher.scheduler.advanceTimeBy(2000)
         composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithContentDescription(Const.LoadingContDesc.toString())
+        composeTestRule.onNodeWithContentDescription(loadingScreenContentDesc)
             .assertExists()
             .assertIsDisplayed()
         // More than 5 sec
@@ -289,9 +288,9 @@ class ScenarioTest : StringResources() {
 
         filtersPage.assertPageDisplayed()
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeDifficulty(Difficulty.HARD)
+        filtersPage.chooseSomeDifficulty(DifficultyDomain.HARD)
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeCategory(Category.BOARD_GAMES)
+        filtersPage.chooseSomeCategory(CategoryDomain.BOARD_GAMES)
         filtersPage.assertStartQuizButtonEnabled()
         filtersPage.clickStartQuizButton()
 
@@ -314,8 +313,8 @@ class ScenarioTest : StringResources() {
         welcomePage.assertPageDisplayed()
         welcomePage.clickStartButton()
 
-        filtersPage.chooseSomeCategory(Category.FILM)
-        filtersPage.chooseSomeDifficulty(Difficulty.EASY)
+        filtersPage.chooseSomeCategory(CategoryDomain.FILM)
+        filtersPage.chooseSomeDifficulty(DifficultyDomain.EASY)
         filtersPage.clickStartQuizButton()
 
         repeat(4) {
@@ -345,8 +344,8 @@ class ScenarioTest : StringResources() {
         welcomePage.assertPageDisplayed()
         welcomePage.clickStartButton()
 
-        filtersPage.chooseSomeCategory(Category.COMICS)
-        filtersPage.chooseSomeDifficulty(Difficulty.EASY)
+        filtersPage.chooseSomeCategory(CategoryDomain.COMICS)
+        filtersPage.chooseSomeDifficulty(DifficultyDomain.EASY)
         filtersPage.clickStartQuizButton()
 
         repeat(4) {
@@ -379,7 +378,7 @@ class ScenarioTest : StringResources() {
         composeTestRule.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithContentDescription(Const.WelcomeContDesc.toString())
+        composeTestRule.onNodeWithContentDescription(loadingScreenContentDesc)
             .performTouchInput {
                 repeat(5) {
                     swipeUp()
@@ -397,7 +396,7 @@ class ScenarioTest : StringResources() {
         welcomePage.assertPageDisplayed()
         welcomePage.assertHistoryButtonNotDisplayed()
 
-        composeTestRule.onNodeWithContentDescription(Const.WelcomeContDesc.toString())
+        composeTestRule.onNodeWithContentDescription(loadingScreenContentDesc)
             .performTouchInput {
                 repeat(5) {
                     swipeDown()
@@ -425,7 +424,7 @@ class ScenarioTest : StringResources() {
         historyPage.assertNonEmptyHistoriesDisplayed()
         historyPage.assertHistoryTitleWithBackButtonDisplayed()
 
-        composeTestRule.onNodeWithContentDescription(HistoryUiState.NonEmptyHistoryContDesc.toString())
+        composeTestRule.onNodeWithContentDescription(historyPage.nonEmptyContentDesc)
             .performTouchInput {
                 repeat(5) {
                     swipeUp()
@@ -438,7 +437,7 @@ class ScenarioTest : StringResources() {
         composeTestRule.onNodeWithText(
             retrieveString(
                 R.string.quiz_number_title,
-                dummyHistoryResults.last().id + 1
+                stubHistories.last().number + 1
             )
         ).assertExists().assertIsDisplayed()
 
@@ -448,7 +447,7 @@ class ScenarioTest : StringResources() {
         historyPage.assertNonEmptyHistoriesDisplayed()
         historyPage.assertHistoryTitleWithBackButtonNotDisplayed()
 
-        composeTestRule.onNodeWithContentDescription(HistoryUiState.NonEmptyHistoryContDesc.toString())
+        composeTestRule.onNodeWithContentDescription(historyPage.nonEmptyContentDesc)
             .performTouchInput {
                 repeat(5) {
                     swipeDown()
@@ -466,18 +465,18 @@ class ScenarioTest : StringResources() {
 
         filtersPage.assertPageDisplayed()
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeCategory(Category.FILM)
-        filtersPage.chooseSomeDifficulty(Difficulty.EASY)
+        filtersPage.chooseSomeCategory(CategoryDomain.FILM)
+        filtersPage.chooseSomeDifficulty(DifficultyDomain.EASY)
         filtersPage.assertStartQuizButtonEnabled()
 
         composeTestRule.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         composeTestRule.waitForIdle()
 
-        filtersPage.assertCategorySelected(Category.FILM)
-        filtersPage.assertDifficultySelected(Difficulty.EASY)
+        filtersPage.assertCategorySelected(CategoryDomain.FILM)
+        filtersPage.assertDifficultySelected(DifficultyDomain.EASY)
         filtersPage.assertStartQuizButtonEnabled()
 
-        composeTestRule.onNodeWithContentDescription(QuizUiState.FiltersContDesc.toString())
+        composeTestRule.onNodeWithContentDescription(filtersPage.mainContentDesc)
             .performTouchInput {
                 repeat(5) {
                     swipeUp()
@@ -487,23 +486,23 @@ class ScenarioTest : StringResources() {
         composeTestRule.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithContentDescription(QuizUiState.FiltersContDesc.toString())
+        composeTestRule.onNodeWithContentDescription(filtersPage.mainContentDesc)
             .performTouchInput {
                 repeat(5) {
                     swipeDown()
                 }
             }
 
-        filtersPage.assertCategorySelected(Category.FILM)
-        filtersPage.assertDifficultySelected(Difficulty.EASY)
+        filtersPage.assertCategorySelected(CategoryDomain.FILM)
+        filtersPage.assertDifficultySelected(DifficultyDomain.EASY)
         filtersPage.assertStartQuizButtonEnabled()
     }
 
     @Test(timeout = 60000)
     fun checkHorizontalLandscape_hasCorrectBehaviour_onQuizScreen() {
         welcomePage.clickStartButton()
-        filtersPage.chooseSomeCategory(Category.FILM)
-        filtersPage.chooseSomeDifficulty(Difficulty.EASY)
+        filtersPage.chooseSomeCategory(CategoryDomain.FILM)
+        filtersPage.chooseSomeDifficulty(DifficultyDomain.EASY)
         filtersPage.clickStartQuizButton()
 
         quizPage.assertPageDisplayed()
@@ -516,14 +515,14 @@ class ScenarioTest : StringResources() {
             .performClick()
         quizPage.assertNextButtonEnabled()
 
-        composeTestRule.onNodeWithContentDescription(QuizUiState.QuizContDesc.toString())
+        composeTestRule.onNodeWithContentDescription(quizPage.mainContentDesc)
             .performTouchInput {
                 repeat(5) {
                     swipeUp()
                 }
             }
 
-        composeTestRule.onNodeWithContentDescription(QuizUiState.QuizContDesc.toString())
+        composeTestRule.onNodeWithContentDescription(quizPage.mainContentDesc)
             .performTouchInput {
                 repeat(5) {
                     swipeDown()
@@ -539,11 +538,11 @@ class ScenarioTest : StringResources() {
     @Test(timeout = 60000)
     fun checkHorizontalLandscape_hasCorrectBehaviour_onQuizResultScreen() {
         welcomePage.clickStartButton()
-        filtersPage.chooseSomeCategory(Category.TELEVISION)
-        filtersPage.chooseSomeDifficulty(Difficulty.MEDIUM)
+        filtersPage.chooseSomeCategory(CategoryDomain.TELEVISION)
+        filtersPage.chooseSomeDifficulty(DifficultyDomain.MEDIUM)
         filtersPage.clickStartQuizButton()
         // 10 for MEDIUM
-        val questionsSize = Difficulty.MEDIUM.amountOfQuestions
+        val questionsSize = DifficultyDomain.MEDIUM.amountOfQuestions
         repeat(questionsSize - 1) {
             quizPage.chooseOption(it % 2 == 0)
             quizPage.clickNextButton()
@@ -556,7 +555,7 @@ class ScenarioTest : StringResources() {
         composeTestRule.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithContentDescription(QuizUiState.ResultsContDesc.toString())
+        composeTestRule.onNodeWithContentDescription(resultPage.mainContentDesc)
             .performTouchInput {
                 repeat(5) {
                     swipeUp()

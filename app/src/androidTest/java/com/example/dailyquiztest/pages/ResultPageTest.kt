@@ -9,8 +9,8 @@ import androidx.compose.ui.test.onNodeWithText
 import com.example.dailyquiztest.core.rememberTestNavController
 import com.example.dailyquiztest.helpPages.ResultPage
 import com.example.dailyquiztest.presentation.features.quiz.QuizScreenUi
-import com.example.dailyquiztest.presentation.features.quiz.model.QuizResultUi
-import com.example.testing.dummy.stubQuizAnswers
+import com.example.dailyquiztest.presentation.features.quiz.model.ResultUi
+import com.example.testing.stub.stubQuizAnswers
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -32,7 +32,7 @@ class ResultPageTest {
     @Test
     fun resetState_onLazyList_showsCorrectPreviouslySelectedItem() {
         restorationTester.setContent {
-            val uiState = QuizResultUi(
+            val uiState = ResultUi(
                 quizAnswers = stubQuizAnswers
             )
             QuizScreenUi(
