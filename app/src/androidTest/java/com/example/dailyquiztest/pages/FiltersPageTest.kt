@@ -11,9 +11,9 @@ import com.example.dailyquiztest.core.rememberTestNavController
 import com.example.dailyquiztest.domain.model.CategoryDomain
 import com.example.dailyquiztest.domain.model.DifficultyDomain
 import com.example.dailyquiztest.helpPages.FiltersPage
-import com.example.dailyquiztest.presentation.features.quiz.QuizScreenUi
-import com.example.dailyquiztest.presentation.features.quiz.model.FiltersUi
-import com.example.dailyquiztest.presentation.features.quiz.model.small_screen.ErrorUiState
+import com.example.dailyquiztest.presentation.feature.quiz.QuizScreenUi
+import com.example.dailyquiztest.presentation.feature.quiz.model.FiltersUi
+import com.example.dailyquiztest.presentation.feature.quiz.model.small_screen.ErrorUiState
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

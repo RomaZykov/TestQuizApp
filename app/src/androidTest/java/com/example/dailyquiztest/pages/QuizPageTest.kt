@@ -12,8 +12,8 @@ import com.example.dailyquiztest.domain.model.CategoryDomain
 import com.example.dailyquiztest.domain.model.DifficultyDomain
 import com.example.dailyquiztest.domain.model.QuestionTypeDomain
 import com.example.dailyquiztest.helpPages.QuizPage
-import com.example.dailyquiztest.presentation.features.quiz.QuizScreenUi
-import com.example.dailyquiztest.presentation.features.quiz.model.QuizUi
+import com.example.dailyquiztest.presentation.feature.quiz.QuizScreenUi
+import com.example.dailyquiztest.presentation.feature.quiz.model.QuizUi
 import com.example.testing.repository.FakeQuizRepository
 import org.junit.Before
 import org.junit.Rule

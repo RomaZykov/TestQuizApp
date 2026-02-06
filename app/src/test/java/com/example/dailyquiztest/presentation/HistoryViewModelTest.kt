@@ -5,10 +5,10 @@ import com.example.dailyquiztest.domain.model.CategoryDomain
 import com.example.dailyquiztest.domain.model.DifficultyDomain
 import com.example.dailyquiztest.domain.model.ResultDomain
 import com.example.dailyquiztest.fake.FakeQuizRouteProvider
-import com.example.dailyquiztest.presentation.features.history.HistoryUiState
-import com.example.dailyquiztest.presentation.features.history.HistoryViewModel
-import com.example.dailyquiztest.presentation.features.history.model.EmptyHistoryUi
-import com.example.dailyquiztest.presentation.features.history.model.HistoryUi
+import com.example.dailyquiztest.presentation.feature.history.HistoryUiState
+import com.example.dailyquiztest.presentation.feature.history.HistoryViewModel
+import com.example.dailyquiztest.presentation.feature.history.model.EmptyHistoryUi
+import com.example.dailyquiztest.presentation.feature.history.model.HistoryUi
 import com.example.testing.di.FakeDispatcherList
 import com.example.testing.repository.FakeHistoryRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -19,7 +19,6 @@ import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
 import com.example.dailyquiztest.domain.model.CategoryDomain
 import com.example.dailyquiztest.domain.model.DifficultyDomain
-import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 
 class FiltersPage(private val composeTestRule: ComposeTestRule) : StringResources() {
 

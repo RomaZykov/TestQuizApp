@@ -12,8 +12,8 @@ import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
 import com.example.dailyquiztest.core.rememberTestNavController
 import com.example.dailyquiztest.helpPages.HistoryPage
-import com.example.dailyquiztest.presentation.features.history.HistoryScreen
-import com.example.dailyquiztest.presentation.features.history.model.HistoryUi
+import com.example.dailyquiztest.presentation.feature.history.HistoryScreen
+import com.example.dailyquiztest.presentation.feature.history.model.HistoryUi
 import com.example.testing.stub.stubHistories
 import com.example.testing.repository.FakeHistoryRepository
 import org.junit.Before

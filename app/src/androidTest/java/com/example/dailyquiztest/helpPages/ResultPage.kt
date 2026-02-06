@@ -16,7 +16,6 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
-import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 
 class ResultPage(private val composeTestRule: ComposeTestRule) : StringResources() {
     val resultLazyListTag = "result lazy list"

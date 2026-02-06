@@ -3,7 +3,7 @@ package com.example.testing.stub
 import com.example.dailyquiztest.domain.model.CategoryDomain
 import com.example.dailyquiztest.domain.model.DifficultyDomain
 import com.example.dailyquiztest.domain.model.QuestionTypeDomain
-import com.example.dailyquiztest.presentation.features.quiz.model.QuizUi
+import com.example.dailyquiztest.presentation.feature.quiz.model.QuizUi
 
 /**
  * Size of quiz answers = [15]

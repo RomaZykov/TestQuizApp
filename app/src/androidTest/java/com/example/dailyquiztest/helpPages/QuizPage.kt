@@ -19,7 +19,6 @@ import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
 import com.example.dailyquiztest.domain.model.QuizDomain
 import com.example.dailyquiztest.domain.repository.QuizRepository
-import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 import com.example.testing.repository.FakeQuizRepository
 
 class QuizPage(
