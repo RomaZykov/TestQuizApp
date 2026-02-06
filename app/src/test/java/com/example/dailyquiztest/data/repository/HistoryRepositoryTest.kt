@@ -1,6 +1,6 @@
 package com.example.dailyquiztest.data.repository
 
-import com.example.testing.dummy.dummyHistoryResults
+import com.example.testing.stub.stubHistories
 import com.example.dailyquiztest.domain.repository.HistoryRepository
 import com.example.testing.data.local.FakeLocalHistoryDataSource
 import com.example.testing.data.mapper.FakeDomainToLocalQuizResultMapper
@@ -37,12 +37,12 @@ class HistoryRepositoryTest {
     fun `historyRepository save correct as local`() = runTest(
         UnconfinedTestDispatcher()
     ) {
-        historyRepository.saveQuizResult(dummyHistoryResults.first())
+        historyRepository.saveQuizResult(stubHistories.first())
 
         assertEquals(1, fakeDomainToLocalQuizResultMapper.mapCalledCount)
         assertEquals(0, fakeLocalToDomainQuizResultMapper.mapCalledCount)
         assertEquals(
-            listOf(dummyHistoryResults.first()),
+            listOf(stubHistories.first()),
             actual = historyRepository.fetchQuizResults().first()
         )
     }
@@ -52,15 +52,15 @@ class HistoryRepositoryTest {
     fun `historyRepository delete all histories`() = runTest(
         UnconfinedTestDispatcher()
     ) {
-        dummyHistoryResults.forEach {
+        stubHistories.forEach {
             historyRepository.saveQuizResult(it)
         }
 
         assertEquals(7, fakeDomainToLocalQuizResultMapper.mapCalledCount)
         assertEquals(0, fakeLocalToDomainQuizResultMapper.mapCalledCount)
 
-        dummyHistoryResults.forEach {
-            historyRepository.deleteQuizResult(it.id)
+        stubHistories.forEach {
+            historyRepository.deleteQuizResult(it.number)
         }
 
         assertEquals(
