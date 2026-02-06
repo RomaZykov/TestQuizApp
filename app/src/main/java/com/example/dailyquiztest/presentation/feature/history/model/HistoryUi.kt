@@ -1,4 +1,4 @@
-package com.example.dailyquiztest.presentation.features.history.model
+package com.example.dailyquiztest.presentation.feature.history.model
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -55,13 +55,13 @@ import com.example.dailyquiztest.domain.model.DifficultyDomain
 import com.example.dailyquiztest.domain.model.ResultDomain
 import com.example.dailyquiztest.presentation.common.StarsScore
 import com.example.dailyquiztest.presentation.common.UiLogo
-import com.example.dailyquiztest.presentation.features.history.HistoryUiState
-import com.example.dailyquiztest.presentation.features.history.HistoryUserActions
-import com.example.dailyquiztest.presentation.features.history.components.HistoryTopBar
+import com.example.dailyquiztest.presentation.feature.history.HistoryUiState
+import com.example.dailyquiztest.presentation.feature.history.HistoryUserActions
+import com.example.dailyquiztest.presentation.feature.history.components.HistoryTopBar
 import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 import kotlinx.coroutines.launch
 
-data class HistoryUi(val histories: List<ResultDomain>) : HistoryUiState {
+ data class HistoryUi(private val histories: List<ResultDomain>) : HistoryUiState {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
