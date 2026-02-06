@@ -61,7 +61,7 @@ class QuizViewModel @Inject constructor(
                         question = quizQuestion.question,
                         incorrectAnswers = quizQuestion.incorrectAnswers,
                         correctAnswer = quizQuestion.correctAnswer,
-                        questionTypeDomain = quizQuestion.type,
+                        quizTypeDomain = quizQuestion.type,
                         totalQuestions = it.size,
                         categoryDomain = categoryDomain,
                         difficultyDomain = difficultyDomain

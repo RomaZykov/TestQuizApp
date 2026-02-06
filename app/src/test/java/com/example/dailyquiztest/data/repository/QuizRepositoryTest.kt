@@ -2,7 +2,7 @@ package com.example.dailyquiztest.data.repository
 
 import com.example.dailyquiztest.domain.model.CategoryDomain
 import com.example.dailyquiztest.domain.model.DifficultyDomain
-import com.example.dailyquiztest.domain.model.QuestionTypeDomain
+import com.example.dailyquiztest.domain.model.QuizTypeDomain
 import com.example.dailyquiztest.domain.model.QuizDomain
 import com.example.dailyquiztest.domain.repository.QuizRepository
 import com.example.testing.data.mapper.FakeNetworkToDomainQuizQuestionMapper
@@ -59,31 +59,31 @@ class QuizRepositoryTest {
         assertEquals(
             listOf(
                 QuizDomain(
-                    type = QuestionTypeDomain.MULTIPLE,
+                    type = QuizTypeDomain.MULTIPLE,
                     question = "Question 1",
                     correctAnswer = "correct",
                     incorrectAnswers = listOf("inCorrect 1", "inCorrect 2", "inCorrect 3")
                 ),
                 QuizDomain(
-                    type = QuestionTypeDomain.MULTIPLE,
+                    type = QuizTypeDomain.MULTIPLE,
                     question = "Question 2",
                     correctAnswer = "correct",
                     incorrectAnswers = listOf("inCorrect 1", "inCorrect 2", "inCorrect 3")
                 ),
                 QuizDomain(
-                    type = QuestionTypeDomain.MULTIPLE,
+                    type = QuizTypeDomain.MULTIPLE,
                     question = "Question 3",
                     correctAnswer = "correct",
                     incorrectAnswers = listOf("inCorrect 1", "inCorrect 2", "inCorrect 3")
                 ),
                 QuizDomain(
-                    type = QuestionTypeDomain.BOOLEAN,
+                    type = QuizTypeDomain.BOOLEAN,
                     question = "Question 4",
                     correctAnswer = "True",
                     incorrectAnswers = listOf("False")
                 ),
                 QuizDomain(
-                    type = QuestionTypeDomain.BOOLEAN,
+                    type = QuizTypeDomain.BOOLEAN,
                     question = "Question 5",
                     correctAnswer = "False",
                     incorrectAnswers = listOf("True")

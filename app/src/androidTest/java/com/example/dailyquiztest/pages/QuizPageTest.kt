@@ -10,7 +10,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.dailyquiztest.core.rememberTestNavController
 import com.example.dailyquiztest.domain.model.CategoryDomain
 import com.example.dailyquiztest.domain.model.DifficultyDomain
-import com.example.dailyquiztest.domain.model.QuestionTypeDomain
+import com.example.dailyquiztest.domain.model.QuizTypeDomain
 import com.example.dailyquiztest.helpPages.QuizPage
 import com.example.dailyquiztest.presentation.feature.quiz.QuizScreenUi
 import com.example.dailyquiztest.presentation.feature.quiz.model.QuizUi
@@ -43,7 +43,7 @@ class QuizPageTest {
                 question = "Test question",
                 incorrectAnswers = listOf("b", "c", "d"),
                 correctAnswer = "a",
-                questionTypeDomain = QuestionTypeDomain.MULTIPLE,
+                quizTypeDomain = QuizTypeDomain.MULTIPLE,
                 totalQuestions = 5,
                 categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
                 difficultyDomain = DifficultyDomain.MEDIUM
@@ -79,7 +79,7 @@ class QuizPageTest {
                 question = "Test question",
                 incorrectAnswers = listOf("b", "c", "d"),
                 correctAnswer = "a",
-                questionTypeDomain = QuestionTypeDomain.MULTIPLE,
+                quizTypeDomain = QuizTypeDomain.MULTIPLE,
                 totalQuestions = 5,
                 categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
                 difficultyDomain = DifficultyDomain.MEDIUM
@@ -124,7 +124,7 @@ class QuizPageTest {
                 question = "Test question",
                 incorrectAnswers = listOf("false"),
                 correctAnswer = "true",
-                questionTypeDomain = QuestionTypeDomain.BOOLEAN,
+                quizTypeDomain = QuizTypeDomain.BOOLEAN,
                 totalQuestions = 5,
                 categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
                 difficultyDomain = DifficultyDomain.HARD

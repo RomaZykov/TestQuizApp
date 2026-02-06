@@ -2,14 +2,14 @@ package com.example.dailyquiztest.presentation.common.answers_group
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import com.example.dailyquiztest.domain.model.QuestionTypeDomain
+import com.example.dailyquiztest.domain.model.QuizTypeDomain
 
 interface AnswersSpecificTypeFactory {
 
     fun createGroup(): AnswersGroup
 
     class Base(
-        private val questionTypeDomain: QuestionTypeDomain,
+        private val quizTypeDomain: QuizTypeDomain,
         private val question: String,
         private val correctAnswers: List<String>,
         private val inCorrectAnswers: List<String>,
@@ -19,8 +19,8 @@ interface AnswersSpecificTypeFactory {
     ) : AnswersSpecificTypeFactory {
 
         override fun createGroup(): AnswersGroup {
-            return when (questionTypeDomain) {
-                QuestionTypeDomain.MULTIPLE -> {
+            return when (quizTypeDomain) {
+                QuizTypeDomain.MULTIPLE -> {
                     CheckboxGroup(
                         question,
                         correctAnswers,
@@ -31,7 +31,7 @@ interface AnswersSpecificTypeFactory {
                     )
                 }
 
-                QuestionTypeDomain.BOOLEAN -> {
+                QuizTypeDomain.BOOLEAN -> {
                     RadioButtonGroup(
                         question = question,
                         isCorrectOption = correctAnswers.first().toBoolean(),
@@ -46,7 +46,7 @@ interface AnswersSpecificTypeFactory {
                 }
 
                 else -> {
-                    throw IllegalArgumentException("Unknown question type: ${questionTypeDomain.typeApi}")
+                    throw IllegalArgumentException("Unknown question type: ${quizTypeDomain.typeApi}")
                 }
             }
         }

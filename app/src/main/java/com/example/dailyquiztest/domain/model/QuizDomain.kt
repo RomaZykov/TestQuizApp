@@ -4,5 +4,5 @@ data class QuizDomain(
     val question: String,
     val incorrectAnswers: List<String>,
     val correctAnswer: String,
-    val type: QuestionTypeDomain
+    val type: QuizTypeDomain
 )

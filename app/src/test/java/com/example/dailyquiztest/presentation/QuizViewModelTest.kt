@@ -2,7 +2,7 @@ package com.example.dailyquiztest.presentation
 
 import com.example.dailyquiztest.domain.model.CategoryDomain
 import com.example.dailyquiztest.domain.model.DifficultyDomain
-import com.example.dailyquiztest.domain.model.QuestionTypeDomain
+import com.example.dailyquiztest.domain.model.QuizTypeDomain
 import com.example.dailyquiztest.fake.FakeFormatDate
 import com.example.dailyquiztest.fake.FakeWelcomeRouteProvider
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUiState
@@ -174,7 +174,7 @@ class QuizViewModelTest {
             question = stubTrueFalseQuizes[index].question,
             incorrectAnswers = stubTrueFalseQuizes[index].incorrectAnswers,
             correctAnswer = stubTrueFalseQuizes[index].correctAnswer,
-            questionTypeDomain = QuestionTypeDomain.BOOLEAN,
+            quizTypeDomain = QuizTypeDomain.BOOLEAN,
             totalQuestions = 5,
             categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
             difficultyDomain = DifficultyDomain.EASY,
@@ -192,8 +192,8 @@ class QuizViewModelTest {
             question = stubQuizes[index].question,
             incorrectAnswers = stubQuizes[index].incorrectAnswers,
             correctAnswer = stubQuizes[index].correctAnswer,
-            questionTypeDomain = QuestionTypeDomain.entries.find { it == stubQuizes[index].type }
-                ?: QuestionTypeDomain.BOOLEAN,
+            quizTypeDomain = QuizTypeDomain.entries.find { it == stubQuizes[index].type }
+                ?: QuizTypeDomain.BOOLEAN,
             totalQuestions = difficultyDomain.amountOfQuestions,
             categoryDomain = categoryDomain,
             difficultyDomain = difficultyDomain,

@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.sp
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.domain.model.CategoryDomain
 import com.example.dailyquiztest.domain.model.DifficultyDomain
-import com.example.dailyquiztest.domain.model.QuestionTypeDomain
+import com.example.dailyquiztest.domain.model.QuizTypeDomain
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.CommonCard
 import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
@@ -50,16 +50,16 @@ import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
 data class QuizUi(
-    val number: Int,
-    val question: String,
-    val incorrectAnswers: List<String>,
-    val correctAnswer: String,
-    val questionTypeDomain: QuestionTypeDomain,
-    val totalQuestions: Int,
-    val userAnswers: List<String> = listOf(),
-    val isAnsweredCorrect: Boolean = false,
-    val categoryDomain: CategoryDomain,
-    val difficultyDomain: DifficultyDomain
+    private val number: Int,
+    private val question: String,
+    private val incorrectAnswers: List<String>,
+    private val correctAnswer: String,
+    private val quizTypeDomain: QuizTypeDomain,
+    private val totalQuestions: Int,
+    private val userAnswers: List<String> = listOf(),
+    private val isAnsweredCorrect: Boolean = false,
+    private val categoryDomain: CategoryDomain,
+    private val difficultyDomain: DifficultyDomain
 ) : QuizUiState {
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -250,7 +250,7 @@ data class QuizUi(
             inCorrectAnswers = inCorrectAnswers,
             checkedEnabled = true,
             actionButtonEnabled = actionButtonEnabled,
-            questionTypeDomain = questionTypeDomain,
+            quizTypeDomain = quizTypeDomain,
             question = question
         )
         quizOptions.createGroup()
@@ -278,7 +278,7 @@ private fun LongQuizPreview() {
             "Test 4"
         ),
         correctAnswer = "i`m correct answer",
-        questionTypeDomain = QuestionTypeDomain.MULTIPLE,
+        quizTypeDomain = QuizTypeDomain.MULTIPLE,
         totalQuestions = 5,
         categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
         difficultyDomain = DifficultyDomain.EASY
@@ -297,7 +297,7 @@ private fun ShortQuizPreview() {
             "4"
         ),
         correctAnswer = "i`m correct answer",
-        questionTypeDomain = QuestionTypeDomain.MULTIPLE,
+        quizTypeDomain = QuizTypeDomain.MULTIPLE,
         totalQuestions = 5,
         categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
         difficultyDomain = DifficultyDomain.EASY

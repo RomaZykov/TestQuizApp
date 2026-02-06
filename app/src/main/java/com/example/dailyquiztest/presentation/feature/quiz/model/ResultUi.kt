@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.domain.model.CategoryDomain
 import com.example.dailyquiztest.domain.model.DifficultyDomain
-import com.example.dailyquiztest.domain.model.QuestionTypeDomain
+import com.example.dailyquiztest.domain.model.QuizTypeDomain
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.StarsScore
 import com.example.dailyquiztest.presentation.common.answers_group.AnswersSpecificTypeFactory
@@ -190,7 +190,7 @@ data class ResultUi(
             )
             Column {
                 val quizOptions = AnswersSpecificTypeFactory.Base(
-                    questionTypeDomain = quiz.questionTypeDomain,
+                    quizTypeDomain = quiz.questionTypeDomain,
                     question = quiz.question,
                     correctAnswers = listOf(quiz.correctAnswer),
                     inCorrectAnswers = quiz.incorrectAnswers,
@@ -267,10 +267,10 @@ fun QuizResultsPreview() {
                         question = "Test title $it",
                         incorrectAnswers = listOf("a", "b", "c"),
                         correctAnswer = "d",
-                        questionTypeDomain = if (it % 2 == 0) {
-                            QuestionTypeDomain.MULTIPLE
+                        quizTypeDomain = if (it % 2 == 0) {
+                            QuizTypeDomain.MULTIPLE
                         } else {
-                            QuestionTypeDomain.BOOLEAN
+                            QuizTypeDomain.BOOLEAN
                         },
                         totalQuestions = 10,
                         userAnswers = listOf("a"),

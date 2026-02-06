@@ -1,7 +1,7 @@
 package com.example.testing.data.mapper
 
 import com.example.dailyquiztest.data.model.network.model.NetworkQuizQuestion
-import com.example.dailyquiztest.domain.model.QuestionTypeDomain
+import com.example.dailyquiztest.domain.model.QuizTypeDomain
 import com.example.dailyquiztest.domain.model.QuizDomain
 
 class FakeNetworkToDomainQuizQuestionMapper : NetworkQuizQuestion.Mapper<QuizDomain> {
@@ -18,7 +18,7 @@ class FakeNetworkToDomainQuizQuestionMapper : NetworkQuizQuestion.Mapper<QuizDom
             question = question,
             incorrectAnswers = incorrectAnswers,
             correctAnswer = correctAnswer,
-            type = QuestionTypeDomain.entries.find { it.typeApi == type } ?: throw IllegalArgumentException("No found question type - $type")
+            type = QuizTypeDomain.entries.find { it.typeApi == type } ?: throw IllegalArgumentException("No found question type - $type")
         )
     }
 }
