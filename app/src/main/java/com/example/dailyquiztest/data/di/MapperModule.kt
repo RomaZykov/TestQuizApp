@@ -5,8 +5,8 @@ import com.example.dailyquiztest.data.mapper.LocalToDomainQuizResultMapper
 import com.example.dailyquiztest.data.mapper.NetworkToDomainQuizQuestionMapper
 import com.example.dailyquiztest.data.model.local.model.LocalQuizResult
 import com.example.dailyquiztest.data.model.network.model.NetworkQuizQuestion
-import com.example.dailyquiztest.domain.model.QuizQuestion
-import com.example.dailyquiztest.domain.model.QuizResult
+import com.example.dailyquiztest.domain.model.QuizDomain
+import com.example.dailyquiztest.domain.model.ResultDomain
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,16 +18,16 @@ import javax.inject.Singleton
 object MapperModule {
     @Provides
     @Singleton
-    fun provideLocalToDomainQuizResultMapper(): LocalQuizResult.Mapper<QuizResult> =
+    fun provideLocalToDomainQuizResultMapper(): LocalQuizResult.Mapper<ResultDomain> =
         LocalToDomainQuizResultMapper()
 
     @Provides
     @Singleton
-    fun provideDomainToLocalQuizResultMapper(): QuizResult.Mapper<LocalQuizResult> =
+    fun provideDomainToLocalQuizResultMapper(): ResultDomain.Mapper<LocalQuizResult> =
         DomainToLocalQuizResultMapper()
 
     @Provides
     @Singleton
-    fun provideNetworkToDomainQuizQuestionMapper(): NetworkQuizQuestion.Mapper<QuizQuestion> =
+    fun provideNetworkToDomainQuizQuestionMapper(): NetworkQuizQuestion.Mapper<QuizDomain> =
         NetworkToDomainQuizQuestionMapper()
 }

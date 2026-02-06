@@ -8,13 +8,12 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.dailyquiztest.core.rememberTestNavController
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
-import com.example.dailyquiztest.domain.model.QuestionType
+import com.example.dailyquiztest.domain.model.CategoryDomain
+import com.example.dailyquiztest.domain.model.DifficultyDomain
+import com.example.dailyquiztest.domain.model.QuestionTypeDomain
 import com.example.dailyquiztest.helpPages.QuizPage
 import com.example.dailyquiztest.presentation.features.quiz.QuizScreenUi
 import com.example.dailyquiztest.presentation.features.quiz.model.QuizUi
-import com.example.dailyquiztest.presentation.features.quiz.model.small_screen.DialogUiState
 import com.example.testing.repository.FakeQuizRepository
 import org.junit.Before
 import org.junit.Rule
@@ -40,15 +39,14 @@ class QuizPageTest {
     fun changeOrientation_whenOneCorrectOptionSelected_showCorrectContent() {
         restorationTester.setContent {
             val uiState = QuizUi(
-                currentNumberQuestion = 1,
+                number = 1,
                 question = "Test question",
                 incorrectAnswers = listOf("b", "c", "d"),
                 correctAnswer = "a",
-                questionType = QuestionType.MULTIPLE,
+                questionTypeDomain = QuestionTypeDomain.MULTIPLE,
                 totalQuestions = 5,
-                category = Category.CARTOON_AND_ANIMATIONS,
-                difficulty = Difficulty.MEDIUM,
-                timerDialogUi = DialogUiState.NoDialog
+                categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
+                difficultyDomain = DifficultyDomain.MEDIUM
             )
             QuizScreenUi(
                 uiState = uiState,
@@ -77,15 +75,14 @@ class QuizPageTest {
     fun changeOrientation_whenAllOptionsSelected_showCorrectContent() {
         restorationTester.setContent {
             val uiState = QuizUi(
-                currentNumberQuestion = 1,
+                number = 1,
                 question = "Test question",
                 incorrectAnswers = listOf("b", "c", "d"),
                 correctAnswer = "a",
-                questionType = QuestionType.MULTIPLE,
+                questionTypeDomain = QuestionTypeDomain.MULTIPLE,
                 totalQuestions = 5,
-                category = Category.CARTOON_AND_ANIMATIONS,
-                difficulty = Difficulty.MEDIUM,
-                timerDialogUi = DialogUiState.NoDialog
+                categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
+                difficultyDomain = DifficultyDomain.MEDIUM
             )
             QuizScreenUi(
                 uiState = uiState,
@@ -123,15 +120,14 @@ class QuizPageTest {
     fun changeOrientation_whenOneCorrectBooleanOptionSelected_showCorrectContent() {
         restorationTester.setContent {
             val uiState = QuizUi(
-                currentNumberQuestion = 1,
+                number = 1,
                 question = "Test question",
                 incorrectAnswers = listOf("false"),
                 correctAnswer = "true",
-                questionType = QuestionType.BOOLEAN,
+                questionTypeDomain = QuestionTypeDomain.BOOLEAN,
                 totalQuestions = 5,
-                category = Category.CARTOON_AND_ANIMATIONS,
-                difficulty = Difficulty.HARD,
-                timerDialogUi = DialogUiState.NoDialog
+                categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
+                difficultyDomain = DifficultyDomain.HARD
             )
             QuizScreenUi(
                 uiState = uiState,

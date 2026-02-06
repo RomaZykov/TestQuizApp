@@ -3,7 +3,7 @@ package com.example.dailyquiztest.domain.model
 import androidx.annotation.StringRes
 import com.example.dailyquiztest.R
 
-enum class Category(val apiId: Int, @StringRes val textId: Int) {
+enum class CategoryDomain(val apiId: Int, @StringRes val textId: Int) {
     GENERAL_KNOWLEDGE(9, R.string.general_knowledge),
     BOOKS(10, R.string.entertainment_books),
     FILM(11, R.string.entertainment_film),

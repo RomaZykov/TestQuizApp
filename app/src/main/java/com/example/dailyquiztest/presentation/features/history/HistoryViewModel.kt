@@ -31,7 +31,7 @@ class HistoryViewModel @Inject constructor(
                 uiStateMutable.value = if (it.isEmpty()) {
                     EmptyHistoryUi
                 } else {
-                    HistoryUi(historyQuizResults = it)
+                    HistoryUi(histories = it)
                 }
             }
         }

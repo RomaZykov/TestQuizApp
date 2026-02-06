@@ -1,9 +1,9 @@
 package com.example.dailyquiztest.data.repository
 
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
-import com.example.dailyquiztest.domain.model.QuestionType
-import com.example.dailyquiztest.domain.model.QuizQuestion
+import com.example.dailyquiztest.domain.model.CategoryDomain
+import com.example.dailyquiztest.domain.model.DifficultyDomain
+import com.example.dailyquiztest.domain.model.QuestionTypeDomain
+import com.example.dailyquiztest.domain.model.QuizDomain
 import com.example.dailyquiztest.domain.repository.QuizRepository
 import com.example.testing.data.mapper.FakeNetworkToDomainQuizQuestionMapper
 import com.example.testing.data.network.FakeNetworkQuizQuestionsDataSource
@@ -27,7 +27,7 @@ class QuizRepositoryTest {
         fakeNetworkToDomainQuizQuestionMapper = FakeNetworkToDomainQuizQuestionMapper()
         quizRepository = QuizRepositoryImpl(
             networkQuizQuestionsDataSource = fakeNetworkQuizDataSource,
-            networkToDomainQuizQuestionMapper = fakeNetworkToDomainQuizQuestionMapper
+            networkToDomainQuizDomainMapper = fakeNetworkToDomainQuizQuestionMapper
         )
     }
 
@@ -40,8 +40,8 @@ class QuizRepositoryTest {
         fakeNetworkQuizDataSource.shouldSimulateNetworkError = true
 
         quizRepository.retrieveQuizQuestions(
-            5, Category.GENERAL_KNOWLEDGE.apiId,
-            Difficulty.HARD.toString()
+            5, CategoryDomain.GENERAL_KNOWLEDGE.apiId,
+            DifficultyDomain.HARD.toString()
         )
     }
 
@@ -51,39 +51,39 @@ class QuizRepositoryTest {
         UnconfinedTestDispatcher()
     ) {
         val actual = quizRepository.retrieveQuizQuestions(
-            5, Category.FILM.apiId,
-            Difficulty.EASY.toString()
+            5, CategoryDomain.FILM.apiId,
+            DifficultyDomain.EASY.toString()
         )
 
         assertEquals(5, fakeNetworkToDomainQuizQuestionMapper.mapCalledCount)
         assertEquals(
             listOf(
-                QuizQuestion(
-                    type = QuestionType.MULTIPLE,
+                QuizDomain(
+                    type = QuestionTypeDomain.MULTIPLE,
                     question = "Question 1",
                     correctAnswer = "correct",
                     incorrectAnswers = listOf("inCorrect 1", "inCorrect 2", "inCorrect 3")
                 ),
-                QuizQuestion(
-                    type = QuestionType.MULTIPLE,
+                QuizDomain(
+                    type = QuestionTypeDomain.MULTIPLE,
                     question = "Question 2",
                     correctAnswer = "correct",
                     incorrectAnswers = listOf("inCorrect 1", "inCorrect 2", "inCorrect 3")
                 ),
-                QuizQuestion(
-                    type = QuestionType.MULTIPLE,
+                QuizDomain(
+                    type = QuestionTypeDomain.MULTIPLE,
                     question = "Question 3",
                     correctAnswer = "correct",
                     incorrectAnswers = listOf("inCorrect 1", "inCorrect 2", "inCorrect 3")
                 ),
-                QuizQuestion(
-                    type = QuestionType.BOOLEAN,
+                QuizDomain(
+                    type = QuestionTypeDomain.BOOLEAN,
                     question = "Question 4",
                     correctAnswer = "True",
                     incorrectAnswers = listOf("False")
                 ),
-                QuizQuestion(
-                    type = QuestionType.BOOLEAN,
+                QuizDomain(
+                    type = QuestionTypeDomain.BOOLEAN,
                     question = "Question 5",
                     correctAnswer = "False",
                     incorrectAnswers = listOf("True")

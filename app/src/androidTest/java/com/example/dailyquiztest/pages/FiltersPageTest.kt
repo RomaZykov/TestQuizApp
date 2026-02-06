@@ -8,8 +8,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
 import com.example.dailyquiztest.core.rememberTestNavController
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
+import com.example.dailyquiztest.domain.model.CategoryDomain
+import com.example.dailyquiztest.domain.model.DifficultyDomain
 import com.example.dailyquiztest.helpPages.FiltersPage
 import com.example.dailyquiztest.presentation.features.quiz.QuizScreenUi
 import com.example.dailyquiztest.presentation.features.quiz.model.FiltersUi
@@ -34,8 +34,8 @@ class FiltersPageTest : StringResources() {
         filtersPage = FiltersPage(composeTestRule)
         restorationTester.setContent {
             val uiState = FiltersUi(
-                categories = Category.entries,
-                difficulties = Difficulty.entries,
+                categories = CategoryDomain.entries,
+                difficulties = DifficultyDomain.entries,
                 ErrorUiState.EmptyUi
             )
             QuizScreenUi(
@@ -57,15 +57,15 @@ class FiltersPageTest : StringResources() {
         filtersPage.hasScrollOption()
 
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeCategory(Category.VIDEO_GAMES)
+        filtersPage.chooseSomeCategory(CategoryDomain.VIDEO_GAMES)
         filtersPage.assertStartQuizButtonNotEnabled()
-        filtersPage.chooseSomeDifficulty(Difficulty.HARD)
+        filtersPage.chooseSomeDifficulty(DifficultyDomain.HARD)
         filtersPage.assertStartQuizButtonEnabled()
 
         restorationTester.emulateSavedInstanceStateRestore()
 
-        filtersPage.assertCategorySelected(Category.VIDEO_GAMES)
-        filtersPage.assertDifficultySelected(Difficulty.HARD)
+        filtersPage.assertCategorySelected(CategoryDomain.VIDEO_GAMES)
+        filtersPage.assertDifficultySelected(DifficultyDomain.HARD)
         filtersPage.assertStartQuizButtonEnabled()
     }
 

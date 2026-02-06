@@ -4,17 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dailyquiztest.core.DispatcherList
 import com.example.dailyquiztest.core.FormatDate
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
-import com.example.dailyquiztest.domain.model.QuizResult
+import com.example.dailyquiztest.domain.model.CategoryDomain
+import com.example.dailyquiztest.domain.model.DifficultyDomain
+import com.example.dailyquiztest.domain.model.ResultDomain
 import com.example.dailyquiztest.domain.repository.HistoryRepository
 import com.example.dailyquiztest.domain.repository.QuizRepository
-import com.example.dailyquiztest.presentation.features.quiz.model.small_screen.ErrorUiState
 import com.example.dailyquiztest.presentation.features.quiz.model.FiltersUi
 import com.example.dailyquiztest.presentation.features.quiz.model.LoadingUi
-import com.example.dailyquiztest.presentation.features.quiz.model.QuizResultUi
 import com.example.dailyquiztest.presentation.features.quiz.model.QuizUi
-import com.example.dailyquiztest.presentation.features.quiz.model.small_screen.DialogUiState
+import com.example.dailyquiztest.presentation.features.quiz.model.ResultUi
+import com.example.dailyquiztest.presentation.features.quiz.model.small_screen.ErrorUiState
 import com.example.dailyquiztest.presentation.main_navigation.Route
 import com.example.dailyquiztest.presentation.main_navigation.WelcomeRouteProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,27 +45,26 @@ class QuizViewModel @Inject constructor(
     private var currentQuizQuestion = 0
 
     override fun prepareQuizGame(
-        category: Category,
-        difficulty: Difficulty
+        categoryDomain: CategoryDomain,
+        difficultyDomain: DifficultyDomain
     ) {
         viewModelScope.launch(dispatcherList.io()) {
             uiStateMutable.value = LoadingUi
             quizRepository.retrieveQuizQuestions(
-                amount = difficulty.amountOfQuestions,
-                category = category.apiId,
-                difficulty = difficulty.toString()
+                amount = difficultyDomain.amountOfQuestions,
+                category = categoryDomain.apiId,
+                difficulty = difficultyDomain.toString()
             ).onSuccess {
                 questions.addAll(it.mapIndexed { i, quizQuestion ->
                     QuizUi(
-                        currentNumberQuestion = i,
+                        number = i,
                         question = quizQuestion.question,
                         incorrectAnswers = quizQuestion.incorrectAnswers,
                         correctAnswer = quizQuestion.correctAnswer,
-                        questionType = quizQuestion.type,
+                        questionTypeDomain = quizQuestion.type,
                         totalQuestions = it.size,
-                        category = category,
-                        difficulty = difficulty,
-                        timerDialogUi = DialogUiState.NoDialog
+                        categoryDomain = categoryDomain,
+                        difficultyDomain = difficultyDomain
                     )
                 })
                 uiStateMutable.value = questions[currentQuizQuestion]
@@ -90,14 +88,14 @@ class QuizViewModel @Inject constructor(
     }
 
     override fun showResult() {
-        val resultScreen = QuizResultUi(quizAnswers = questions)
+        val resultScreen = ResultUi(quizAnswers = questions)
         uiStateMutable.value = resultScreen
         viewModelScope.launch(dispatcherList.io()) {
             historyRepository.saveQuizResult(
-                QuizResult(
+                ResultDomain(
                     stars = resultScreen.calculateStarsScoreResult(),
-                    category = questions.first().category,
-                    difficulty = questions.first().difficulty,
+                    categoryDomain = questions.first().categoryDomain,
+                    difficultyDomain = questions.first().difficultyDomain,
                     lastTime = formattedDate.timeFinished(),
                     lastDate = formattedDate.dateFinished()
                 )
@@ -125,8 +123,8 @@ interface CoreVMActions {
     fun saveQuizAnswer(quizUi: QuizUi)
 
     fun prepareQuizGame(
-        category: Category,
-        difficulty: Difficulty
+        categoryDomain: CategoryDomain,
+        difficultyDomain: DifficultyDomain
     )
 
     fun timerProgress()

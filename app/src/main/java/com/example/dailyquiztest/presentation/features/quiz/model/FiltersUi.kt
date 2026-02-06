@@ -41,8 +41,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.dailyquiztest.R
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
+import com.example.dailyquiztest.domain.model.CategoryDomain
+import com.example.dailyquiztest.domain.model.DifficultyDomain
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
 import com.example.dailyquiztest.presentation.common.UiLogo
@@ -52,8 +52,8 @@ import com.example.dailyquiztest.presentation.features.quiz.model.small_screen.E
 import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 
 data class FiltersUi(
-    private val categories: List<Category> = Category.entries,
-    private val difficulties: List<Difficulty> = Difficulty.entries,
+    private val categories: List<CategoryDomain> = CategoryDomain.entries,
+    private val difficulties: List<DifficultyDomain> = DifficultyDomain.entries,
     private val errorSnackBar: ErrorUiState
 ) : QuizUiState {
 
@@ -75,7 +75,7 @@ data class FiltersUi(
         Scaffold(
             modifier = Modifier
                 .semantics {
-                    contentDescription = QuizUiState.FiltersContDesc.toString()
+                    contentDescription = "filters screen"
                 }
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = { FiltersTopBar(quizUserActions.onBackClicked(), scrollBehavior) }
@@ -254,7 +254,7 @@ data class FiltersUi(
 
     @Composable
     private fun StartQuizButton(
-        onNextButtonClicked: (Category, Difficulty) -> Unit,
+        onNextButtonClicked: (CategoryDomain, DifficultyDomain) -> Unit,
         selectedCategory: String,
         selectedDifficulty: String,
         startButtonEnabled: Boolean
@@ -263,8 +263,8 @@ data class FiltersUi(
             enabled = startButtonEnabled,
             onClick = {
                 onNextButtonClicked.invoke(
-                    Category.valueOf(selectedCategory.substringAfter(DELIMITER)),
-                    Difficulty.valueOf(selectedDifficulty.substringAfter(DELIMITER))
+                    CategoryDomain.valueOf(selectedCategory.substringAfter(DELIMITER)),
+                    DifficultyDomain.valueOf(selectedDifficulty.substringAfter(DELIMITER))
                 )
             },
             text = R.string.start_quiz_button_text
@@ -279,6 +279,6 @@ data class FiltersUi(
 @Preview(showSystemUi = true)
 @Composable
 fun FiltersPreview() {
-    FiltersUi(Category.entries, emptyList(), ErrorUiState.ErrorUi("Some error!"))
+    FiltersUi(CategoryDomain.entries, emptyList(), ErrorUiState.ErrorUi("Some error!"))
         .Display(timerProgress = {}, quizUserActions = QuizUserActions.ForPreview)
 }

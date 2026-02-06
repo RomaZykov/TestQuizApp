@@ -1,19 +1,19 @@
 package com.example.dailyquiztest.domain.model
 
-data class QuizResult(
-    val id: Int = 0,
+data class ResultDomain(
+    val number: Int = 0,
     val stars: Int,
-    val category: Category,
-    val difficulty: Difficulty,
+    val categoryDomain: CategoryDomain,
+    val difficultyDomain: DifficultyDomain,
     val lastTime: String,
     val lastDate: String
 ) {
     fun <T> map(mapper: Mapper<T>): T {
         return mapper.mappedValue(
-            id = this.id,
+            id = this.number,
             stars = this.stars,
-            category = this.category,
-            difficulty = this.difficulty,
+            categoryDomain = this.categoryDomain,
+            difficultyDomain = this.difficultyDomain,
             lastTime = this.lastTime,
             lastDate = this.lastDate
         )
@@ -23,8 +23,8 @@ data class QuizResult(
         fun mappedValue(
             id: Int,
             stars: Int,
-            category: Category,
-            difficulty: Difficulty,
+            categoryDomain: CategoryDomain,
+            difficultyDomain: DifficultyDomain,
             lastTime: String,
             lastDate: String
         ): T

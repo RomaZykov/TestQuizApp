@@ -34,9 +34,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dailyquiztest.R
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
-import com.example.dailyquiztest.domain.model.QuestionType
+import com.example.dailyquiztest.domain.model.CategoryDomain
+import com.example.dailyquiztest.domain.model.DifficultyDomain
+import com.example.dailyquiztest.domain.model.QuestionTypeDomain
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.CommonCard
 import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
@@ -44,24 +44,22 @@ import com.example.dailyquiztest.presentation.common.UiLogo
 import com.example.dailyquiztest.presentation.common.answers_group.AnswersSpecificTypeFactory
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.features.quiz.QuizUserActions
-import com.example.dailyquiztest.presentation.features.quiz.model.small_screen.DialogUiState
 import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
 data class QuizUi(
-    val currentNumberQuestion: Int,
+    val number: Int,
     val question: String,
     val incorrectAnswers: List<String>,
     val correctAnswer: String,
-    val questionType: QuestionType,
+    val questionTypeDomain: QuestionTypeDomain,
     val totalQuestions: Int,
     val userAnswers: List<String> = listOf(),
     val isAnsweredCorrect: Boolean = false,
-    val category: Category,
-    val difficulty: Difficulty,
-    val timerDialogUi: DialogUiState
+    val categoryDomain: CategoryDomain,
+    val difficultyDomain: DifficultyDomain
 ) : QuizUiState {
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -92,7 +90,7 @@ data class QuizUi(
             },
             modifier = Modifier
                 .semantics {
-                    contentDescription = QuizUiState.QuizContDesc.toString()
+                    contentDescription = "quiz screen"
                 }
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { innerPadding ->
@@ -110,7 +108,7 @@ data class QuizUi(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
 //                        TimerProgress(shouldShowTimeIsOverDialog)
-                        NumberOfQuestions(currentNumberQuestion, totalQuestions)
+                        NumberOfQuestions(number, totalQuestions)
                         Question(question)
                         QuizOptions(
                             listOf(correctAnswer),
@@ -132,14 +130,14 @@ data class QuizUi(
                                 )
                                 scope.launch {
                                     delay(2.seconds)
-                                    if (currentNumberQuestion + 1 == totalQuestions) {
+                                    if (number + 1 == totalQuestions) {
                                         quizUserActions.onResultClicked().invoke(updatedQuizUi)
                                     } else {
                                         quizUserActions.onNextClicked().invoke(updatedQuizUi)
                                     }
                                 }
                             },
-                            text = if (currentNumberQuestion + 1 == totalQuestions) {
+                            text = if (number + 1 == totalQuestions) {
                                 R.string.finish_quiz_button_text
                             } else {
                                 R.string.next_button_text
@@ -158,9 +156,10 @@ data class QuizUi(
                 )
             }
         }
-        timerDialogUi.Display {
-            quizUserActions.onStartNewQuizClicked().invoke()
-        }
+
+//        timerDialogUi.Display {
+//            quizUserActions.onStartNewQuizClicked().invoke()
+//        }
     }
 
     @Composable
@@ -251,7 +250,7 @@ data class QuizUi(
             inCorrectAnswers = inCorrectAnswers,
             checkedEnabled = true,
             actionButtonEnabled = actionButtonEnabled,
-            questionType = questionType,
+            questionTypeDomain = questionTypeDomain,
             question = question
         )
         quizOptions.createGroup()
@@ -270,7 +269,7 @@ data class QuizUi(
 @Preview(showSystemUi = true)
 private fun LongQuizPreview() {
     QuizUi(
-        currentNumberQuestion = 0,
+        number = 0,
         question = "Test question Test question  Test question Test question Test question Test question Test question Test question Test question?",
         incorrectAnswers = listOf(
             "Test 1 Test 1 Test 1 Test 1 Test 1 Test 1 Test 1 Test 1 Test 1 Test 1 Test 1 Test 1 Test 1",
@@ -279,11 +278,10 @@ private fun LongQuizPreview() {
             "Test 4"
         ),
         correctAnswer = "i`m correct answer",
-        questionType = QuestionType.MULTIPLE,
+        questionTypeDomain = QuestionTypeDomain.MULTIPLE,
         totalQuestions = 5,
-        category = Category.CARTOON_AND_ANIMATIONS,
-        difficulty = Difficulty.EASY,
-        timerDialogUi = DialogUiState.NoDialog
+        categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
+        difficultyDomain = DifficultyDomain.EASY
     ).Display(timerProgress = {}, quizUserActions = QuizUserActions.ForPreview)
 }
 
@@ -291,7 +289,7 @@ private fun LongQuizPreview() {
 @Preview(showSystemUi = true)
 private fun ShortQuizPreview() {
     QuizUi(
-        currentNumberQuestion = 0,
+        number = 0,
         question = "Short Test question",
         incorrectAnswers = listOf(
             "1",
@@ -299,10 +297,9 @@ private fun ShortQuizPreview() {
             "4"
         ),
         correctAnswer = "i`m correct answer",
-        questionType = QuestionType.MULTIPLE,
+        questionTypeDomain = QuestionTypeDomain.MULTIPLE,
         totalQuestions = 5,
-        category = Category.CARTOON_AND_ANIMATIONS,
-        difficulty = Difficulty.EASY,
-        timerDialogUi = DialogUiState.NoDialog
+        categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
+        difficultyDomain = DifficultyDomain.EASY
     ).Display(timerProgress = {}, quizUserActions = QuizUserActions.ForPreview)
 }

@@ -3,8 +3,8 @@ package com.example.dailyquiztest.data.model.local.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
+import com.example.dailyquiztest.domain.model.CategoryDomain
+import com.example.dailyquiztest.domain.model.DifficultyDomain
 
 @Entity(tableName = "history_db")
 data class LocalQuizResult(
@@ -31,8 +31,8 @@ data class LocalQuizResult(
         return mapper.mappedValue(
             quizResultNumber = this.quizResultNumber,
             stars = this.stars,
-            category = Category.valueOf(this.category),
-            difficulty = Difficulty.valueOf(this.difficulty.uppercase()),
+            categoryDomain = CategoryDomain.valueOf(this.category),
+            difficultyDomain = DifficultyDomain.valueOf(this.difficulty.uppercase()),
             lastTime = this.lastTime,
             lastDate = this.lastDate
         )
@@ -42,8 +42,8 @@ data class LocalQuizResult(
         fun mappedValue(
             quizResultNumber: Int,
             stars: Int,
-            category: Category,
-            difficulty: Difficulty,
+            categoryDomain: CategoryDomain,
+            difficultyDomain: DifficultyDomain,
             lastTime: String,
             lastDate: String
         ): T

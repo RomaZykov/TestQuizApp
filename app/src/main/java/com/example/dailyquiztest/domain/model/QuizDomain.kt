@@ -1,8 +1,8 @@
 package com.example.dailyquiztest.domain.model
 
-data class QuizQuestion(
+data class QuizDomain(
     val question: String,
     val incorrectAnswers: List<String>,
     val correctAnswer: String,
-    val type: QuestionType
+    val type: QuestionTypeDomain
 )

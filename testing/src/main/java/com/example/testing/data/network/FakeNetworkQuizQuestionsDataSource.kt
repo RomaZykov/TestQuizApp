@@ -1,12 +1,11 @@
 package com.example.testing.data.network
 
-import com.example.dailyquiztest.R
 import com.example.dailyquiztest.data.model.network.NetworkQuizQuestionsDataSource
 import com.example.dailyquiztest.data.model.network.exception.NoInternetConnection
 import com.example.dailyquiztest.data.model.network.exception.ServiceUnavailableException
 import com.example.dailyquiztest.data.model.network.model.NetworkQuizQuestion
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
+import com.example.dailyquiztest.domain.model.CategoryDomain
+import com.example.dailyquiztest.domain.model.DifficultyDomain
 
 class FakeNetworkQuizQuestionsDataSource : NetworkQuizQuestionsDataSource {
     var shouldSimulateNetworkError = false
@@ -29,7 +28,7 @@ class FakeNetworkQuizQuestionsDataSource : NetworkQuizQuestionsDataSource {
     }
 
     private val networkQuestions = mutableMapOf(
-        Pair(Category.FILM.apiId, Difficulty.EASY) to listOf(
+        Pair(CategoryDomain.FILM.apiId, DifficultyDomain.EASY) to listOf(
             NetworkQuizQuestion(
                 type = "multiple",
                 question = "Question 1",
@@ -67,10 +66,10 @@ class FakeNetworkQuizQuestionsDataSource : NetworkQuizQuestionsDataSource {
                 incorrectAnswers = listOf("True")
             )
         ),
-        Pair(Category.VIDEO_GAMES.apiId, Difficulty.MEDIUM) to listOf(
+        Pair(CategoryDomain.VIDEO_GAMES.apiId, DifficultyDomain.MEDIUM) to listOf(
             NetworkQuizQuestion()
         ),
-        Pair(Category.BOARD_GAMES.apiId, Difficulty.HARD) to listOf(
+        Pair(CategoryDomain.BOARD_GAMES.apiId, DifficultyDomain.HARD) to listOf(
             NetworkQuizQuestion()
         )
     )

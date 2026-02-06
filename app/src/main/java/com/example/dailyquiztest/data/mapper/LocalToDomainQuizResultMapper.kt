@@ -1,24 +1,24 @@
 package com.example.dailyquiztest.data.mapper
 
 import com.example.dailyquiztest.data.model.local.model.LocalQuizResult
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
-import com.example.dailyquiztest.domain.model.QuizResult
+import com.example.dailyquiztest.domain.model.CategoryDomain
+import com.example.dailyquiztest.domain.model.DifficultyDomain
+import com.example.dailyquiztest.domain.model.ResultDomain
 
-class LocalToDomainQuizResultMapper() : LocalQuizResult.Mapper<QuizResult> {
+class LocalToDomainQuizResultMapper() : LocalQuizResult.Mapper<ResultDomain> {
     override fun mappedValue(
         quizResultNumber: Int,
         stars: Int,
-        category: Category,
-        difficulty: Difficulty,
+        categoryDomain: CategoryDomain,
+        difficultyDomain: DifficultyDomain,
         lastTime: String,
         lastDate: String
-    ): QuizResult {
-        return QuizResult(
-            id = quizResultNumber,
+    ): ResultDomain {
+        return ResultDomain(
+            number = quizResultNumber,
             stars = stars,
-            category = category,
-            difficulty = difficulty,
+            categoryDomain = categoryDomain,
+            difficultyDomain = difficultyDomain,
             lastTime = lastTime,
             lastDate = lastDate
         )

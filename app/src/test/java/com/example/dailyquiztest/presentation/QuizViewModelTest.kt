@@ -1,21 +1,20 @@
 package com.example.dailyquiztest.presentation
 
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
-import com.example.dailyquiztest.domain.model.QuestionType
+import com.example.dailyquiztest.domain.model.CategoryDomain
+import com.example.dailyquiztest.domain.model.DifficultyDomain
+import com.example.dailyquiztest.domain.model.QuestionTypeDomain
 import com.example.dailyquiztest.fake.FakeFormatDate
 import com.example.dailyquiztest.fake.FakeWelcomeRouteProvider
 import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.features.quiz.QuizViewModel
 import com.example.dailyquiztest.presentation.features.quiz.model.FiltersUi
 import com.example.dailyquiztest.presentation.features.quiz.model.LoadingUi
-import com.example.dailyquiztest.presentation.features.quiz.model.QuizResultUi
+import com.example.dailyquiztest.presentation.features.quiz.model.ResultUi
 import com.example.dailyquiztest.presentation.features.quiz.model.QuizUi
-import com.example.dailyquiztest.presentation.features.quiz.model.small_screen.DialogUiState
 import com.example.dailyquiztest.presentation.features.quiz.model.small_screen.ErrorUiState
 import com.example.testing.di.FakeDispatcherList
-import com.example.testing.dummy.dummyTrueFalseQuizes
-import com.example.testing.dummy.stubQuizes
+import com.example.testing.stub.stubTrueFalseQuizes
+import com.example.testing.stub.stubQuizes
 import com.example.testing.repository.FakeHistoryRepository
 import com.example.testing.repository.FakeQuizRepository
 import kotlinx.coroutines.Dispatchers
@@ -76,7 +75,7 @@ class QuizViewModelTest {
         runTest(testDispatcher) {
             fakeQuizRepository.shouldSimulateFiveSecDelay = true
 
-            viewModel.prepareQuizGame(Category.FILM, Difficulty.HARD)
+            viewModel.prepareQuizGame(CategoryDomain.FILM, DifficultyDomain.HARD)
             advanceTimeBy(2500)
             assertEquals(
                 LoadingUi,
@@ -90,7 +89,7 @@ class QuizViewModelTest {
             advanceTimeBy(505)
 
             val expectedFinalState =
-                retrieveStubQuestionByIndex(0, Category.FILM, Difficulty.HARD)
+                retrieveStubQuestionByIndex(0, CategoryDomain.FILM, DifficultyDomain.HARD)
             assertEquals(expectedFinalState, stateFlow.value)
         }
 
@@ -99,7 +98,7 @@ class QuizViewModelTest {
         runTest {
             fakeQuizRepository.shouldSimulateNetworkError = true
 
-            viewModel.prepareQuizGame(Category.FILM, Difficulty.HARD)
+            viewModel.prepareQuizGame(CategoryDomain.FILM, DifficultyDomain.HARD)
 
             val expectedState = FiltersUi(
                 errorSnackBar = ErrorUiState.ErrorUi("Check your connection!"),
@@ -112,7 +111,7 @@ class QuizViewModelTest {
         runTest {
             fakeQuizRepository.shouldSimulateServiceUnavailableError = true
 
-            viewModel.prepareQuizGame(Category.FILM, Difficulty.HARD)
+            viewModel.prepareQuizGame(CategoryDomain.FILM, DifficultyDomain.HARD)
 
             val expectedState = FiltersUi(
                 errorSnackBar = ErrorUiState.ErrorUi("Error with code: 1"),
@@ -136,8 +135,8 @@ class QuizViewModelTest {
             var currentNumQuestion = 0
             val expectedQuizResults = mutableListOf<QuizUi>()
             viewModel.prepareQuizGame(
-                Category.CARTOON_AND_ANIMATIONS,
-                Difficulty.EASY
+                CategoryDomain.CARTOON_AND_ANIMATIONS,
+                DifficultyDomain.EASY
             )
             repeat(4) {
                 val currentQuestion = retrieveDummyTrueFalseQuestionByIndex(currentNumQuestion)
@@ -165,40 +164,40 @@ class QuizViewModelTest {
             expectedQuizResults.add(incorrectAnsweredQuestion)
 
             viewModel.showResult()
-            val expectedResultUiState = QuizResultUi(expectedQuizResults)
+            val expectedResultUiState = ResultUi(expectedQuizResults)
             assertEquals(expectedResultUiState, stateFlow.value)
         }
 
     private fun retrieveDummyTrueFalseQuestionByIndex(index: Int): QuizUi {
         return QuizUi(
-            currentNumberQuestion = index,
-            question = dummyTrueFalseQuizes[index].question,
-            incorrectAnswers = dummyTrueFalseQuizes[index].incorrectAnswers,
-            correctAnswer = dummyTrueFalseQuizes[index].correctAnswer,
-            questionType = QuestionType.BOOLEAN,
+            number = index,
+            question = stubTrueFalseQuizes[index].question,
+            incorrectAnswers = stubTrueFalseQuizes[index].incorrectAnswers,
+            correctAnswer = stubTrueFalseQuizes[index].correctAnswer,
+            questionTypeDomain = QuestionTypeDomain.BOOLEAN,
             totalQuestions = 5,
-            category = Category.CARTOON_AND_ANIMATIONS,
-            difficulty = Difficulty.EASY,
-            timerDialogUi = DialogUiState.NoDialog
+            categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
+            difficultyDomain = DifficultyDomain.EASY,
+//            timerDialogUi = DialogUiState.NoDialog
         )
     }
 
     private fun retrieveStubQuestionByIndex(
         index: Int,
-        category: Category,
-        difficulty: Difficulty
+        categoryDomain: CategoryDomain,
+        difficultyDomain: DifficultyDomain
     ): QuizUi {
         return QuizUi(
-            currentNumberQuestion = index,
+            number = index,
             question = stubQuizes[index].question,
             incorrectAnswers = stubQuizes[index].incorrectAnswers,
             correctAnswer = stubQuizes[index].correctAnswer,
-            questionType = QuestionType.entries.find { it == stubQuizes[index].type }
-                ?: QuestionType.BOOLEAN,
-            totalQuestions = difficulty.amountOfQuestions,
-            category = category,
-            difficulty = difficulty,
-            timerDialogUi = DialogUiState.NoDialog
+            questionTypeDomain = QuestionTypeDomain.entries.find { it == stubQuizes[index].type }
+                ?: QuestionTypeDomain.BOOLEAN,
+            totalQuestions = difficultyDomain.amountOfQuestions,
+            categoryDomain = categoryDomain,
+            difficultyDomain = difficultyDomain,
+//            timerDialogUi = DialogUiState.NoDialog
         )
     }
 }

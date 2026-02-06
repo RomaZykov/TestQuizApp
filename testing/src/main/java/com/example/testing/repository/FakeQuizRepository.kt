@@ -2,10 +2,10 @@ package com.example.testing.repository
 
 import com.example.dailyquiztest.data.model.network.exception.NoInternetConnection
 import com.example.dailyquiztest.data.model.network.exception.ServiceUnavailableException
-import com.example.dailyquiztest.domain.model.QuizQuestion
+import com.example.dailyquiztest.domain.model.QuizDomain
 import com.example.dailyquiztest.domain.repository.QuizRepository
-import com.example.testing.dummy.dummyTrueFalseQuizes
-import com.example.testing.dummy.stubQuizes
+import com.example.testing.stub.stubTrueFalseQuizes
+import com.example.testing.stub.stubQuizes
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
@@ -15,13 +15,13 @@ class FakeQuizRepository @Inject constructor() : QuizRepository {
     var shouldSimulateOnlyTrueFalseOptions = false
     var shouldSimulateFiveSecDelay = false
 
-    val savedQuizes = mutableListOf<QuizQuestion>()
+    val savedQuizes = mutableListOf<QuizDomain>()
 
     override suspend fun retrieveQuizQuestions(
         amount: Int,
         category: Int,
         difficulty: String
-    ): Result<List<QuizQuestion>> {
+    ): Result<List<QuizDomain>> {
         return if (shouldSimulateNetworkError) {
             Result.failure(NoInternetConnection("Check your connection!"))
         } else if (shouldSimulateServiceUnavailableError) {
@@ -31,7 +31,7 @@ class FakeQuizRepository @Inject constructor() : QuizRepository {
                 delay(5000)
             }
             val source = if (shouldSimulateOnlyTrueFalseOptions) {
-                dummyTrueFalseQuizes
+                stubTrueFalseQuizes
             } else {
                 stubQuizes
             }

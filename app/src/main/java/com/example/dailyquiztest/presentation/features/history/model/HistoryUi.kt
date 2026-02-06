@@ -50,9 +50,9 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dailyquiztest.R
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
-import com.example.dailyquiztest.domain.model.QuizResult
+import com.example.dailyquiztest.domain.model.CategoryDomain
+import com.example.dailyquiztest.domain.model.DifficultyDomain
+import com.example.dailyquiztest.domain.model.ResultDomain
 import com.example.dailyquiztest.presentation.common.StarsScore
 import com.example.dailyquiztest.presentation.common.UiLogo
 import com.example.dailyquiztest.presentation.features.history.HistoryUiState
@@ -61,7 +61,7 @@ import com.example.dailyquiztest.presentation.features.history.components.Histor
 import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 import kotlinx.coroutines.launch
 
-data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState {
+data class HistoryUi(val histories: List<ResultDomain>) : HistoryUiState {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -74,7 +74,7 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
         Scaffold(
             modifier = Modifier
                 .semantics {
-                    contentDescription = HistoryUiState.NonEmptyHistoryContDesc.toString()
+                    contentDescription = "non empty history screen"
                 }
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
             snackbarHost = {
@@ -99,12 +99,12 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .testTag(HistoryUiState.HistoryLazyList.toString()),
+                        .testTag("history lazy list"),
                     state = listState
                 ) {
-                    itemsIndexed(historyQuizResults) { _, result ->
+                    itemsIndexed(histories) { _, result ->
                         HistoryCard(result, dropDownMenuActive, snackBarHostState) {
-                            historyUserActions.onDeleteClicked().invoke(result.id)
+                            historyUserActions.onDeleteClicked().invoke(result.number)
                         }
                     }
                     item {
@@ -119,7 +119,7 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
 
     @Composable
     private fun HistoryCard(
-        result: QuizResult,
+        resultDomain: ResultDomain,
         dropDownMenuActive: MutableState<Boolean>,
         snackBarHostState: SnackbarHostState,
         onDeleteClicked: () -> Unit
@@ -148,12 +148,12 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        stringResource(R.string.quiz_number_title, (result.id + 1)),
+                        stringResource(R.string.quiz_number_title, (resultDomain.number + 1)),
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         color = DailyQuizTheme.colorScheme.tertiary
                     )
-                    StarsScore(modifier = Modifier.height(24.dp), result.stars)
+                    StarsScore(modifier = Modifier.height(24.dp), resultDomain.stars)
                 }
                 Row(
                     modifier = Modifier
@@ -162,12 +162,12 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        result.lastDate,
+                        resultDomain.lastDate,
                         style = DailyQuizTheme.typography.body,
                         fontSize = 12.sp
                     )
                     Text(
-                        result.lastTime,
+                        resultDomain.lastTime,
                         style = DailyQuizTheme.typography.body,
                         fontSize = 12.sp
                     )
@@ -176,7 +176,7 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    val categoryStringName = stringResource(result.category.textId)
+                    val categoryStringName = stringResource(resultDomain.categoryDomain.textId)
                     Text(
                         modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
                         text = stringResource(
@@ -187,7 +187,7 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
                         fontSize = 12.sp
                     )
                     Text(
-                        stringResource(R.string.difficulty_result, result.difficulty.toString()),
+                        stringResource(R.string.difficulty_result, resultDomain.difficultyDomain.toString()),
                         style = DailyQuizTheme.typography.body,
                         fontSize = 12.sp
                     )
@@ -253,35 +253,35 @@ data class HistoryUi(val historyQuizResults: List<QuizResult>) : HistoryUiState 
 fun HistoryUiPreview() {
     HistoryUi(
         listOf(
-            QuizResult(
+            ResultDomain(
                 0,
                 stars = 0,
-                category = Category.HISTORY,
-                difficulty = Difficulty.EASY,
+                categoryDomain = CategoryDomain.HISTORY,
+                difficultyDomain = DifficultyDomain.EASY,
                 lastTime = "14:54",
                 lastDate = "2014"
             ),
-            QuizResult(
+            ResultDomain(
                 1,
                 stars = 5,
-                category = Category.HISTORY,
-                difficulty = Difficulty.EASY,
+                categoryDomain = CategoryDomain.HISTORY,
+                difficultyDomain = DifficultyDomain.EASY,
                 lastTime = "2014",
                 lastDate = "14:54"
             ),
-            QuizResult(
+            ResultDomain(
                 2,
                 stars = 3,
-                category = Category.CARTOON_AND_ANIMATIONS,
-                difficulty = Difficulty.MEDIUM,
+                categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
+                difficultyDomain = DifficultyDomain.MEDIUM,
                 lastTime = "2014",
                 lastDate = "14:54"
             ),
-            QuizResult(
+            ResultDomain(
                 3,
                 stars = 2,
-                category = Category.CARTOON_AND_ANIMATIONS,
-                difficulty = Difficulty.HARD,
+                categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
+                difficultyDomain = DifficultyDomain.HARD,
                 lastTime = "2014",
                 lastDate = "14:54"
             )

@@ -1,7 +1,7 @@
 package com.example.dailyquiztest.data.mapper
 
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
+import com.example.dailyquiztest.domain.model.CategoryDomain
+import com.example.dailyquiztest.domain.model.DifficultyDomain
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -11,24 +11,24 @@ class DomainToLocalQuizResultMapperTest {
         val mapper = DomainToLocalQuizResultMapper()
         val quizResultNumber = 1
         val stars = 5
-        val category = Category.COMICS
-        val difficulty = Difficulty.HARD
+        val categoryDomain = CategoryDomain.COMICS
+        val difficultyDomain = DifficultyDomain.HARD
         val lastTime = "18:45"
         val lastDate = "2025:01:01"
 
         val result = mapper.mappedValue(
             id = quizResultNumber,
             stars = stars,
-            category = category,
-            difficulty = difficulty,
+            categoryDomain = categoryDomain,
+            difficultyDomain = difficultyDomain,
             lastTime = lastTime,
             lastDate = lastDate
         )
 
         assertEquals(1, result.quizResultNumber)
         assertEquals(5, result.stars)
-        assertEquals(Category.COMICS.name, result.category)
-        assertEquals(Difficulty.HARD.toString(), result.difficulty)
+        assertEquals(CategoryDomain.COMICS.name, result.category)
+        assertEquals(DifficultyDomain.HARD.toString(), result.difficulty)
         assertEquals("18:45", result.lastTime)
         assertEquals("2025:01:01", result.lastDate)
     }
