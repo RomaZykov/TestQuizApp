@@ -3,12 +3,13 @@ package com.example.dailyquiztest.presentation.feature.quiz
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dailyquiztest.core.DispatcherList
-import com.example.dailyquiztest.core.FormatDate
 import com.example.dailyquiztest.domain.model.CategoryDomain
 import com.example.dailyquiztest.domain.model.DifficultyDomain
 import com.example.dailyquiztest.domain.model.ResultDomain
 import com.example.dailyquiztest.domain.repository.HistoryRepository
 import com.example.dailyquiztest.domain.repository.QuizRepository
+import com.example.dailyquiztest.core.FormatDate
+import com.example.dailyquiztest.presentation.feature.quiz.mapper.QuizUiMapper
 import com.example.dailyquiztest.presentation.feature.quiz.model.FiltersUi
 import com.example.dailyquiztest.presentation.feature.quiz.model.LoadingUi
 import com.example.dailyquiztest.presentation.feature.quiz.model.QuizUi
@@ -29,8 +30,10 @@ class QuizViewModel @Inject constructor(
     private val quizRepository: QuizRepository,
     private val historyRepository: HistoryRepository,
     private val welcomeRouteProvider: WelcomeRouteProvider,
-    private val dispatcherList: DispatcherList,
-    private val formattedDate: FormatDate
+    private val mapper: QuizUiMapper,
+    private val score: CalculateScore.All,
+    private val formatDate: FormatDate,
+    private val dispatcherList: DispatcherList
 ) : ViewModel(), CoreVMActions {
 
     private val uiStateMutable = MutableStateFlow<QuizUiState>(
@@ -41,7 +44,7 @@ class QuizViewModel @Inject constructor(
     val uiState: StateFlow<QuizUiState>
         get() = uiStateMutable.asStateFlow()
 
-    private val questions: MutableList<QuizUi> = mutableListOf()
+    private val quizes: MutableList<QuizUi> = mutableListOf()
     private var currentQuizQuestion = 0
 
     override fun prepareQuizGame(
@@ -55,19 +58,8 @@ class QuizViewModel @Inject constructor(
                 category = categoryDomain.apiId,
                 difficulty = difficultyDomain.toString()
             ).onSuccess {
-                questions.addAll(it.mapIndexed { i, quizQuestion ->
-                    QuizUi(
-                        number = i,
-                        question = quizQuestion.question,
-                        incorrectAnswers = quizQuestion.incorrectAnswers,
-                        correctAnswer = quizQuestion.correctAnswer,
-                        quizTypeDomain = quizQuestion.type,
-                        totalQuestions = it.size,
-                        categoryDomain = categoryDomain,
-                        difficultyDomain = difficultyDomain
-                    )
-                })
-                uiStateMutable.value = questions[currentQuizQuestion]
+                quizes.addAll(mapper.mapToListQuiz(it))
+                uiStateMutable.value = quizes[currentQuizQuestion]
             }.onFailure {
                 val filtersUi = FiltersUi(
                     errorSnackBar = ErrorUiState.ErrorUi(it.message ?: "")
@@ -79,37 +71,37 @@ class QuizViewModel @Inject constructor(
         }
     }
 
-    override fun saveQuizAnswer(quizUi: QuizUi) {
-        questions[currentQuizQuestion] = quizUi
+    override fun saveQuizAnswer(answeredQuiz: QuizUi) {
+        quizes[currentQuizQuestion] = answeredQuiz
     }
 
     override fun retrieveNextAnswer() {
-        uiStateMutable.value = questions[++currentQuizQuestion]
+        uiStateMutable.value = quizes[++currentQuizQuestion]
     }
 
     override fun showResult() {
-        val resultScreen = ResultUi(quizAnswers = questions)
+        quizes.forEach { it.visit(score) }
+        val resultScreen = ResultUi(quizes, score)
         uiStateMutable.value = resultScreen
         viewModelScope.launch(dispatcherList.io()) {
             historyRepository.saveQuizResult(
-                ResultDomain(
-                    stars = resultScreen.calculateStarsScoreResult(),
-                    categoryDomain = questions.first().categoryDomain,
-                    difficultyDomain = questions.first().difficultyDomain,
-                    lastTime = formattedDate.timeFinished(),
-                    lastDate = formattedDate.dateFinished()
+                ResultDomain.Result(
+                    stars = score.calculateStarsScoreResult(),
+                    categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
+                    difficultyDomain = DifficultyDomain.HARD,
+                    lastTime = formatDate.timeFinished(),
+                    lastDate = formatDate.dateFinished()
                 )
             )
         }
     }
 
     override fun timerProgress() {
-        TODO("Not yet implemented")
     }
 
     override fun navigateToWelcome(toWelcome: (Route) -> Unit) {
         currentQuizQuestion = 0
-        questions.clear()
+        quizes.clear()
         toWelcome.invoke(welcomeRouteProvider.route())
     }
 }
@@ -120,7 +112,7 @@ interface CoreVMActions {
 
     fun showResult()
 
-    fun saveQuizAnswer(quizUi: QuizUi)
+    fun saveQuizAnswer(answeredQuiz: QuizUi)
 
     fun prepareQuizGame(
         categoryDomain: CategoryDomain,

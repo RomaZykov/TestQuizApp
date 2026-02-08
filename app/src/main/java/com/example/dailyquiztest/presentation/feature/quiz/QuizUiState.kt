@@ -5,5 +5,7 @@ import androidx.compose.runtime.Composable
 interface QuizUiState {
 
     @Composable
-    fun Display(timerProgress: () -> Unit, quizUserActions: QuizUserActions)
+    fun Display(quizUserActions: QuizUserActions)
+
+    fun visit(score: CalculateScore.AddInfo) = Unit
 }
