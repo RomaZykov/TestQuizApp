@@ -59,7 +59,7 @@ data class FiltersUi(
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    override fun Display(timerProgress: () -> Unit, quizUserActions: QuizUserActions) {
+    override fun Display(quizUserActions: QuizUserActions) {
         val categoryLabel = stringResource(R.string.category_menu_text)
         val selectedCategory = rememberSaveable(categories) { mutableStateOf(categoryLabel) }
 
@@ -280,5 +280,5 @@ data class FiltersUi(
 @Composable
 fun FiltersPreview() {
     FiltersUi(CategoryDomain.entries, emptyList(), ErrorUiState.ErrorUi("Some error!"))
-        .Display(timerProgress = {}, quizUserActions = QuizUserActions.ForPreview)
+        .Display(quizUserActions = QuizUserActions.ForPreview)
 }

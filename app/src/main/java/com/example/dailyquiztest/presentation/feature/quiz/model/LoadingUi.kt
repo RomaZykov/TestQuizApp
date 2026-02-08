@@ -8,10 +8,7 @@ import com.example.dailyquiztest.presentation.feature.quiz.QuizUserActions
 object LoadingUi : QuizUiState {
 
     @Composable
-    override fun Display(
-        timerProgress: () -> Unit,
-        quizUserActions: QuizUserActions
-    ) {
+    override fun Display(quizUserActions: QuizUserActions) {
         UiLoading()
     }
 }

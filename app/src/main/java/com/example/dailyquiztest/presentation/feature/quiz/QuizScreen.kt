@@ -41,7 +41,7 @@ fun QuizScreenUi(
     showResult: () -> Unit,
     navigateToWelcome: (toWelcome: (Route) -> Unit) -> Unit
 ) {
-    uiState.Display(timerProgress, quizUserActions = object : QuizUserActions {
+    uiState.Display(quizUserActions = object : QuizUserActions {
         override fun onBackClicked(): () -> Unit = {
             navController.popBackStack()
         }
