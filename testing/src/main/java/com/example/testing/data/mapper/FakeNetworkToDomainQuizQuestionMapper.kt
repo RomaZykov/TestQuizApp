@@ -4,7 +4,7 @@ import com.example.dailyquiztest.data.model.network.model.NetworkQuizQuestion
 import com.example.dailyquiztest.domain.model.QuizTypeDomain
 import com.example.dailyquiztest.domain.model.QuizDomain
 
-class FakeNetworkToDomainQuizQuestionMapper : NetworkQuizQuestion.Mapper<QuizDomain> {
+class FakeNetworkToDomainQuizQuestionMapper : NetworkQuizQuestion.Mapper<QuizDomain.Quiz> {
     var mapCalledCount = 0
 
     override fun mappedValue(
@@ -12,7 +12,7 @@ class FakeNetworkToDomainQuizQuestionMapper : NetworkQuizQuestion.Mapper<QuizDom
         incorrectAnswers: List<String>,
         correctAnswer: String,
         type: String
-    ): QuizDomain {
+    ): QuizDomain.Quiz {
         mapCalledCount++
         return QuizDomain.Quiz(
             question = question,

@@ -27,7 +27,7 @@ class QuizRepositoryTest {
         fakeNetworkToDomainQuizQuestionMapper = FakeNetworkToDomainQuizQuestionMapper()
         quizRepository = QuizRepositoryImpl(
             networkQuizQuestionsDataSource = fakeNetworkQuizDataSource,
-            networkToDomainQuizDomainMapper = fakeNetworkToDomainQuizQuestionMapper
+            networkToDomainQuizMapper = fakeNetworkToDomainQuizQuestionMapper
         )
     }
 
@@ -58,31 +58,31 @@ class QuizRepositoryTest {
         assertEquals(5, fakeNetworkToDomainQuizQuestionMapper.mapCalledCount)
         assertEquals(
             listOf(
-                QuizDomain(
+                QuizDomain.Quiz(
                     type = QuizTypeDomain.MULTIPLE,
                     question = "Question 1",
                     correctAnswer = "correct",
                     incorrectAnswers = listOf("inCorrect 1", "inCorrect 2", "inCorrect 3")
                 ),
-                QuizDomain(
+                QuizDomain.Quiz(
                     type = QuizTypeDomain.MULTIPLE,
                     question = "Question 2",
                     correctAnswer = "correct",
                     incorrectAnswers = listOf("inCorrect 1", "inCorrect 2", "inCorrect 3")
                 ),
-                QuizDomain(
+                QuizDomain.Quiz(
                     type = QuizTypeDomain.MULTIPLE,
                     question = "Question 3",
                     correctAnswer = "correct",
                     incorrectAnswers = listOf("inCorrect 1", "inCorrect 2", "inCorrect 3")
                 ),
-                QuizDomain(
+                QuizDomain.Quiz(
                     type = QuizTypeDomain.BOOLEAN,
                     question = "Question 4",
                     correctAnswer = "True",
                     incorrectAnswers = listOf("False")
                 ),
-                QuizDomain(
+                QuizDomain.Quiz(
                     type = QuizTypeDomain.BOOLEAN,
                     question = "Question 5",
                     correctAnswer = "False",

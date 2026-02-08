@@ -5,7 +5,7 @@ import com.example.dailyquiztest.domain.model.CategoryDomain
 import com.example.dailyquiztest.domain.model.DifficultyDomain
 import com.example.dailyquiztest.domain.model.ResultDomain
 
-class FakeLocalToDomainQuizResultMapper : LocalQuizResult.Mapper<ResultDomain> {
+class FakeLocalToDomainQuizResultMapper : LocalQuizResult.Mapper<ResultDomain.Result> {
     var mapCalledCount = 0
 
     override fun mappedValue(
@@ -15,7 +15,7 @@ class FakeLocalToDomainQuizResultMapper : LocalQuizResult.Mapper<ResultDomain> {
         difficultyDomain: DifficultyDomain,
         lastTime: String,
         lastDate: String
-    ): ResultDomain {
+    ): ResultDomain.Result {
         mapCalledCount++
         return ResultDomain.Result(
             number = number,
