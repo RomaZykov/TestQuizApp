@@ -1,6 +1,7 @@
 package com.example.dailyquiztest.presentation.feature.quiz
 
 import com.example.dailyquiztest.R
+import javax.inject.Inject
 
 interface CalculateScore  {
     interface AddInfo {
@@ -16,7 +17,7 @@ interface CalculateScore  {
     fun scoreTitleResId(): Int
     fun scoreDescriptionResId(): Int
 
-    class Base() : All {
+    class Base @Inject constructor() : All {
         private var correctAnswers = 0
         private var allQuestions = 0
         private fun titleAndDescription(): Pair<Int, Int> {
