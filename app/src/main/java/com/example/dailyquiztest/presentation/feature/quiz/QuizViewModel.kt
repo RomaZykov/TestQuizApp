@@ -87,6 +87,7 @@ class QuizViewModel @Inject constructor(
             historyRepository.saveQuizResult(
                 ResultDomain.Result(
                     stars = score.calculateStarsScoreResult(),
+                    // TODO()
                     categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
                     difficultyDomain = DifficultyDomain.HARD,
                     lastTime = formatDate.timeFinished(),

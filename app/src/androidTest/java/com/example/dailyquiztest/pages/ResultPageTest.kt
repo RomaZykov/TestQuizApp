@@ -10,7 +10,6 @@ import com.example.dailyquiztest.core.rememberTestNavController
 import com.example.dailyquiztest.helpPages.ResultPage
 import com.example.dailyquiztest.presentation.feature.quiz.QuizScreenUi
 import com.example.dailyquiztest.presentation.feature.quiz.model.ResultUi
-import com.example.testing.stub.stubQuizAnswers
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -33,7 +32,7 @@ class ResultPageTest {
     fun resetState_onLazyList_showsCorrectPreviouslySelectedItem() {
         restorationTester.setContent {
             val uiState = ResultUi(
-                quizAnswers = stubQuizAnswers
+                quizAnswers = stubQuizUiAnswers
             )
             QuizScreenUi(
                 uiState = uiState,
@@ -50,21 +49,21 @@ class ResultPageTest {
         resultPage.assertPageDisplayed()
         resultPage.hasScrollOption()
 
-        composeTestRule.onNodeWithText(stubQuizAnswers.first().question)
+        composeTestRule.onNodeWithText(stubQuizUiAnswers.first().question)
             .assertExists().assertIsDisplayed()
-        composeTestRule.onNodeWithText(stubQuizAnswers.last().question)
+        composeTestRule.onNodeWithText(stubQuizUiAnswers.last().question)
             .assertIsNotDisplayed()
 
         restorationTester.emulateSavedInstanceStateRestore()
 
-        resultPage.performScrollToItemWithText(stubQuizAnswers.last().question)
+        resultPage.performScrollToItemWithText(stubQuizUiAnswers.last().question)
 
         restorationTester.emulateSavedInstanceStateRestore()
 
-        composeTestRule.onNodeWithText(stubQuizAnswers.last().question)
+        composeTestRule.onNodeWithText(stubQuizUiAnswers.last().question)
             .assertExists().assertIsDisplayed()
-        resultPage.performScrollToItemWithText(stubQuizAnswers.first().question)
-        composeTestRule.onNodeWithText(stubQuizAnswers.first().question).assertExists()
+        resultPage.performScrollToItemWithText(stubQuizUiAnswers.first().question)
+        composeTestRule.onNodeWithText(stubQuizUiAnswers.first().question).assertExists()
             .assertIsDisplayed()
     }
 }

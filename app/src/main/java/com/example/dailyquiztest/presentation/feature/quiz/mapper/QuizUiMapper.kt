@@ -1,10 +1,9 @@
 package com.example.dailyquiztest.presentation.feature.quiz.mapper
 
-import androidx.compose.runtime.mutableStateOf
 import com.example.dailyquiztest.domain.model.QuizDomain
 import com.example.dailyquiztest.domain.model.QuizDomain.Quiz
 import com.example.dailyquiztest.domain.model.QuizTypeDomain
-import com.example.dailyquiztest.presentation.common.quiz_group.QuizGroupUi
+import com.example.dailyquiztest.presentation.feature.quiz.model.small_screen.QuizGroupUi
 import com.example.dailyquiztest.presentation.feature.quiz.model.QuizUi
 import javax.inject.Inject
 
@@ -16,7 +15,7 @@ interface QuizUiMapper : QuizDomain.MapTo<List<QuizUi>> {
                 val inCorrectAnswers = domain.incorrectAnswers
                 val correctAnswer = domain.correctAnswer
                 QuizUi(
-                    number = i,
+                    number = i + 1,
                     question = question,
                     correctAnswer = correctAnswer,
                     incorrectAnswers = inCorrectAnswers,
@@ -25,16 +24,14 @@ interface QuizUiMapper : QuizDomain.MapTo<List<QuizUi>> {
                         QuizGroupUi.BooleanGroupUi(
                             question = question,
                             correctOption = correctAnswer,
-                            userAnswer = "",
-                            actionButtonEnabled = mutableStateOf(false)
+                            userAnswer = ""
                         )
                     } else {
                         QuizGroupUi.MultipleGroupUi(
                             question = question,
                             correctOption = correctAnswer,
                             inCorrectOptions = inCorrectAnswers,
-                            userAnswer = "",
-                            actionButtonEnabled = mutableStateOf(false)
+                            userAnswer = ""
                         )
                     }
                 )
