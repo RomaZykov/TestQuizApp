@@ -38,7 +38,7 @@ interface QuizGroupUi {
         private val correctOption: String,
         private val allOptions: List<String>,
         private val userAnswer: String = "",
-        private val actionButtonEnabled: MutableState<Boolean> = mutableStateOf(false)
+        private val actionButtonEnabled: MutableState<Boolean>
     ) : QuizGroupUi {
         private val GroupSaver = listSaver(
             save = { stateList ->
@@ -65,9 +65,9 @@ interface QuizGroupUi {
                 correctOption,
                 allOptions,
                 selectedOption,
-                onOptionSelected,
                 pressedEnabled = false,
-                shouldShowBorder = true
+                shouldShowBorder = true,
+                onOptionSelected
             ) {}
         }
 
@@ -91,9 +91,9 @@ interface QuizGroupUi {
                 correctOption,
                 allOptions,
                 selectedOption,
-                onOptionSelected,
                 true,
                 shouldShowBorder,
+                onOptionSelected,
                 updateQuiz
             )
         }
@@ -132,9 +132,9 @@ private fun Options(
     correctOption: String,
     allOptions: List<String>,
     selectedOption: String,
-    onOptionSelected: (String) -> Unit,
     pressedEnabled: Boolean,
     shouldShowBorder: Boolean,
+    onOptionSelected: (String) -> Unit,
     updateQuiz: (String) -> Unit
 ) {
     Column(
@@ -187,5 +187,4 @@ private fun Options(
             }
         }
     }
-
 }
