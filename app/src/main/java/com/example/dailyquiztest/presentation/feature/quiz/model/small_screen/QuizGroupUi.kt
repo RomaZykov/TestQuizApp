@@ -1,4 +1,4 @@
-package com.example.dailyquiztest.presentation.common.quiz_group
+package com.example.dailyquiztest.presentation.feature.quiz.model.small_screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,7 +13,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.listSaver
@@ -37,8 +36,7 @@ interface QuizGroupUi {
         private val question: String,
         private val correctOption: String,
         private val allOptions: List<String>,
-        private val userAnswer: String = "",
-        private val actionButtonEnabled: MutableState<Boolean>
+        private val userAnswer: String
     ) : QuizGroupUi {
         private val GroupSaver = listSaver(
             save = { stateList ->
@@ -60,7 +58,6 @@ interface QuizGroupUi {
             val (selectedOption, onOptionSelected) = rememberSaveable(question) {
                 mutableStateOf(userAnswer)
             }
-
             Options(
                 correctOption,
                 allOptions,
@@ -85,8 +82,6 @@ interface QuizGroupUi {
                         addAll(allOptions)
                     }
                 }
-            actionButtonEnabled.value = selectedOption == correctOption
-
             Options(
                 correctOption,
                 allOptions,
@@ -103,27 +98,23 @@ interface QuizGroupUi {
         question: String,
         correctOption: String,
         userAnswer: String,
-        actionButtonEnabled: MutableState<Boolean>
     ) : Abstract(
         question,
         correctOption,
         listOf("true", "false"),
-        userAnswer,
-        actionButtonEnabled
+        userAnswer
     )
 
     class MultipleGroupUi(
         question: String,
         correctOption: String,
         inCorrectOptions: List<String>,
-        userAnswer: String,
-        actionButtonEnabled: MutableState<Boolean>
+        userAnswer: String
     ) : Abstract(
         question,
         correctOption,
         (listOf(correctOption) + inCorrectOptions).shuffled(),
-        userAnswer,
-        actionButtonEnabled
+        userAnswer
     )
 }
 

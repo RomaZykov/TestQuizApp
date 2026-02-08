@@ -21,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -41,10 +40,10 @@ import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.CommonCard
 import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
 import com.example.dailyquiztest.presentation.common.UiLogo
-import com.example.dailyquiztest.presentation.common.quiz_group.QuizGroupUi
+import com.example.dailyquiztest.presentation.feature.quiz.model.small_screen.QuizGroupUi
+import com.example.dailyquiztest.presentation.feature.quiz.CalculateScore
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUserActions
-import com.example.dailyquiztest.presentation.feature.quiz.CalculateScore
 import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -121,6 +120,7 @@ data class QuizUi(
                         QuizOptions(
                             shouldShowBorder.value
                         ) { _, answeredCorrect ->
+                            actionButtonEnabled.value = answeredCorrect
                             finalAnswerCorrect.value = answeredCorrect
                         }
                         ActionButtonWithText(
@@ -133,14 +133,14 @@ data class QuizUi(
                                 )
                                 scope.launch {
                                     delay(2.seconds)
-                                    if (number + 1 == totalQuestions) {
+                                    if (number == totalQuestions) {
                                         quizUserActions.onResultClicked().invoke(updatedQuizUi)
                                     } else {
                                         quizUserActions.onNextClicked().invoke(updatedQuizUi)
                                     }
                                 }
                             },
-                            text = if (number + 1 == totalQuestions) {
+                            text = if (number == totalQuestions) {
                                 R.string.finish_quiz_button_text
                             } else {
                                 R.string.next_button_text
@@ -250,7 +250,7 @@ data class QuizUi(
             modifier = Modifier.padding(top = 32.dp, bottom = 24.dp),
             text = stringResource(
                 R.string.total_questions,
-                currentNumberQuestion + 1,
+                currentNumberQuestion,
                 totalQuestions
             ),
             style = DailyQuizTheme.typography.numberOfQuestions
@@ -307,8 +307,7 @@ private fun LongQuizPreview() {
             question = question,
             correctOption = correctAnswer,
             inCorrectOptions = incorrectAnswers,
-            userAnswer = "",
-            actionButtonEnabled = remember { mutableStateOf(false) }
+            userAnswer = ""
         )
     ).Display(quizUserActions = QuizUserActions.ForPreview)
 }
@@ -333,8 +332,7 @@ private fun ShortQuizPreview() {
             question = question,
             correctOption = correctAnswer,
             inCorrectOptions = incorrectAnswers,
-            userAnswer = "4",
-            actionButtonEnabled = remember { mutableStateOf(true) }
+            userAnswer = "4"
         )
     ).Display(quizUserActions = QuizUserActions.ForPreview)
 }

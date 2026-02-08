@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,10 +29,10 @@ import androidx.compose.ui.unit.sp
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.StarsScore
-import com.example.dailyquiztest.presentation.common.quiz_group.QuizGroupUi
+import com.example.dailyquiztest.presentation.feature.quiz.model.small_screen.QuizGroupUi
+import com.example.dailyquiztest.presentation.feature.quiz.CalculateScore
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUserActions
-import com.example.dailyquiztest.presentation.feature.quiz.CalculateScore
 import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 
 data class ResultUi(
@@ -197,16 +196,14 @@ fun QuizResultsPreview() {
                         QuizGroupUi.BooleanGroupUi(
                             question = question,
                             correctOption = correctAnswer,
-                            userAnswer = userAnswer,
-                            actionButtonEnabled = mutableStateOf(false)
+                            userAnswer = userAnswer
                         )
                     } else {
                         QuizGroupUi.MultipleGroupUi(
                             question = question,
                             correctOption = correctAnswer,
                             inCorrectOptions = listOf("a", "b", "c"),
-                            userAnswer = userAnswer,
-                            actionButtonEnabled = mutableStateOf(false),
+                            userAnswer = userAnswer
                         )
                     }
                 )
