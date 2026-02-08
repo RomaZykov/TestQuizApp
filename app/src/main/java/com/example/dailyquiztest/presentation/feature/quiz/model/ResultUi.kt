@@ -1,6 +1,5 @@
 package com.example.dailyquiztest.presentation.feature.quiz.model
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,17 +8,17 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -29,22 +28,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dailyquiztest.R
-import com.example.dailyquiztest.domain.model.CategoryDomain
-import com.example.dailyquiztest.domain.model.DifficultyDomain
-import com.example.dailyquiztest.domain.model.QuizTypeDomain
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.StarsScore
-import com.example.dailyquiztest.presentation.common.answers_group.AnswersSpecificTypeFactory
+import com.example.dailyquiztest.presentation.common.quiz_group.QuizGroupUi
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUserActions
+import com.example.dailyquiztest.presentation.feature.quiz.CalculateScore
 import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 
 data class ResultUi(
-    private val quizAnswers: List<QuizUi>
+    private val quizAnswers: List<QuizUi>,
+    private val score: CalculateScore
 ) : QuizUiState {
 
     @Composable
-    override fun Display(timerProgress: () -> Unit, quizUserActions: QuizUserActions) {
+    override fun Display(quizUserActions: QuizUserActions) {
         val listState = rememberLazyListState()
         LazyColumn(
             modifier = Modifier
@@ -69,8 +67,8 @@ data class ResultUi(
             item {
                 ResultActionCard(quizUserActions.onStartNewQuizClicked())
             }
-            items(quizAnswers) {
-                QuizResultItem(it)
+            itemsIndexed(quizAnswers) { i, answeredQuiz ->
+                QuizResultItem(i, answeredQuiz)
             }
             item {
                 ActionButtonWithText(
@@ -94,16 +92,17 @@ data class ResultUi(
 
     @Composable
     fun CalculatedScoreResult() {
-        val title = stringResource(titleAndDescription().first)
-        val description = stringResource(titleAndDescription().second)
         Column(
             modifier = Modifier.padding(vertical = 4.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(title, style = DailyQuizTheme.typography.title)
+            Text(
+                stringResource(score.scoreTitleResId()),
+                style = DailyQuizTheme.typography.title
+            )
             Spacer(modifier = Modifier.padding(vertical = 4.dp))
             Text(
-                description,
+                stringResource(score.scoreDescriptionResId()),
                 style = DailyQuizTheme.typography.regular,
                 textAlign = TextAlign.Center
             )
@@ -111,7 +110,9 @@ data class ResultUi(
     }
 
     @Composable
-    private fun ResultActionCard(onStartNewQuizClicked: () -> Unit) {
+    private fun ResultActionCard(
+        onStartNewQuizClicked: () -> Unit
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -126,14 +127,15 @@ data class ResultUi(
                     .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                StarsScore(calculatedStarsScoreResult = calculateStarsScoreResult())
+                StarsScore(calculatedStarsScoreResult = score.calculateStarsScoreResult())
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
                 Text(
                     stringResource(
                         R.string.score_result,
-                        totalCorrectAnswers(),
-                        quizAnswers.first().totalQuestions
+                        score.totalCorrectAnswers(),
+                        quizAnswers.size
                     ),
+                    textAlign = TextAlign.Center,
                     color = DailyQuizTheme.colorScheme.surface,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
@@ -148,7 +150,7 @@ data class ResultUi(
     }
 
     @Composable
-    private fun QuizResultItem(quiz: QuizUi) {
+    private fun QuizResultItem(i: Int, quizUi: QuizUi) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -162,123 +164,57 @@ data class ResultUi(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = stringResource(
-                        R.string.questions_count,
-                        quiz.number + 1,
-                        quiz.totalQuestions
-                    ),
+                    text = stringResource(R.string.questions_count, i + 1, quizAnswers.size),
                     style = DailyQuizTheme.typography.numberOfQuestions,
                     color = DailyQuizTheme.colorScheme.background
                 )
-                Image(
-                    painter = painterResource(
-                        if (quiz.isAnsweredCorrect) {
-                            R.drawable.property_1_right
-                        } else {
-                            R.drawable.property_1_wrong
-                        }
-                    ), null
-                )
+                quizUi.PrintImage()
             }
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                text = quiz.question,
-                style = DailyQuizTheme.typography.title,
-                textAlign = TextAlign.Center
-            )
-            Column {
-                val quizOptions = AnswersSpecificTypeFactory.Base(
-                    quizTypeDomain = quiz.questionTypeDomain,
-                    question = quiz.question,
-                    correctAnswers = listOf(quiz.correctAnswer),
-                    inCorrectAnswers = quiz.incorrectAnswers,
-                    checkedEnabled = false,
-                    userAnswers = quiz.userAnswers
-                )
-                quizOptions.createGroup().DisplayGroup(true) {}
-            }
+            quizUi.PrintText()
+            quizUi.PrintStaticOptions()
         }
-    }
-
-    private fun titleAndDescription(): Pair<Int, Int> {
-        return when (calculateScorePercentage()) {
-            in 0 until 20 -> Pair(
-                R.string.zero_stars_title,
-                R.string.zero_stars_desc
-            )
-
-            in 20 until 40 -> Pair(
-                R.string.one_stars_title,
-                R.string.one_stars_desc
-            )
-
-            in 40 until 60 -> Pair(
-                R.string.two_stars_title,
-                R.string.two_stars_desc
-            )
-
-            in 60 until 80 -> Pair(
-                R.string.three_stars_title,
-                R.string.three_stars_desc
-            )
-
-            in 80 until 100 -> Pair(
-                R.string.four_stars_title,
-                R.string.four_stars_desc
-            )
-
-            else -> Pair(
-                R.string.five_stars_title,
-                R.string.five_stars_description
-            )
-        }
-    }
-
-    private fun totalCorrectAnswers() = quizAnswers.count { it.isAnsweredCorrect }
-    private fun calculateScorePercentage() =
-        totalCorrectAnswers() * 100 / quizAnswers.first().totalQuestions
-
-    fun calculateStarsScoreResult(): Int {
-        val percentagesList = listOf(20, 40, 60, 80, 100)
-        var starsCounter = 0
-        val calculatedScore = calculateScorePercentage()
-        for (e in percentagesList) {
-            if (calculatedScore >= e) {
-                starsCounter++
-            } else {
-                break
-            }
-        }
-        return starsCounter
     }
 }
 
 @Preview(showSystemUi = true)
 @Composable
 fun QuizResultsPreview() {
-    ResultUi(
-        mutableListOf<QuizUi>().apply {
-            repeat(10) {
-                this.add(
-                    QuizUi(
-                        number = it,
-                        question = "Test title $it",
-                        incorrectAnswers = listOf("a", "b", "c"),
-                        correctAnswer = "d",
-                        quizTypeDomain = if (it % 2 == 0) {
-                            QuizTypeDomain.MULTIPLE
-                        } else {
-                            QuizTypeDomain.BOOLEAN
-                        },
-                        totalQuestions = 10,
-                        userAnswers = listOf("a"),
-                        categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
-                        difficultyDomain = DifficultyDomain.EASY
-                    )
+    val listAnsweredQuizes = mutableListOf<QuizUi>().apply {
+        repeat(10) {
+            val question = "Test title $it"
+            val correctAnswer = "d"
+            val userAnswer = "b"
+            this.add(
+                QuizUi(
+                    number = it,
+                    question = question,
+                    incorrectAnswers = listOf("a", "b", "c"),
+                    correctAnswer = correctAnswer,
+                    totalQuestions = it,
+                    userAnswer = userAnswer,
+                    isAnsweredCorrect = false,
+                    quizGroupUi = if (it % 2 == 0) {
+                        QuizGroupUi.BooleanGroupUi(
+                            question = question,
+                            correctOption = correctAnswer,
+                            userAnswer = userAnswer,
+                            actionButtonEnabled = mutableStateOf(false)
+                        )
+                    } else {
+                        QuizGroupUi.MultipleGroupUi(
+                            question = question,
+                            correctOption = correctAnswer,
+                            inCorrectOptions = listOf("a", "b", "c"),
+                            userAnswer = userAnswer,
+                            actionButtonEnabled = mutableStateOf(false),
+                        )
+                    }
                 )
-            }
-        }.toList()
-    ).Display(timerProgress = {}, quizUserActions = QuizUserActions.ForPreview)
+            )
+        }
+    }.toList()
+    ResultUi(
+        listAnsweredQuizes,
+        score = CalculateScore.Base(),
+    ).Display(quizUserActions = QuizUserActions.ForPreview)
 }
