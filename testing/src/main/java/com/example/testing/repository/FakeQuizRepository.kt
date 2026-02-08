@@ -5,7 +5,7 @@ import com.example.dailyquiztest.data.model.network.exception.ServiceUnavailable
 import com.example.dailyquiztest.domain.model.QuizDomain
 import com.example.dailyquiztest.domain.repository.QuizRepository
 import com.example.testing.stub.stubTrueFalseQuizes
-import com.example.testing.stub.stubQuizes
+import com.example.testing.stub.stubDomainQuizes
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
@@ -33,7 +33,7 @@ class FakeQuizRepository @Inject constructor() : QuizRepository {
             val source = if (shouldSimulateOnlyTrueFalseOptions) {
                 stubTrueFalseQuizes
             } else {
-                stubQuizes
+                stubDomainQuizes
             }
             savedQuizes.addAll(source.take(amount))
             Result.success(savedQuizes)

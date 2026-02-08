@@ -104,7 +104,7 @@ class HistoryViewModelTest {
 
         val expectedUiState = HistoryUi(
             listOf(
-                ResultDomain(
+                ResultDomain.Result(
                     number = 1,
                     stars = 0,
                     categoryDomain = CategoryDomain.GENERAL_KNOWLEDGE,

@@ -5,16 +5,19 @@ import com.example.dailyquiztest.domain.model.DifficultyDomain
 import com.example.dailyquiztest.domain.model.QuizTypeDomain
 import com.example.dailyquiztest.fake.FakeFormatDate
 import com.example.dailyquiztest.fake.FakeWelcomeRouteProvider
+import com.example.dailyquiztest.presentation.feature.quiz.CalculateScore
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.feature.quiz.QuizViewModel
+import com.example.dailyquiztest.presentation.feature.quiz.mapper.QuizUiMapper
 import com.example.dailyquiztest.presentation.feature.quiz.model.FiltersUi
 import com.example.dailyquiztest.presentation.feature.quiz.model.LoadingUi
 import com.example.dailyquiztest.presentation.feature.quiz.model.ResultUi
 import com.example.dailyquiztest.presentation.feature.quiz.model.QuizUi
 import com.example.dailyquiztest.presentation.feature.quiz.model.small_screen.ErrorUiState
+import com.example.dailyquiztest.presentation.feature.quiz.model.small_screen.QuizGroupUi
 import com.example.testing.di.FakeDispatcherList
 import com.example.testing.stub.stubTrueFalseQuizes
-import com.example.testing.stub.stubQuizes
+import com.example.testing.stub.stubDomainQuizes
 import com.example.testing.repository.FakeHistoryRepository
 import com.example.testing.repository.FakeQuizRepository
 import kotlinx.coroutines.Dispatchers
@@ -32,14 +35,16 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class QuizViewModelTest {
-
-    private lateinit var viewModel: QuizViewModel
     private lateinit var fakeQuizRepository: FakeQuizRepository
     private lateinit var fakeHistoryRepository: FakeHistoryRepository
     private lateinit var fakeWelcomeRouteProvider: FakeWelcomeRouteProvider
     private lateinit var fakeFormatDate: FakeFormatDate
     private lateinit var dispatchers: FakeDispatcherList
+
+
+    private lateinit var viewModel: QuizViewModel
     private lateinit var stateFlow: StateFlow<QuizUiState>
+    private lateinit var score: CalculateScore.All
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private var testDispatcher = UnconfinedTestDispatcher()
@@ -53,12 +58,15 @@ class QuizViewModelTest {
         fakeHistoryRepository = FakeHistoryRepository()
         fakeWelcomeRouteProvider = FakeWelcomeRouteProvider()
         dispatchers = FakeDispatcherList(testDispatcher)
+        score = CalculateScore.Base()
         viewModel = QuizViewModel(
             quizRepository = fakeQuizRepository,
             historyRepository = fakeHistoryRepository,
             welcomeRouteProvider = fakeWelcomeRouteProvider,
             dispatcherList = dispatchers,
-            fakeFormatDate
+            score = score,
+            formatDate = fakeFormatDate,
+            mapper = QuizUiMapper.Base()
         )
         stateFlow = viewModel.uiState
     }
@@ -88,8 +96,19 @@ class QuizViewModelTest {
             )
             advanceTimeBy(505)
 
-            val expectedFinalState =
-                retrieveStubQuestionByIndex(0, CategoryDomain.FILM, DifficultyDomain.HARD)
+            val expectedFinalState = QuizUi(
+                number = 1,
+                question = stubDomainQuizes[0].question,
+                incorrectAnswers = stubDomainQuizes[0].incorrectAnswers,
+                correctAnswer = stubDomainQuizes[0].correctAnswer,
+                totalQuestions = stubDomainQuizes.size,
+                quizGroupUi = QuizGroupUi.MultipleGroupUi(
+                    question = stubDomainQuizes[0].question,
+                    correctOption = stubDomainQuizes[0].correctAnswer,
+                    inCorrectOptions = stubDomainQuizes[0].incorrectAnswers,
+                    userAnswer = ""
+                )
+            )
             assertEquals(expectedFinalState, stateFlow.value)
         }
 
@@ -143,7 +162,7 @@ class QuizViewModelTest {
                 assertEquals(currentQuestion, stateFlow.value)
 
                 val correctAnsweredQuestion = currentQuestion.copy(
-                    userAnswers = listOf("true"),
+                    userAnswer = "true",
                     isAnsweredCorrect = true
                 )
                 viewModel.saveQuizAnswer(correctAnsweredQuestion)
@@ -157,14 +176,14 @@ class QuizViewModelTest {
             assertEquals(finalQuestion, stateFlow.value)
 
             val incorrectAnsweredQuestion = finalQuestion.copy(
-                userAnswers = listOf("false"),
+                userAnswer = "false",
                 isAnsweredCorrect = false
             )
             viewModel.saveQuizAnswer(incorrectAnsweredQuestion)
             expectedQuizResults.add(incorrectAnsweredQuestion)
 
             viewModel.showResult()
-            val expectedResultUiState = ResultUi(expectedQuizResults)
+            val expectedResultUiState = ResultUi(expectedQuizResults, score)
             assertEquals(expectedResultUiState, stateFlow.value)
         }
 
@@ -174,30 +193,14 @@ class QuizViewModelTest {
             question = stubTrueFalseQuizes[index].question,
             incorrectAnswers = stubTrueFalseQuizes[index].incorrectAnswers,
             correctAnswer = stubTrueFalseQuizes[index].correctAnswer,
-            quizTypeDomain = QuizTypeDomain.BOOLEAN,
-            totalQuestions = 5,
-            categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
-            difficultyDomain = DifficultyDomain.EASY,
-//            timerDialogUi = DialogUiState.NoDialog
-        )
-    }
-
-    private fun retrieveStubQuestionByIndex(
-        index: Int,
-        categoryDomain: CategoryDomain,
-        difficultyDomain: DifficultyDomain
-    ): QuizUi {
-        return QuizUi(
-            number = index,
-            question = stubQuizes[index].question,
-            incorrectAnswers = stubQuizes[index].incorrectAnswers,
-            correctAnswer = stubQuizes[index].correctAnswer,
-            quizTypeDomain = QuizTypeDomain.entries.find { it == stubQuizes[index].type }
-                ?: QuizTypeDomain.BOOLEAN,
-            totalQuestions = difficultyDomain.amountOfQuestions,
-            categoryDomain = categoryDomain,
-            difficultyDomain = difficultyDomain,
-//            timerDialogUi = DialogUiState.NoDialog
+            totalQuestions = stubTrueFalseQuizes.size,
+            userAnswer = stubTrueFalseQuizes[index].userAnswer,
+            isAnsweredCorrect = stubTrueFalseQuizes[index].isAnsweredCorrect,
+            quizGroupUi = QuizGroupUi.BooleanGroupUi(
+                question = stubTrueFalseQuizes[index].question,
+                correctOption = stubTrueFalseQuizes[index].correctAnswer,
+                userAnswer = stubTrueFalseQuizes[index].userAnswer
+            )
         )
     }
 }

@@ -5,7 +5,7 @@ import com.example.dailyquiztest.domain.model.DifficultyDomain
 import com.example.dailyquiztest.domain.model.ResultDomain
 
 val stubHistories = listOf(
-    ResultDomain(
+    ResultDomain.Result(
         number = 0,
         stars = 0,
         categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
@@ -13,7 +13,7 @@ val stubHistories = listOf(
         lastTime = "00:00",
         lastDate = "2025"
     ),
-    ResultDomain(
+    ResultDomain.Result(
         number = 1,
         stars = 0,
         categoryDomain = CategoryDomain.GENERAL_KNOWLEDGE,
@@ -21,7 +21,7 @@ val stubHistories = listOf(
         lastTime = "00:00",
         lastDate = "2025"
     ),
-    ResultDomain(
+    ResultDomain.Result(
         number = 2,
         stars = 2,
         categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
@@ -29,7 +29,7 @@ val stubHistories = listOf(
         lastTime = "00:00",
         lastDate = "2025"
     ),
-    ResultDomain(
+    ResultDomain.Result(
         number = 3,
         stars = 3,
         categoryDomain = CategoryDomain.BOARD_GAMES,
@@ -37,7 +37,7 @@ val stubHistories = listOf(
         lastTime = "00:00",
         lastDate = "2025"
     ),
-    ResultDomain(
+    ResultDomain.Result(
         number = 4,
         stars = 5,
         categoryDomain = CategoryDomain.HISTORY,
@@ -45,7 +45,7 @@ val stubHistories = listOf(
         lastTime = "00:00",
         lastDate = "2025"
     ),
-    ResultDomain(
+    ResultDomain.Result(
         number = 5,
         stars = 5,
         categoryDomain = CategoryDomain.HISTORY,
@@ -53,7 +53,7 @@ val stubHistories = listOf(
         lastTime = "00:00",
         lastDate = "2025"
     ),
-    ResultDomain(
+    ResultDomain.Result(
         number = 6,
         stars = 5,
         categoryDomain = CategoryDomain.BOARD_GAMES,

@@ -24,8 +24,7 @@ import com.example.dailyquiztest.helpPages.ResultPage
 import com.example.dailyquiztest.helpPages.WelcomePage
 import com.example.dailyquiztest.presentation.MainActivity
 import com.example.testing.stub.stubHistories
-import com.example.testing.stub.stubQuizAnswers
-import com.example.testing.stub.stubQuizes
+import com.example.testing.stub.stubDomainQuizes
 import com.example.testing.repository.FakeQuizRepository
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -507,10 +506,10 @@ class ScenarioTest : StringResources() {
 
         quizPage.assertPageDisplayed()
         quizPage.assertNextButtonNotEnabled()
-        composeTestRule.onNodeWithText(stubQuizes.first().incorrectAnswers[2])
+        composeTestRule.onNodeWithText(stubDomainQuizes.first().incorrectAnswers[2])
             .performScrollTo()
             .performClick()
-        composeTestRule.onNodeWithText(stubQuizes.first().incorrectAnswers[0])
+        composeTestRule.onNodeWithText(stubDomainQuizes.first().incorrectAnswers[0])
             .performScrollTo()
             .performClick()
         quizPage.assertNextButtonEnabled()
@@ -530,8 +529,8 @@ class ScenarioTest : StringResources() {
             }
 
         quizPage.assertPageDisplayed()
-        composeTestRule.onNodeWithText(stubQuizes.first().incorrectAnswers[2]).assertIsSelected()
-        composeTestRule.onNodeWithText(stubQuizes.first().incorrectAnswers[0]).assertIsSelected()
+        composeTestRule.onNodeWithText(stubDomainQuizes.first().incorrectAnswers[2]).assertIsSelected()
+        composeTestRule.onNodeWithText(stubDomainQuizes.first().incorrectAnswers[0]).assertIsSelected()
         quizPage.assertNextButtonEnabled()
     }
 
@@ -563,13 +562,13 @@ class ScenarioTest : StringResources() {
             }
         composeTestRule.waitForIdle()
 
-        resultPage.performScrollToItemWithText(stubQuizAnswers[4].question)
-        resultPage.performScrollToItemWithText(stubQuizAnswers[9].question)
+        resultPage.performScrollToItemWithText(stubQuizUiAnswers[4].question)
+        resultPage.performScrollToItemWithText(stubQuizUiAnswers[9].question)
 
         composeTestRule.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithText(stubQuizes[9].question).assertIsDisplayed()
+        composeTestRule.onNodeWithText(stubDomainQuizes[9].question).assertIsDisplayed()
         resultPage.clickBottomStartAgainButton()
 
         welcomePage.assertPageDisplayed()
