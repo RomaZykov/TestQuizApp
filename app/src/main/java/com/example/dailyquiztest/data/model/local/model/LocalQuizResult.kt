@@ -11,14 +11,13 @@ data class LocalQuizResult(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(
         name = "quiz_number",
         defaultValue = "0"
-    ) val quizResultNumber: Int,
+    ) val number: Int,
     @ColumnInfo(name = "stars") val stars: Int,
     @ColumnInfo(name = "category") val category: String,
     @ColumnInfo(name = "difficulty") val difficulty: String,
     @ColumnInfo(name = "last_time") val lastTime: String,
     @ColumnInfo(name = "last_date") val lastDate: String
 ) {
-
     constructor(
         stars: Int,
         category: String,
@@ -29,7 +28,7 @@ data class LocalQuizResult(
 
     fun <T> map(mapper: Mapper<T>): T {
         return mapper.mappedValue(
-            quizResultNumber = this.quizResultNumber,
+            number = this.number,
             stars = this.stars,
             categoryDomain = CategoryDomain.valueOf(this.category),
             difficultyDomain = DifficultyDomain.valueOf(this.difficulty.uppercase()),
@@ -40,7 +39,7 @@ data class LocalQuizResult(
 
     interface Mapper<T> {
         fun mappedValue(
-            quizResultNumber: Int,
+            number: Int,
             stars: Int,
             categoryDomain: CategoryDomain,
             difficultyDomain: DifficultyDomain,

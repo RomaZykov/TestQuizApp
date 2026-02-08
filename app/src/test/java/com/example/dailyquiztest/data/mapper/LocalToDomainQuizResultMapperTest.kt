@@ -9,7 +9,7 @@ class LocalToDomainQuizResultMapperTest {
 
     @Test
     fun `map should return DomainQuizResult with valid input`() {
-        val mapper = LocalToDomainQuizResultMapper()
+        val mapper = LocalToDomainResultMapper()
         val quizResultNumber = 1
         val stars = 5
         val categoryDomain = CategoryDomain.COMICS
@@ -18,7 +18,7 @@ class LocalToDomainQuizResultMapperTest {
         val lastDate = "2025:01:01"
 
         val result = mapper.mappedValue(
-            quizResultNumber = quizResultNumber,
+            number = quizResultNumber,
             stars = stars,
             categoryDomain = categoryDomain,
             difficultyDomain = difficultyDomain,

@@ -14,7 +14,7 @@ class FakeNetworkToDomainQuizQuestionMapper : NetworkQuizQuestion.Mapper<QuizDom
         type: String
     ): QuizDomain {
         mapCalledCount++
-        return QuizDomain(
+        return QuizDomain.Quiz(
             question = question,
             incorrectAnswers = incorrectAnswers,
             correctAnswer = correctAnswer,

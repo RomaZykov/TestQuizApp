@@ -5,22 +5,22 @@ import com.example.dailyquiztest.domain.model.CategoryDomain
 import com.example.dailyquiztest.domain.model.DifficultyDomain
 import com.example.dailyquiztest.domain.model.ResultDomain
 
-class DomainToLocalQuizResultMapper() : ResultDomain.Mapper<LocalQuizResult> {
+class LocalToDomainResultMapper() : LocalQuizResult.Mapper<ResultDomain.Result> {
     override fun mappedValue(
-        id: Int,
+        number: Int,
         stars: Int,
         categoryDomain: CategoryDomain,
         difficultyDomain: DifficultyDomain,
         lastTime: String,
         lastDate: String
-    ): LocalQuizResult {
-        return LocalQuizResult(
-            quizResultNumber = id,
+    ): ResultDomain.Result {
+        return ResultDomain.Result(
+            number = number,
             stars = stars,
+            categoryDomain = categoryDomain,
+            difficultyDomain = difficultyDomain,
             lastTime = lastTime,
-            lastDate = lastDate,
-            category = categoryDomain.toString(),
-            difficulty = difficultyDomain.toString()
+            lastDate = lastDate
         )
     }
 }

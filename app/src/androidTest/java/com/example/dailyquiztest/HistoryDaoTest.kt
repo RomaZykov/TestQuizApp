@@ -42,7 +42,7 @@ class HistoryDaoTest {
 
         assertEquals(
             listOf(1, 2, 3),
-            actualResult.map { it.quizResultNumber }
+            actualResult.map { it.number }
         )
     }
 
@@ -70,14 +70,14 @@ class HistoryDaoTest {
 
         assertEquals(
             listOf(1, 3),
-            actualResults.map { it.quizResultNumber }
+            actualResults.map { it.number }
         )
     }
 
     private suspend fun insertHistories() {
         val historyEntities = listOf(
             LocalQuizResult(
-                quizResultNumber = 1,
+                number = 1,
                 stars = 0,
                 category = CategoryDomain.HISTORY.name,
                 difficulty = DifficultyDomain.EASY.toString(),
@@ -85,7 +85,7 @@ class HistoryDaoTest {
                 lastDate = ""
             ),
             LocalQuizResult(
-                quizResultNumber = 2,
+                number = 2,
                 stars = 5,
                 category = CategoryDomain.BOARD_GAMES.name,
                 difficulty = DifficultyDomain.HARD.toString(),
@@ -93,7 +93,7 @@ class HistoryDaoTest {
                 lastDate = ""
             ),
             LocalQuizResult(
-                quizResultNumber = 3,
+                number = 3,
                 stars = 2,
                 category = CategoryDomain.HISTORY.name,
                 difficulty = DifficultyDomain.MEDIUM.toString(),

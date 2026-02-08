@@ -5,15 +5,15 @@ import com.example.dailyquiztest.domain.model.QuizTypeDomain
 import com.example.dailyquiztest.domain.model.QuizDomain
 import javax.inject.Inject
 
-class NetworkToDomainQuizQuestionMapper @Inject constructor() :
-    NetworkQuizQuestion.Mapper<QuizDomain> {
+class NetworkToDomainQuizMapper @Inject constructor() :
+    NetworkQuizQuestion.Mapper<QuizDomain.Quiz> {
     override fun mappedValue(
         question: String,
         incorrectAnswers: List<String>,
         correctAnswer: String,
         type: String
-    ): QuizDomain {
-        return QuizDomain(
+    ): QuizDomain.Quiz {
+        return QuizDomain.Quiz(
             question = question,
             incorrectAnswers = incorrectAnswers.map { it.lowercase() },
             correctAnswer = correctAnswer.lowercase(),

@@ -8,5 +8,5 @@ interface QuizRepository {
         amount: Int,
         category: Int,
         difficulty: String
-    ) : Result<List<QuizDomain>>
+    ) : Result<List<QuizDomain.Quiz>>
 }

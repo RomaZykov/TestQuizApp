@@ -10,19 +10,19 @@ import javax.inject.Inject
 
 class HistoryRepositoryImpl @Inject constructor(
     private val localHistoryDataSource: LocalHistoryDataSource,
-    private val mapperFromLocalToDomain: LocalQuizResult.Mapper<ResultDomain>,
-    private val mapperFromDomainToLocal: ResultDomain.Mapper<LocalQuizResult>,
+    private val mapperFromLocalToDomain: LocalQuizResult.Mapper<ResultDomain.Result>,
+    private val mapperFromDomainToLocal: ResultDomain.MapTo<LocalQuizResult>,
 ) : HistoryRepository {
 
-    override fun fetchQuizResults(): Flow<List<ResultDomain>> =
+    override fun fetchQuizResults(): Flow<List<ResultDomain.Result>> =
         localHistoryDataSource.fetchQuizResults().map { localQuizResults ->
             localQuizResults.map {
                 it.map(mapperFromLocalToDomain)
             }
         }
 
-    override suspend fun saveQuizResult(resultDomain: ResultDomain) {
-        localHistoryDataSource.addQuizResult(resultDomain.map(mapperFromDomainToLocal))
+    override suspend fun saveQuizResult(result: ResultDomain.Result) {
+        localHistoryDataSource.addQuizResult(result.map(mapperFromDomainToLocal))
     }
 
     override suspend fun deleteQuizResult(id: Int) {

@@ -61,7 +61,7 @@ import com.example.dailyquiztest.presentation.feature.history.components.History
 import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 import kotlinx.coroutines.launch
 
- data class HistoryUi(private val histories: List<ResultDomain>) : HistoryUiState {
+ data class HistoryUi(private val histories: List<ResultDomain.Result>) : HistoryUiState {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -119,7 +119,7 @@ import kotlinx.coroutines.launch
 
     @Composable
     private fun HistoryCard(
-        resultDomain: ResultDomain,
+        resultDomain: ResultDomain.Result,
         dropDownMenuActive: MutableState<Boolean>,
         snackBarHostState: SnackbarHostState,
         onDeleteClicked: () -> Unit
@@ -253,7 +253,7 @@ import kotlinx.coroutines.launch
 fun HistoryUiPreview() {
     HistoryUi(
         listOf(
-            ResultDomain(
+            ResultDomain.Result(
                 0,
                 stars = 0,
                 categoryDomain = CategoryDomain.HISTORY,
@@ -261,7 +261,7 @@ fun HistoryUiPreview() {
                 lastTime = "14:54",
                 lastDate = "2014"
             ),
-            ResultDomain(
+            ResultDomain.Result(
                 1,
                 stars = 5,
                 categoryDomain = CategoryDomain.HISTORY,
@@ -269,7 +269,7 @@ fun HistoryUiPreview() {
                 lastTime = "2014",
                 lastDate = "14:54"
             ),
-            ResultDomain(
+            ResultDomain.Result(
                 2,
                 stars = 3,
                 categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,
@@ -277,7 +277,7 @@ fun HistoryUiPreview() {
                 lastTime = "2014",
                 lastDate = "14:54"
             ),
-            ResultDomain(
+            ResultDomain.Result(
                 3,
                 stars = 2,
                 categoryDomain = CategoryDomain.CARTOON_AND_ANIMATIONS,

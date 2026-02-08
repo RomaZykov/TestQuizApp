@@ -9,7 +9,7 @@ class FakeLocalToDomainQuizResultMapper : LocalQuizResult.Mapper<ResultDomain> {
     var mapCalledCount = 0
 
     override fun mappedValue(
-        quizResultNumber: Int,
+        number: Int,
         stars: Int,
         categoryDomain: CategoryDomain,
         difficultyDomain: DifficultyDomain,
@@ -17,8 +17,8 @@ class FakeLocalToDomainQuizResultMapper : LocalQuizResult.Mapper<ResultDomain> {
         lastDate: String
     ): ResultDomain {
         mapCalledCount++
-        return ResultDomain(
-            number = quizResultNumber,
+        return ResultDomain.Result(
+            number = number,
             stars = stars,
             categoryDomain = categoryDomain,
             difficultyDomain = difficultyDomain,

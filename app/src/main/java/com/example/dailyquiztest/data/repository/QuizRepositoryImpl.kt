@@ -8,16 +8,16 @@ import javax.inject.Inject
 
 class QuizRepositoryImpl @Inject constructor(
     private val networkQuizQuestionsDataSource: NetworkQuizQuestionsDataSource,
-    private val networkToDomainQuizDomainMapper: NetworkQuizQuestion.Mapper<QuizDomain>
+    private val networkToDomainQuizMapper: NetworkQuizQuestion.Mapper<QuizDomain.Quiz>
 ) : QuizRepository {
     override suspend fun retrieveQuizQuestions(
         amount: Int,
         category: Int,
         difficulty: String
-    ): Result<List<QuizDomain>> {
+    ): Result<List<QuizDomain.Quiz>> {
         return networkQuizQuestionsDataSource.retrieveQuizQuestions(amount, category, difficulty).map {
             it.take(amount).map { networkQuiz ->
-                networkQuiz.map(networkToDomainQuizDomainMapper)
+                networkQuiz.map(networkToDomainQuizMapper)
             }
         }
     }

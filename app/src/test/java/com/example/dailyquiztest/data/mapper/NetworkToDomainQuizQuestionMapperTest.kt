@@ -8,7 +8,7 @@ class NetworkToDomainQuizQuestionMapperTest {
 
     @Test
     fun `map from true-false options should return lowercase values with boolean type`() {
-        val mapper = NetworkToDomainQuizQuestionMapper()
+        val mapper = NetworkToDomainQuizMapper()
         val question = "test question"
         val incorrectAnswers = listOf("True")
         val correctAnswer = "False"

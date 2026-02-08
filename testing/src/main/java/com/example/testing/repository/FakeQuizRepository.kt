@@ -15,13 +15,13 @@ class FakeQuizRepository @Inject constructor() : QuizRepository {
     var shouldSimulateOnlyTrueFalseOptions = false
     var shouldSimulateFiveSecDelay = false
 
-    val savedQuizes = mutableListOf<QuizDomain>()
+    val savedQuizes = mutableListOf<QuizDomain.Quiz>()
 
     override suspend fun retrieveQuizQuestions(
         amount: Int,
         category: Int,
         difficulty: String
-    ): Result<List<QuizDomain>> {
+    ): Result<List<QuizDomain.Quiz>> {
         return if (shouldSimulateNetworkError) {
             Result.failure(NoInternetConnection("Check your connection!"))
         } else if (shouldSimulateServiceUnavailableError) {

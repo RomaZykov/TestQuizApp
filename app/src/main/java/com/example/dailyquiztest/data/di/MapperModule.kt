@@ -1,8 +1,8 @@
 package com.example.dailyquiztest.data.di
 
-import com.example.dailyquiztest.data.mapper.DomainToLocalQuizResultMapper
-import com.example.dailyquiztest.data.mapper.LocalToDomainQuizResultMapper
-import com.example.dailyquiztest.data.mapper.NetworkToDomainQuizQuestionMapper
+import com.example.dailyquiztest.data.mapper.DomainToLocalResultMapper
+import com.example.dailyquiztest.data.mapper.LocalToDomainResultMapper
+import com.example.dailyquiztest.data.mapper.NetworkToDomainQuizMapper
 import com.example.dailyquiztest.data.model.local.model.LocalQuizResult
 import com.example.dailyquiztest.data.model.network.model.NetworkQuizQuestion
 import com.example.dailyquiztest.domain.model.QuizDomain
@@ -18,16 +18,16 @@ import javax.inject.Singleton
 object MapperModule {
     @Provides
     @Singleton
-    fun provideLocalToDomainQuizResultMapper(): LocalQuizResult.Mapper<ResultDomain> =
-        LocalToDomainQuizResultMapper()
+    fun provideLocalToDomainQuizResultMapper(): LocalQuizResult.Mapper<ResultDomain.Result> =
+        LocalToDomainResultMapper()
 
     @Provides
     @Singleton
-    fun provideDomainToLocalQuizResultMapper(): ResultDomain.Mapper<LocalQuizResult> =
-        DomainToLocalQuizResultMapper()
+    fun provideDomainToLocalQuizResultMapper(): ResultDomain.MapTo<LocalQuizResult> =
+        DomainToLocalResultMapper()
 
     @Provides
     @Singleton
-    fun provideNetworkToDomainQuizQuestionMapper(): NetworkQuizQuestion.Mapper<QuizDomain> =
-        NetworkToDomainQuizQuestionMapper()
+    fun provideNetworkToDomainQuizQuestionMapper(): NetworkQuizQuestion.Mapper<QuizDomain.Quiz> =
+        NetworkToDomainQuizMapper()
 }

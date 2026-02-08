@@ -4,9 +4,9 @@ import com.example.dailyquiztest.domain.model.ResultDomain
 import kotlinx.coroutines.flow.Flow
 
 interface HistoryRepository {
-    suspend fun saveQuizResult(resultDomain: ResultDomain)
+    suspend fun saveQuizResult(result: ResultDomain.Result)
 
     suspend fun deleteQuizResult(id: Int)
 
-    fun fetchQuizResults(): Flow<List<ResultDomain>>
+    fun fetchQuizResults(): Flow<List<ResultDomain.Result>>
 }
