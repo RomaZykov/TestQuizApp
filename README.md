@@ -5,8 +5,8 @@
 
 ## Скриншоты
 <p align="center">
-<img src="https://github.com/RomaZykov/DailyQuizeTest/blob/master/demo/Welcome_Screen.png">
+<img src="">
 </p>
 <p align="center">
-<img src="https://github.com/RomaZykov/DailyQuizeTest/blob/master/demo/Filters_Screen.png">
+<img src="">
 </p>
