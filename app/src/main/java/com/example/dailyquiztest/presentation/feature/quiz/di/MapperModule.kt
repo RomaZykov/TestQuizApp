@@ -1,6 +1,6 @@
 package com.example.dailyquiztest.presentation.feature.quiz.di
 
-import com.example.dailyquiztest.presentation.feature.quiz.mapper.QuizUiMapper
+import com.example.dailyquiztest.presentation.feature.quiz.mapper.QuizMapper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,5 +11,5 @@ import dagger.hilt.components.SingletonComponent
 object MapperModule {
 
     @Provides
-    fun provideQuizUiMapper(): QuizUiMapper = QuizUiMapper.Base()
+    fun provideQuizUiMapper(): QuizMapper = QuizMapper.Base()
 }
