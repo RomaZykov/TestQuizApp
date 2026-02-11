@@ -49,10 +49,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
-interface Info {
-    fun accumulate(isAnsweredCorrect: Boolean)
-}
-
 data class QuizUi(
     private val number: Int,
     private val question: String,
