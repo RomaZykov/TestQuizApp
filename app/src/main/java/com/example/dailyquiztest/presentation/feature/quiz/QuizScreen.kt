@@ -21,7 +21,7 @@ fun QuizScreen(
     QuizScreenUi(
         uiState,
         navController,
-        viewModel::timerProgress,
+//        viewModel::timerProgress,
         viewModel::prepareQuizGame,
         viewModel::saveQuizAnswer,
         viewModel::retrieveNextAnswer,
@@ -34,7 +34,7 @@ fun QuizScreen(
 fun QuizScreenUi(
     uiState: QuizUiState,
     navController: NavController,
-    timerProgress: () -> Unit,
+//    timerProgress: () -> Unit,
     prepareQuizGame: (categoryDomain: CategoryDomain, difficultyDomain: DifficultyDomain) -> Unit,
     saveQuizAnswer: (quizUi: QuizUi) -> Unit,
     retrieveNextAnswer: () -> Unit,

@@ -148,7 +148,7 @@ import kotlinx.coroutines.launch
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        stringResource(R.string.quiz_number_title, (resultDomain.number + 1)),
+                        stringResource(R.string.quiz_number_title, resultDomain.number + 1),
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         color = DailyQuizTheme.colorScheme.tertiary
