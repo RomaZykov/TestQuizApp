@@ -40,10 +40,10 @@ import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.CommonCard
 import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
 import com.example.dailyquiztest.presentation.common.UiLogo
-import com.example.dailyquiztest.presentation.feature.quiz.model.small_screen.QuizGroupUi
 import com.example.dailyquiztest.presentation.feature.quiz.CalculateScore
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUserActions
+import com.example.dailyquiztest.presentation.feature.quiz.model.small_screen.QuizGroupUi
 import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -65,7 +65,9 @@ data class QuizUi(
 ) : QuizUiState {
 
     override fun visit(score: CalculateScore.AddInfo) {
-        score.accIfCorrect(isAnsweredCorrect)
+        if (isAnsweredCorrect) {
+            score.addCorrectness()
+        }
         score.totalQuestions(totalQuestions)
     }
 
@@ -74,7 +76,6 @@ data class QuizUi(
     override fun Display(quizUserActions: QuizUserActions) {
         val finalUserAnswer =
             rememberSaveable(question) { mutableStateOf(userAnswer) }
-        val finalAnswerCorrect = rememberSaveable(question) { mutableStateOf(isAnsweredCorrect) }
 
         val actionButtonEnabled = rememberSaveable(question) { mutableStateOf(false) }
         val shouldShowBorder = rememberSaveable(question) { mutableStateOf(false) }
@@ -116,12 +117,12 @@ data class QuizUi(
                     ) {
 //                        TimerProgress(shouldShowTimeIsOverDialog)
                         NumberOfQuestions(number, totalQuestions)
-                        Question(question)
-                        QuizOptions(
-                            shouldShowBorder.value
-                        ) { _, answeredCorrect ->
-                            actionButtonEnabled.value = answeredCorrect
-                            finalAnswerCorrect.value = answeredCorrect
+                        Column(modifier = Modifier.padding(8.dp)) {
+                            Question(question)
+                            QuizOptions(shouldShowBorder.value) { selectedOption ->
+                                actionButtonEnabled.value = selectedOption.isNotEmpty()
+                                finalUserAnswer.value = selectedOption
+                            }
                         }
                         ActionButtonWithText(
                             enabled = actionButtonEnabled.value && !shouldShowBorder.value,
@@ -129,7 +130,8 @@ data class QuizUi(
                                 shouldShowBorder.value = true
                                 val updatedQuizUi = this@QuizUi.copy(
                                     userAnswer = finalUserAnswer.value,
-                                    isAnsweredCorrect = finalAnswerCorrect.value
+                                    isAnsweredCorrect = finalUserAnswer.value == correctAnswer,
+                                    quizGroupUi = this@QuizUi.quizGroupUi
                                 )
                                 scope.launch {
                                     delay(2.seconds)
@@ -159,7 +161,6 @@ data class QuizUi(
                 )
             }
         }
-
 //        timerDialogUi.Display {
 //            quizUserActions.onStartNewQuizClicked().invoke()
 //        }
@@ -167,14 +168,15 @@ data class QuizUi(
 
     @Composable
     fun PrintStaticOptions() {
-        quizGroupUi.DisplayStaticGroup()
+        quizGroupUi.DisplayStaticGroup(userAnswer)
     }
 
     @Composable
-    fun PrintText() {
+    fun PrintQuestion() {
         Text(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
             text = question,
             style = DailyQuizTheme.typography.title,
             textAlign = TextAlign.Center
@@ -182,15 +184,14 @@ data class QuizUi(
     }
 
     @Composable
-    fun PrintImage() {
+    fun PrintCorrectnessIcon() {
+        val (drawResId, contentDesc) = if (isAnsweredCorrect) {
+            R.drawable.property_right to "correct card icon"
+        } else {
+            R.drawable.property_wrong to "wrong card icon"
+        }
         Image(
-            painter = painterResource(
-                if (isAnsweredCorrect) {
-                    R.drawable.property_1_right
-                } else {
-                    R.drawable.property_1_wrong
-                }
-            ), null
+            painter = painterResource(drawResId), contentDesc
         )
     }
 
@@ -262,7 +263,7 @@ data class QuizUi(
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 32.dp, vertical = 8.dp),
+                .padding(vertical = 8.dp),
             text = question,
             textAlign = TextAlign.Center,
             style = DailyQuizTheme.typography.questionTitle
@@ -272,16 +273,14 @@ data class QuizUi(
     @Composable
     private fun QuizOptions(
         shouldShowBorderWithDelay: Boolean,
-        updateUserAnswer: (String, Boolean) -> Unit
+        onSelectedOption: (String) -> Unit
     ) {
         quizGroupUi.DisplayDynamicGroup(
             shouldShowBorderWithDelay,
             updateQuiz = { selectedOption ->
-                updateUserAnswer.invoke(
-                    selectedOption,
-                    selectedOption.isNotEmpty()
-                )
-            })
+                onSelectedOption.invoke(selectedOption)
+            }
+        )
     }
 }
 

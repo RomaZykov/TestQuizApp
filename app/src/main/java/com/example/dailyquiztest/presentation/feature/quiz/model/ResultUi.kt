@@ -29,10 +29,10 @@ import androidx.compose.ui.unit.sp
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.StarsScore
-import com.example.dailyquiztest.presentation.feature.quiz.model.small_screen.QuizGroupUi
 import com.example.dailyquiztest.presentation.feature.quiz.CalculateScore
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUserActions
+import com.example.dailyquiztest.presentation.feature.quiz.model.small_screen.QuizGroupUi
 import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 
 data class ResultUi(
@@ -90,9 +90,11 @@ data class ResultUi(
     }
 
     @Composable
-    fun CalculatedScoreResult() {
+    private fun CalculatedScoreResult() {
         Column(
-            modifier = Modifier.padding(vertical = 4.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -167,9 +169,9 @@ data class ResultUi(
                     style = DailyQuizTheme.typography.numberOfQuestions,
                     color = DailyQuizTheme.colorScheme.background
                 )
-                quizUi.PrintImage()
+                quizUi.PrintCorrectnessIcon()
             }
-            quizUi.PrintText()
+            quizUi.PrintQuestion()
             quizUi.PrintStaticOptions()
         }
     }
@@ -177,10 +179,10 @@ data class ResultUi(
 
 @Preview(showSystemUi = true)
 @Composable
-fun QuizResultsPreview() {
+private fun QuizResultsPreview() {
     val listAnsweredQuizes = mutableListOf<QuizUi>().apply {
         repeat(10) {
-            val question = "Test title $it"
+            val question = "Test title Test title Test title Test title $it"
             val correctAnswer = "d"
             val userAnswer = "b"
             this.add(
@@ -192,26 +194,18 @@ fun QuizResultsPreview() {
                     totalQuestions = it,
                     userAnswer = userAnswer,
                     isAnsweredCorrect = false,
-                    quizGroupUi = if (it % 2 == 0) {
-                        QuizGroupUi.BooleanGroupUi(
-                            question = question,
-                            correctOption = correctAnswer,
-                            userAnswer = userAnswer
-                        )
-                    } else {
-                        QuizGroupUi.MultipleGroupUi(
-                            question = question,
-                            correctOption = correctAnswer,
-                            inCorrectOptions = listOf("a", "b", "c"),
-                            userAnswer = userAnswer
-                        )
-                    }
+                    quizGroupUi = QuizGroupUi.MultipleGroupUi(
+                        question = question,
+                        correctOption = correctAnswer,
+                        inCorrectOptions = listOf("a", "b", "c"),
+                        userAnswer = userAnswer
+                    )
                 )
             )
         }
     }.toList()
     ResultUi(
         listAnsweredQuizes,
-        score = CalculateScore.Base(),
+        score = CalculateScore.Base().apply { this.totalQuestions(listAnsweredQuizes.size) },
     ).Display(quizUserActions = QuizUserActions.ForPreview)
 }
