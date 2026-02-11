@@ -306,6 +306,35 @@ class ScenarioTest : StringResources() {
     }
 
     @Test
+    fun finishQuiz_withFourCorrectAnswersOutOfFive() = runTest {
+        welcomePage.assertPageDisplayed()
+        welcomePage.clickStartButton()
+
+        filtersPage.chooseSomeCategory(CategoryDomain.FILM)
+        filtersPage.chooseSomeDifficulty(DifficultyDomain.EASY)
+        filtersPage.clickStartQuizButton()
+
+        repeat(4) {
+            quizPage.assertNextButtonNotEnabled()
+            quizPage.chooseOption(true)
+            quizPage.clickNextButton()
+        }
+
+        quizPage.assertFinishQuizButtonNotEnabled()
+        quizPage.chooseOption(false)
+        quizPage.clickFinishQuizButton()
+
+        resultPage.assertPageDisplayed()
+        resultPage.assertFinalResultContains(
+            retrieveString(R.string.four_stars_title),
+            retrieveString(R.string.four_stars_desc)
+        )
+        resultPage.clickBottomStartAgainButton()
+
+        welcomePage.assertPageDisplayed()
+    }
+
+    @Test
     fun finishQuiz_whereAllOptionsAreTrueOrFalse_withFourCorrectAnswersOutOfFive() = runTest {
         (fakeQuizRepository as FakeQuizRepository).shouldSimulateOnlyTrueFalseOptions = true
 
@@ -562,8 +591,8 @@ class ScenarioTest : StringResources() {
             }
         composeTestRule.waitForIdle()
 
-        resultPage.performScrollToItemWithText(stubQuizUiAnswers[4].question)
-        resultPage.performScrollToItemWithText(stubQuizUiAnswers[9].question)
+        resultPage.performScrollToItemWithText(stubDomainQuizes[4].question)
+        resultPage.performScrollToItemWithText(stubDomainQuizes[9].question)
 
         composeTestRule.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         composeTestRule.waitForIdle()

@@ -2,24 +2,23 @@ package com.example.dailyquiztest.presentation
 
 import com.example.dailyquiztest.domain.model.CategoryDomain
 import com.example.dailyquiztest.domain.model.DifficultyDomain
-import com.example.dailyquiztest.domain.model.QuizTypeDomain
 import com.example.dailyquiztest.fake.FakeFormatDate
 import com.example.dailyquiztest.fake.FakeWelcomeRouteProvider
 import com.example.dailyquiztest.presentation.feature.quiz.CalculateScore
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.feature.quiz.QuizViewModel
-import com.example.dailyquiztest.presentation.feature.quiz.mapper.QuizUiMapper
+import com.example.dailyquiztest.presentation.feature.quiz.mapper.QuizMapper
 import com.example.dailyquiztest.presentation.feature.quiz.model.FiltersUi
 import com.example.dailyquiztest.presentation.feature.quiz.model.LoadingUi
-import com.example.dailyquiztest.presentation.feature.quiz.model.ResultUi
 import com.example.dailyquiztest.presentation.feature.quiz.model.QuizUi
+import com.example.dailyquiztest.presentation.feature.quiz.model.ResultUi
 import com.example.dailyquiztest.presentation.feature.quiz.model.small_screen.ErrorUiState
 import com.example.dailyquiztest.presentation.feature.quiz.model.small_screen.QuizGroupUi
 import com.example.testing.di.FakeDispatcherList
-import com.example.testing.stub.stubTrueFalseQuizes
-import com.example.testing.stub.stubDomainQuizes
 import com.example.testing.repository.FakeHistoryRepository
 import com.example.testing.repository.FakeQuizRepository
+import com.example.testing.stub.stubDomainQuizes
+import com.example.testing.stub.stubTrueFalseQuizes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
@@ -66,7 +65,7 @@ class QuizViewModelTest {
             dispatcherList = dispatchers,
             score = score,
             formatDate = fakeFormatDate,
-            mapper = QuizUiMapper.Base()
+            mapper = QuizMapper.Base()
         )
         stateFlow = viewModel.uiState
     }

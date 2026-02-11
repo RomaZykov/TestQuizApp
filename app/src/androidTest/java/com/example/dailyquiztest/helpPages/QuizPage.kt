@@ -28,8 +28,8 @@ class QuizPage(
 
     val mainContentDesc = "quiz screen"
 
-    private val dummyQuizesToIterate: ArrayDeque<QuizDomain> by lazy {
-        ArrayDeque<QuizDomain>().apply {
+    private val dummyQuizesToIterate: ArrayDeque<QuizDomain.Quiz> by lazy {
+        ArrayDeque<QuizDomain.Quiz>().apply {
             this.addAll((fakeQuizRepository as FakeQuizRepository).savedQuizes)
         }
     }

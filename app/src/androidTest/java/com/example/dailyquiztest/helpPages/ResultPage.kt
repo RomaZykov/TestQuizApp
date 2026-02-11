@@ -1,6 +1,7 @@
 package com.example.dailyquiztest.helpPages
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasScrollAction
@@ -65,5 +66,76 @@ class ResultPage(private val composeTestRule: ComposeTestRule) : StringResources
                 .performScrollToNode(hasText(questionTitle))
                 .isDisplayed()
         }
+    }
+
+    // Card icon
+    fun assertGreenCardIconDisplayedOnQuestion(question: String) {
+        composeTestRule.onNodeWithText(question).assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("correct card icon")
+            .assertExists().assertIsDisplayed()
+    }
+
+    fun assertRedCardIconDisplayedOnQuestion(question: String) {
+        composeTestRule.onNodeWithText(question).assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("wrong card icon")
+            .assertExists().assertIsDisplayed()
+    }
+
+    fun assertCardIconsNotDisplayedOnQuestion(question: String) {
+        composeTestRule.onNodeWithText(question).assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("wrong card icon")
+            .assertIsNotDisplayed()
+        composeTestRule.onNodeWithContentDescription("correct card icon")
+            .assertIsNotDisplayed()
+    }
+
+    // Edge board
+    fun assertGreenEdgeDisplayedOnText(userAnswer: String) {
+        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithTag("green edge")
+            .assertExists().assertIsDisplayed()
+    }
+
+    fun assertGreenEdgeIsNotDisplayedOnText(userAnswer: String) {
+        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithTag("green edge")
+            .assertIsNotDisplayed()
+    }
+
+    fun assertRedEdgeDisplayedOnText(userAnswer: String) {
+        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithTag("red edge")
+            .assertExists().assertIsDisplayed()
+    }
+
+    fun assertRedEdgeIsNotDisplayedOnText(option: String) {
+        composeTestRule.onNodeWithText(option, ignoreCase = true).assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithTag("red edge")
+            .assertIsNotDisplayed()
+    }
+
+    // Option icon
+    fun assertGreenOptionIconDisplayedOnText(userAnswer: String) {
+        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("correct option icon")
+            .assertExists().assertIsDisplayed()
+    }
+
+    fun assertGreenOptionIconIsNotDisplayedOnText(userAnswer: String) {
+        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("correct option icon")
+            .assertIsNotDisplayed()
+    }
+
+    fun assertRedOptionIconDisplayedOnText(userAnswer: String) {
+        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("wrong option icon")
+            .assertExists().assertIsDisplayed()
+    }
+
+    fun assertRedOptionIconIsNotDisplayedOnText(userAnswer: String) {
+        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("wrong option icon")
+            .assertIsNotDisplayed()
     }
 }
