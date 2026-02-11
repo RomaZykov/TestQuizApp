@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.testing.android)
+    implementation(libs.compose.material3)
 
     // retrofit
     implementation(libs.retrofit2)

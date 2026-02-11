@@ -12,10 +12,9 @@ import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
 import com.example.dailyquiztest.core.rememberTestNavController
 import com.example.dailyquiztest.helpPages.HistoryPage
-import com.example.dailyquiztest.presentation.features.history.HistoryScreen
-import com.example.dailyquiztest.presentation.features.history.HistoryUiState
-import com.example.dailyquiztest.presentation.features.history.model.HistoryUi
-import com.example.testing.dummy.dummyHistoryResults
+import com.example.dailyquiztest.presentation.feature.history.HistoryScreen
+import com.example.dailyquiztest.presentation.feature.history.model.HistoryUi
+import com.example.testing.stub.stubHistories
 import com.example.testing.repository.FakeHistoryRepository
 import org.junit.Before
 import org.junit.Rule
@@ -36,7 +35,7 @@ class HistoryPageTest : StringResources() {
         historyPage = HistoryPage(composeTestRule, FakeHistoryRepository())
         restorationTester.setContent {
             val uiState = HistoryUi(
-                historyQuizResults = dummyHistoryResults
+                histories = stubHistories
             )
             HistoryScreen(
                 uiState = uiState,
@@ -51,11 +50,11 @@ class HistoryPageTest : StringResources() {
     fun changeOrientation_showsAllHistoriesBeforeChanging() {
         historyPage.assertNonEmptyHistoriesDisplayed()
 
-        composeTestRule.onNodeWithTag(HistoryUiState.LAZY_HISTORY_LIST).performScrollToNode(
+        composeTestRule.onNodeWithTag(historyPage.historyLazyListTag).performScrollToNode(
             hasText(
                 retrieveString(
                     R.string.quiz_number_title,
-                    dummyHistoryResults.last().id + 1
+                    stubHistories.last().number + 1
                 )
             )
         )
@@ -67,7 +66,7 @@ class HistoryPageTest : StringResources() {
         composeTestRule.onNodeWithText(
             retrieveString(
                 R.string.quiz_number_title,
-                dummyHistoryResults.last().id + 1
+                stubHistories.last().number + 1
             )
         ).assertExists().assertIsDisplayed()
     }

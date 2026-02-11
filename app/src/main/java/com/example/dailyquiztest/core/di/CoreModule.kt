@@ -1,6 +1,8 @@
 package com.example.dailyquiztest.core.di
 
-import com.example.dailyquiztest.core.StringProvider
+import com.example.dailyquiztest.core.FormatDate
+import com.example.dailyquiztest.core.ProvideString
+import com.example.dailyquiztest.core.exception.QuizHandleError
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,5 +15,13 @@ abstract class CommonModule {
 
     @Binds
     @Singleton
-    abstract fun bindsResources(resources: StringProvider.Base): StringProvider
+    abstract fun bindsResources(resources: ProvideString.Base): ProvideString
+
+    @Binds
+    @Singleton
+    abstract fun bindsFormattedDate(formatDate: FormatDate.Base): FormatDate
+
+    @Binds
+    @Singleton
+    abstract fun bindsHandleExceptions(handleException: QuizHandleError.QuizFailureFactory): QuizHandleError
 }

@@ -1,19 +1,24 @@
 package com.example.dailyquiztest.presentation
 
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
-import com.example.dailyquiztest.domain.model.QuestionTypes
-import com.example.dailyquiztest.testdoubles.FakeWelcomeRouteProvider
-import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
-import com.example.dailyquiztest.presentation.features.quiz.QuizViewModel
-import com.example.dailyquiztest.presentation.features.quiz.model.FiltersUi
-import com.example.dailyquiztest.presentation.features.quiz.model.QuizResultUi
-import com.example.dailyquiztest.presentation.features.quiz.model.QuizUi
+import com.example.dailyquiztest.domain.model.CategoryDomain
+import com.example.dailyquiztest.domain.model.DifficultyDomain
+import com.example.dailyquiztest.fake.FakeFormatDate
+import com.example.dailyquiztest.fake.FakeWelcomeRouteProvider
+import com.example.dailyquiztest.presentation.feature.quiz.CalculateScore
+import com.example.dailyquiztest.presentation.feature.quiz.QuizUiState
+import com.example.dailyquiztest.presentation.feature.quiz.QuizViewModel
+import com.example.dailyquiztest.presentation.feature.quiz.mapper.QuizMapper
+import com.example.dailyquiztest.presentation.feature.quiz.model.FiltersUi
+import com.example.dailyquiztest.presentation.feature.quiz.model.LoadingUi
+import com.example.dailyquiztest.presentation.feature.quiz.model.QuizUi
+import com.example.dailyquiztest.presentation.feature.quiz.model.ResultUi
+import com.example.dailyquiztest.presentation.feature.quiz.model.small_screen.ErrorUiState
+import com.example.dailyquiztest.presentation.feature.quiz.model.small_screen.QuizGroupUi
 import com.example.testing.di.FakeDispatcherList
-import com.example.testing.dummy.dummyQuizes
-import com.example.testing.dummy.dummyTrueFalseQuizes
 import com.example.testing.repository.FakeHistoryRepository
 import com.example.testing.repository.FakeQuizRepository
+import com.example.testing.stub.stubDomainQuizes
+import com.example.testing.stub.stubTrueFalseQuizes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
@@ -29,13 +34,16 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class QuizViewModelTest {
-
-    private lateinit var viewModel: QuizViewModel
     private lateinit var fakeQuizRepository: FakeQuizRepository
     private lateinit var fakeHistoryRepository: FakeHistoryRepository
     private lateinit var fakeWelcomeRouteProvider: FakeWelcomeRouteProvider
+    private lateinit var fakeFormatDate: FakeFormatDate
     private lateinit var dispatchers: FakeDispatcherList
+
+
+    private lateinit var viewModel: QuizViewModel
     private lateinit var stateFlow: StateFlow<QuizUiState>
+    private lateinit var score: CalculateScore.All
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private var testDispatcher = UnconfinedTestDispatcher()
@@ -44,15 +52,20 @@ class QuizViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     fun setup() {
         Dispatchers.setMain(testDispatcher)
+        fakeFormatDate = FakeFormatDate()
         fakeQuizRepository = FakeQuizRepository()
         fakeHistoryRepository = FakeHistoryRepository()
         fakeWelcomeRouteProvider = FakeWelcomeRouteProvider()
         dispatchers = FakeDispatcherList(testDispatcher)
+        score = CalculateScore.Base()
         viewModel = QuizViewModel(
             quizRepository = fakeQuizRepository,
             historyRepository = fakeHistoryRepository,
             welcomeRouteProvider = fakeWelcomeRouteProvider,
-            dispatcherList = dispatchers
+            dispatcherList = dispatchers,
+            score = score,
+            formatDate = fakeFormatDate,
+            mapper = QuizMapper.Base()
         )
         stateFlow = viewModel.uiState
     }
@@ -69,35 +82,57 @@ class QuizViewModelTest {
         runTest(testDispatcher) {
             fakeQuizRepository.shouldSimulateFiveSecDelay = true
 
-            viewModel.prepareQuizGame(Category.FILM, Difficulty.HARD)
+            viewModel.prepareQuizGame(CategoryDomain.FILM, DifficultyDomain.HARD)
             advanceTimeBy(2500)
             assertEquals(
-                com.example.dailyquiztest.presentation.features.quiz.model.LoadingUi,
+                LoadingUi,
                 stateFlow.value
             )
             advanceTimeBy(2000)
             assertEquals(
-                com.example.dailyquiztest.presentation.features.quiz.model.LoadingUi,
+                LoadingUi,
                 stateFlow.value
             )
             advanceTimeBy(505)
 
-            val expectedFinalState =
-                retrieveDummySimpleQuestionByIndex(0, Category.FILM, Difficulty.HARD)
+            val expectedFinalState = QuizUi(
+                number = 1,
+                question = stubDomainQuizes[0].question,
+                incorrectAnswers = stubDomainQuizes[0].incorrectAnswers,
+                correctAnswer = stubDomainQuizes[0].correctAnswer,
+                totalQuestions = stubDomainQuizes.size,
+                quizGroupUi = QuizGroupUi.MultipleGroupUi(
+                    question = stubDomainQuizes[0].question,
+                    correctOption = stubDomainQuizes[0].correctAnswer,
+                    inCorrectOptions = stubDomainQuizes[0].incorrectAnswers,
+                    userAnswer = ""
+                )
+            )
             assertEquals(expectedFinalState, stateFlow.value)
         }
 
     @Test
-    fun `show failed filterState when there are some problems to advance in quiz stage`() =
+    fun `show failed filterState when there is NoConnection error`() =
         runTest {
-            fakeQuizRepository.shouldSimulateError = true
+            fakeQuizRepository.shouldSimulateNetworkError = true
 
-            viewModel.prepareQuizGame(Category.FILM, Difficulty.HARD)
+            viewModel.prepareQuizGame(CategoryDomain.FILM, DifficultyDomain.HARD)
 
             val expectedState = FiltersUi(
-                categories = Category.entries,
-                difficulties = Difficulty.entries,
-                shouldShowError = true
+                errorSnackBar = ErrorUiState.ErrorUi("Check your connection!"),
+            )
+            assertEquals(expectedState, stateFlow.value)
+        }
+
+    @Test
+    fun `show failed filterState when there is ServiceUnavailable error`() =
+        runTest {
+            fakeQuizRepository.shouldSimulateServiceUnavailableError = true
+
+            viewModel.prepareQuizGame(CategoryDomain.FILM, DifficultyDomain.HARD)
+
+            val expectedState = FiltersUi(
+                errorSnackBar = ErrorUiState.ErrorUi("Error with code: 1"),
             )
             assertEquals(expectedState, stateFlow.value)
         }
@@ -118,15 +153,15 @@ class QuizViewModelTest {
             var currentNumQuestion = 0
             val expectedQuizResults = mutableListOf<QuizUi>()
             viewModel.prepareQuizGame(
-                Category.CARTOON_AND_ANIMATIONS,
-                Difficulty.EASY
+                CategoryDomain.CARTOON_AND_ANIMATIONS,
+                DifficultyDomain.EASY
             )
             repeat(4) {
                 val currentQuestion = retrieveDummyTrueFalseQuestionByIndex(currentNumQuestion)
                 assertEquals(currentQuestion, stateFlow.value)
 
                 val correctAnsweredQuestion = currentQuestion.copy(
-                    userAnswers = listOf("true"),
+                    userAnswer = "true",
                     isAnsweredCorrect = true
                 )
                 viewModel.saveQuizAnswer(correctAnsweredQuestion)
@@ -140,45 +175,31 @@ class QuizViewModelTest {
             assertEquals(finalQuestion, stateFlow.value)
 
             val incorrectAnsweredQuestion = finalQuestion.copy(
-                userAnswers = listOf("false"),
+                userAnswer = "false",
                 isAnsweredCorrect = false
             )
             viewModel.saveQuizAnswer(incorrectAnsweredQuestion)
             expectedQuizResults.add(incorrectAnsweredQuestion)
 
             viewModel.showResult()
-            val expectedResultUiState = QuizResultUi(expectedQuizResults)
+            val expectedResultUiState = ResultUi(expectedQuizResults, score)
             assertEquals(expectedResultUiState, stateFlow.value)
         }
 
     private fun retrieveDummyTrueFalseQuestionByIndex(index: Int): QuizUi {
         return QuizUi(
-            currentNumberQuestion = index,
-            question = dummyTrueFalseQuizes[index].question,
-            incorrectAnswers = dummyTrueFalseQuizes[index].incorrectAnswers,
-            correctAnswer = dummyTrueFalseQuizes[index].correctAnswer,
-            questionType = QuestionTypes.BOOLEAN,
-            totalQuestions = 5,
-            category = Category.CARTOON_AND_ANIMATIONS,
-            difficulty = Difficulty.EASY
-        )
-    }
-
-    private fun retrieveDummySimpleQuestionByIndex(
-        index: Int,
-        category: Category,
-        difficulty: Difficulty
-    ): QuizUi {
-        return QuizUi(
-            currentNumberQuestion = index,
-            question = dummyQuizes[index].question,
-            incorrectAnswers = dummyQuizes[index].incorrectAnswers,
-            correctAnswer = dummyQuizes[index].correctAnswer,
-            questionType = QuestionTypes.entries.find { it.typeApi == dummyQuizes[index].type }
-                ?: QuestionTypes.BOOLEAN,
-            totalQuestions = difficulty.amountOfQuestions,
-            category = category,
-            difficulty = difficulty
+            number = index,
+            question = stubTrueFalseQuizes[index].question,
+            incorrectAnswers = stubTrueFalseQuizes[index].incorrectAnswers,
+            correctAnswer = stubTrueFalseQuizes[index].correctAnswer,
+            totalQuestions = stubTrueFalseQuizes.size,
+            userAnswer = stubTrueFalseQuizes[index].userAnswer,
+            isAnsweredCorrect = stubTrueFalseQuizes[index].isAnsweredCorrect,
+            quizGroupUi = QuizGroupUi.BooleanGroupUi(
+                question = stubTrueFalseQuizes[index].question,
+                correctOption = stubTrueFalseQuizes[index].correctAnswer,
+                userAnswer = stubTrueFalseQuizes[index].userAnswer
+            )
         )
     }
 }

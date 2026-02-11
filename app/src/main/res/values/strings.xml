@@ -15,7 +15,7 @@
     <string name="empty_history">Вы еще не проходили\nни одной викторины</string>
     <string name="quiz_bottom_hint">Вернуться к предыдущим вопросам нельзя</string>
     <string name="total_questions">Вопрос %1$d из %2$d</string>
-    <string name="network_error_exception">API error with response code: $d</string>
+    <string name="service_unavailable_exception">Error with code: %s</string>
     <string name="finish_quiz_button_text">Завершить</string>
     <string name="five_stars_title">Идеально!</string>
     <string name="five_stars_description">5/5 — вы ответили на всё правильно. Это блестящий результат!</string>
@@ -70,4 +70,6 @@
     <string name="easy">easy</string>
     <string name="medium">medium</string>
     <string name="hard">hard</string>
+    <string name="no_connection_exception">Check your connection!</string>
+    <string name="generic_exception">Something went wrong. Sorry!</string>
 </resources>

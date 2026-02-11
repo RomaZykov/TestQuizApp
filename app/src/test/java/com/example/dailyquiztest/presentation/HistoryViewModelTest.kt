@@ -1,14 +1,14 @@
 package com.example.dailyquiztest.presentation
 
-import com.example.testing.dummy.dummyHistoryResults
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
-import com.example.dailyquiztest.domain.model.QuizResult
-import com.example.dailyquiztest.testdoubles.FakeQuizRouteProvider
-import com.example.dailyquiztest.presentation.features.history.HistoryUiState
-import com.example.dailyquiztest.presentation.features.history.HistoryViewModel
-import com.example.dailyquiztest.presentation.features.history.model.EmptyHistoryUi
-import com.example.dailyquiztest.presentation.features.history.model.HistoryUi
+import com.example.testing.stub.stubHistories
+import com.example.dailyquiztest.domain.model.CategoryDomain
+import com.example.dailyquiztest.domain.model.DifficultyDomain
+import com.example.dailyquiztest.domain.model.ResultDomain
+import com.example.dailyquiztest.fake.FakeQuizRouteProvider
+import com.example.dailyquiztest.presentation.feature.history.HistoryUiState
+import com.example.dailyquiztest.presentation.feature.history.HistoryViewModel
+import com.example.dailyquiztest.presentation.feature.history.model.EmptyHistoryUi
+import com.example.dailyquiztest.presentation.feature.history.model.HistoryUi
 import com.example.testing.di.FakeDispatcherList
 import com.example.testing.repository.FakeHistoryRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -55,7 +55,7 @@ class HistoryViewModelTest {
             assertTrue(dispatchers.wasIoCalled)
             assertFalse(dispatchers.wasUiCalled)
 
-            val expectedUiState = HistoryUi(dummyHistoryResults)
+            val expectedUiState = HistoryUi(stubHistories)
             assertEquals(expectedUiState, stateFlow.value)
         }
 
@@ -79,7 +79,7 @@ class HistoryViewModelTest {
         assertFalse(dispatchers.wasUiCalled)
 
         var countOfHistory = 0
-        repeat(5) {
+        repeat(7) {
             viewModel.deleteQuizHistory(countOfHistory++)
         }
 
@@ -99,14 +99,16 @@ class HistoryViewModelTest {
         viewModel.deleteQuizHistory(4)
         viewModel.deleteQuizHistory(2)
         viewModel.deleteQuizHistory(3)
+        viewModel.deleteQuizHistory(5)
+        viewModel.deleteQuizHistory(6)
 
         val expectedUiState = HistoryUi(
             listOf(
-                QuizResult(
-                    id = 1,
+                ResultDomain.Result(
+                    number = 1,
                     stars = 0,
-                    category = Category.GENERAL_KNOWLEDGE,
-                    difficulty = Difficulty.EASY,
+                    categoryDomain = CategoryDomain.GENERAL_KNOWLEDGE,
+                    difficultyDomain = DifficultyDomain.EASY,
                     lastTime = "00:00",
                     lastDate = "2025"
                 )
@@ -116,7 +118,7 @@ class HistoryViewModelTest {
     }
 
     private suspend fun initDummyHistories() =
-        dummyHistoryResults.forEach {
+        stubHistories.forEach {
             fakeHistoryRepository.saveQuizResult(it)
         }
 }

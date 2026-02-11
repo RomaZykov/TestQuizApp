@@ -12,7 +12,7 @@ class FakeLocalHistoryDataSource : LocalHistoryDataSource {
     }
 
     override suspend fun deleteQuiz(uid: Int) {
-        localHistories.removeIf { it.quizResultNumber == uid }
+        localHistories.removeIf { it.number == uid }
     }
 
     override fun fetchQuizResults(): Flow<List<LocalQuizResult>> = flow {

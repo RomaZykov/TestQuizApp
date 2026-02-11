@@ -1,29 +1,20 @@
 package com.example.testing.data.mapper
 
 import com.example.dailyquiztest.data.model.local.model.LocalQuizResult
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
-import com.example.dailyquiztest.domain.model.QuizResult
+import com.example.dailyquiztest.domain.model.ResultDomain
 
-class FakeDomainToLocalQuizResultMapper : QuizResult.Mapper<LocalQuizResult> {
-        var mapCalledCount = 0
+class FakeDomainToLocalQuizResultMapper : ResultDomain.MapTo<LocalQuizResult> {
+    var mapCalledCount = 0
 
-        override fun mappedValue(
-            id: Int,
-            stars: Int,
-            category: Category,
-            difficulty: Difficulty,
-            lastTime: String,
-            lastDate: String
-        ): LocalQuizResult {
-            mapCalledCount++
-            return LocalQuizResult(
-                quizResultNumber = id,
-                stars = stars,
-                category = category.name,
-                difficulty = difficulty.name,
-                lastTime = lastTime,
-                lastDate = lastDate
-            )
-        }
+    override fun mapToResult(result: ResultDomain.Result): LocalQuizResult {
+        mapCalledCount++
+        return LocalQuizResult(
+            number = 0,
+            stars = result.stars,
+            category = result.categoryDomain.name,
+            difficulty = result.difficultyDomain.name,
+            lastTime = result.lastTime,
+            lastDate = result.lastDate
+        )
     }
+}

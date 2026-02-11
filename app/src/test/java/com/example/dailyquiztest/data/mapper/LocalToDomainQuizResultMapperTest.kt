@@ -1,7 +1,7 @@
 package com.example.dailyquiztest.data.mapper
 
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
+import com.example.dailyquiztest.domain.model.CategoryDomain
+import com.example.dailyquiztest.domain.model.DifficultyDomain
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -9,27 +9,27 @@ class LocalToDomainQuizResultMapperTest {
 
     @Test
     fun `map should return DomainQuizResult with valid input`() {
-        val mapper = LocalToDomainQuizResultMapper()
+        val mapper = LocalToDomainResultMapper()
         val quizResultNumber = 1
         val stars = 5
-        val category = Category.COMICS
-        val difficulty = Difficulty.HARD
+        val categoryDomain = CategoryDomain.COMICS
+        val difficultyDomain = DifficultyDomain.HARD
         val lastTime = "18:45"
         val lastDate = "2025:01:01"
 
         val result = mapper.mappedValue(
-            quizResultNumber = quizResultNumber,
+            number = quizResultNumber,
             stars = stars,
-            category = category,
-            difficulty = difficulty,
+            categoryDomain = categoryDomain,
+            difficultyDomain = difficultyDomain,
             lastTime = lastTime,
             lastDate = lastDate
         )
 
-        assertEquals(1, result.id)
+        assertEquals(1, result.number)
         assertEquals(5, result.stars)
-        assertEquals(Category.COMICS, result.category)
-        assertEquals(Difficulty.HARD, result.difficulty)
+        assertEquals(CategoryDomain.COMICS, result.categoryDomain)
+        assertEquals(DifficultyDomain.HARD, result.difficultyDomain)
         assertEquals("18:45", result.lastTime)
         assertEquals("2025:01:01", result.lastDate)
     }

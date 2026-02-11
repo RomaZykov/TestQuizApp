@@ -14,14 +14,14 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
 import com.example.dailyquiztest.presentation.common.UiLogo
-import com.example.dailyquiztest.presentation.ui.theme.DailyQuizTheme
+import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UiLoading() {
     Scaffold(
         modifier = Modifier.semantics {
-            contentDescription = "LoadingScreen"
+            contentDescription = "loading screen"
         },
         topBar = {
             TopAppBarDecorator {}

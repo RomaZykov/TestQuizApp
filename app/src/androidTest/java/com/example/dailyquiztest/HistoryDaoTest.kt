@@ -6,8 +6,8 @@ import androidx.test.core.app.ApplicationProvider
 import com.example.dailyquiztest.data.model.local.HistoryDao
 import com.example.dailyquiztest.data.model.local.HistoryDataBase
 import com.example.dailyquiztest.data.model.local.model.LocalQuizResult
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
+import com.example.dailyquiztest.domain.model.CategoryDomain
+import com.example.dailyquiztest.domain.model.DifficultyDomain
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -42,7 +42,7 @@ class HistoryDaoTest {
 
         assertEquals(
             listOf(1, 2, 3),
-            actualResult.map { it.quizResultNumber }
+            actualResult.map { it.number }
         )
     }
 
@@ -70,33 +70,33 @@ class HistoryDaoTest {
 
         assertEquals(
             listOf(1, 3),
-            actualResults.map { it.quizResultNumber }
+            actualResults.map { it.number }
         )
     }
 
     private suspend fun insertHistories() {
         val historyEntities = listOf(
             LocalQuizResult(
-                quizResultNumber = 1,
+                number = 1,
                 stars = 0,
-                category = Category.HISTORY.name,
-                difficulty = Difficulty.EASY.toString(),
+                category = CategoryDomain.HISTORY.name,
+                difficulty = DifficultyDomain.EASY.toString(),
                 lastTime = "",
                 lastDate = ""
             ),
             LocalQuizResult(
-                quizResultNumber = 2,
+                number = 2,
                 stars = 5,
-                category = Category.BOARD_GAMES.name,
-                difficulty = Difficulty.HARD.toString(),
+                category = CategoryDomain.BOARD_GAMES.name,
+                difficulty = DifficultyDomain.HARD.toString(),
                 lastTime = "",
                 lastDate = ""
             ),
             LocalQuizResult(
-                quizResultNumber = 3,
+                number = 3,
                 stars = 2,
-                category = Category.HISTORY.name,
-                difficulty = Difficulty.MEDIUM.toString(),
+                category = CategoryDomain.HISTORY.name,
+                difficulty = DifficultyDomain.MEDIUM.toString(),
                 lastTime = "",
                 lastDate = ""
             )

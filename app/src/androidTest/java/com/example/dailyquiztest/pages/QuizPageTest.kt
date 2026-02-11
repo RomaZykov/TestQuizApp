@@ -8,12 +8,10 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.dailyquiztest.core.rememberTestNavController
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
-import com.example.dailyquiztest.domain.model.QuestionTypes
 import com.example.dailyquiztest.helpPages.QuizPage
-import com.example.dailyquiztest.presentation.features.quiz.QuizScreen
-import com.example.dailyquiztest.presentation.features.quiz.model.QuizUi
+import com.example.dailyquiztest.presentation.feature.quiz.QuizScreenUi
+import com.example.dailyquiztest.presentation.feature.quiz.model.QuizUi
+import com.example.dailyquiztest.presentation.feature.quiz.model.small_screen.QuizGroupUi
 import com.example.testing.repository.FakeQuizRepository
 import org.junit.Before
 import org.junit.Rule
@@ -39,18 +37,22 @@ class QuizPageTest {
     fun changeOrientation_whenOneCorrectOptionSelected_showCorrectContent() {
         restorationTester.setContent {
             val uiState = QuizUi(
-                currentNumberQuestion = 1,
+                number = 1,
                 question = "Test question",
-                incorrectAnswers = listOf("b", "c", "d"),
-                correctAnswer = "a",
-                questionType = QuestionTypes.MULTIPLE,
+                incorrectAnswers = listOf("Bbb", "Ccc", "Ddd"),
+                correctAnswer = "Aaa",
                 totalQuestions = 5,
-                category = Category.CARTOON_AND_ANIMATIONS,
-                difficulty = Difficulty.MEDIUM
+                quizGroupUi = QuizGroupUi.MultipleGroupUi(
+                    question = "Test question",
+                    inCorrectOptions = listOf("Bbb", "Ccc", "Ddd"),
+                    correctOption = "Aaa",
+                    userAnswer = ""
+                ),
             )
-            QuizScreen(
+            QuizScreenUi(
                 uiState = uiState,
                 navController = rememberTestNavController(),
+                timerProgress = {},
                 prepareQuizGame = { _, _ -> },
                 saveQuizAnswer = {},
                 retrieveNextAnswer = {},
@@ -60,57 +62,13 @@ class QuizPageTest {
         }
         quizPage.assertPageDisplayed()
         quizPage.assertNextButtonNotEnabled()
-        composeTestRule.onNodeWithText("a").performClick()
+        composeTestRule.onNodeWithText("Aaa").performClick()
         quizPage.assertNextButtonEnabled()
 
         restorationTester.emulateSavedInstanceStateRestore()
 
         quizPage.assertPageDisplayed()
-        composeTestRule.onNodeWithText("a").assertIsSelected()
-        quizPage.assertNextButtonEnabled()
-    }
-
-    @Test
-    fun changeOrientation_whenAllOptionsSelected_showCorrectContent() {
-        restorationTester.setContent {
-            val uiState = QuizUi(
-                currentNumberQuestion = 1,
-                question = "Test question",
-                incorrectAnswers = listOf("b", "c", "d"),
-                correctAnswer = "a",
-                questionType = QuestionTypes.MULTIPLE,
-                totalQuestions = 5,
-                category = Category.CARTOON_AND_ANIMATIONS,
-                difficulty = Difficulty.MEDIUM
-            )
-            QuizScreen(
-                uiState = uiState,
-                navController = rememberTestNavController(),
-                prepareQuizGame = { _, _ -> },
-                saveQuizAnswer = {},
-                retrieveNextAnswer = {},
-                showResult = {},
-                navigateToWelcome = {}
-            )
-        }
-        quizPage.assertPageDisplayed()
-        quizPage.assertNextButtonNotEnabled()
-        composeTestRule.onNodeWithText("a").performClick()
-        quizPage.assertNextButtonEnabled()
-        composeTestRule.onNodeWithText("b").performClick()
-        quizPage.assertNextButtonEnabled()
-        composeTestRule.onNodeWithText("c").performClick()
-        quizPage.assertNextButtonEnabled()
-        composeTestRule.onNodeWithText("d").performClick()
-        quizPage.assertNextButtonEnabled()
-
-        restorationTester.emulateSavedInstanceStateRestore()
-
-        quizPage.assertPageDisplayed()
-        composeTestRule.onNodeWithText("a").assertIsSelected()
-        composeTestRule.onNodeWithText("b").assertIsSelected()
-        composeTestRule.onNodeWithText("c").assertIsSelected()
-        composeTestRule.onNodeWithText("d").assertIsSelected()
+        composeTestRule.onNodeWithText("Aaa").assertIsSelected()
         quizPage.assertNextButtonEnabled()
     }
 
@@ -118,18 +76,21 @@ class QuizPageTest {
     fun changeOrientation_whenOneCorrectBooleanOptionSelected_showCorrectContent() {
         restorationTester.setContent {
             val uiState = QuizUi(
-                currentNumberQuestion = 1,
+                number = 1,
                 question = "Test question",
-                incorrectAnswers = listOf("false"),
-                correctAnswer = "true",
-                questionType = QuestionTypes.BOOLEAN,
+                incorrectAnswers = listOf("False"),
+                correctAnswer = "True",
                 totalQuestions = 5,
-                category = Category.CARTOON_AND_ANIMATIONS,
-                difficulty = Difficulty.HARD
+                quizGroupUi = QuizGroupUi.BooleanGroupUi(
+                    question = "Test question",
+                    correctOption = "True",
+                    userAnswer = ""
+                ),
             )
-            QuizScreen(
+            QuizScreenUi(
                 uiState = uiState,
                 navController = rememberTestNavController(),
+                timerProgress = {},
                 prepareQuizGame = { _, _ -> },
                 saveQuizAnswer = {},
                 retrieveNextAnswer = {},
@@ -145,8 +106,8 @@ class QuizPageTest {
         restorationTester.emulateSavedInstanceStateRestore()
 
         quizPage.assertPageDisplayed()
-        composeTestRule.onNodeWithText("true", ignoreCase = true).assertIsSelected()
-        composeTestRule.onNodeWithText("false", ignoreCase = true).assertIsNotSelected()
+        composeTestRule.onNodeWithText("True").assertIsSelected()
+        composeTestRule.onNodeWithText("False").assertIsNotSelected()
         quizPage.assertNextButtonEnabled()
     }
 }

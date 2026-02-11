@@ -1,9 +1,8 @@
 package com.example.dailyquiztest.data.model.network
 
-import com.example.dailyquiztest.R
-import com.example.dailyquiztest.core.StringProvider
+import com.example.dailyquiztest.core.exception.QuizHandleError
+import com.example.dailyquiztest.data.model.network.exception.ServiceUnavailableException
 import com.example.dailyquiztest.data.model.network.model.NetworkQuizQuestion
-import java.net.UnknownHostException
 import javax.inject.Inject
 
 interface NetworkQuizQuestionsDataSource {
@@ -16,7 +15,7 @@ interface NetworkQuizQuestionsDataSource {
 
     class Base @Inject constructor(
         private val quizApi: QuizApi,
-        private val stringProvider: StringProvider
+        private val handleException: QuizHandleError,
     ) : NetworkQuizQuestionsDataSource {
         override suspend fun retrieveQuizQuestions(
             amount: Int,
@@ -27,22 +26,17 @@ interface NetworkQuizQuestionsDataSource {
                 val questionsResponse = quizApi.fetchQuizQuestions(amount, category, difficulty)
                 val code = questionsResponse.body()!!.responseCode
                 if (code != SUCCESS_CODE) {
-                    throw UnknownHostException(
-                        stringProvider.string(
-                            R.string.network_error_exception,
-                            code
-                        )
-                    )
+                    throw ServiceUnavailableException(code.toString())
                 }
                 val questions = questionsResponse.body()!!.result!!
                 Result.success(questions)
-            } catch (e: UnknownHostException) {
-                Result.failure(e)
+            } catch (e: Exception) {
+                Result.failure(handleException.handle(e))
             }
         }
     }
 
-    companion object {
-        const val SUCCESS_CODE = 0
+    private companion object {
+        private const val SUCCESS_CODE = 0
     }
 }

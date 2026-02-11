@@ -1,8 +1,8 @@
 package com.example.dailyquiztest.presentation
 
-import com.example.dailyquiztest.testdoubles.FakeHistoryRouteProvider
-import com.example.dailyquiztest.testdoubles.FakeQuizRouteProvider
-import com.example.dailyquiztest.presentation.features.welcome.WelcomeViewModel
+import com.example.dailyquiztest.fake.FakeHistoryRouteProvider
+import com.example.dailyquiztest.fake.FakeQuizRouteProvider
+import com.example.dailyquiztest.presentation.feature.welcome.WelcomeViewModel
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertTrue

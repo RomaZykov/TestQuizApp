@@ -3,22 +3,21 @@ package com.example.dailyquiztest.data.model.local.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.dailyquiztest.domain.model.Category
-import com.example.dailyquiztest.domain.model.Difficulty
+import com.example.dailyquiztest.domain.model.CategoryDomain
+import com.example.dailyquiztest.domain.model.DifficultyDomain
 
 @Entity(tableName = "history_db")
 data class LocalQuizResult(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(
         name = "quiz_number",
         defaultValue = "0"
-    ) val quizResultNumber: Int,
+    ) val number: Int,
     @ColumnInfo(name = "stars") val stars: Int,
     @ColumnInfo(name = "category") val category: String,
     @ColumnInfo(name = "difficulty") val difficulty: String,
     @ColumnInfo(name = "last_time") val lastTime: String,
     @ColumnInfo(name = "last_date") val lastDate: String
 ) {
-
     constructor(
         stars: Int,
         category: String,
@@ -29,10 +28,10 @@ data class LocalQuizResult(
 
     fun <T> map(mapper: Mapper<T>): T {
         return mapper.mappedValue(
-            quizResultNumber = this.quizResultNumber,
+            number = this.number,
             stars = this.stars,
-            category = Category.valueOf(this.category),
-            difficulty = Difficulty.valueOf(this.difficulty.uppercase()),
+            categoryDomain = CategoryDomain.valueOf(this.category),
+            difficultyDomain = DifficultyDomain.valueOf(this.difficulty.uppercase()),
             lastTime = this.lastTime,
             lastDate = this.lastDate
         )
@@ -40,10 +39,10 @@ data class LocalQuizResult(
 
     interface Mapper<T> {
         fun mappedValue(
-            quizResultNumber: Int,
+            number: Int,
             stars: Int,
-            category: Category,
-            difficulty: Difficulty,
+            categoryDomain: CategoryDomain,
+            difficultyDomain: DifficultyDomain,
             lastTime: String,
             lastDate: String
         ): T

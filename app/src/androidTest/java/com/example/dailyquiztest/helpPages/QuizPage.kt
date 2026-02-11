@@ -17,9 +17,8 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
-import com.example.dailyquiztest.domain.model.QuizQuestion
+import com.example.dailyquiztest.domain.model.QuizDomain
 import com.example.dailyquiztest.domain.repository.QuizRepository
-import com.example.dailyquiztest.presentation.features.quiz.QuizUiState
 import com.example.testing.repository.FakeQuizRepository
 
 class QuizPage(
@@ -27,8 +26,10 @@ class QuizPage(
     private val fakeQuizRepository: QuizRepository
 ) : StringResources() {
 
-    private val dummyQuizesToIterate: ArrayDeque<QuizQuestion> by lazy {
-        ArrayDeque<QuizQuestion>().apply {
+    val mainContentDesc = "quiz screen"
+
+    private val dummyQuizesToIterate: ArrayDeque<QuizDomain.Quiz> by lazy {
+        ArrayDeque<QuizDomain.Quiz>().apply {
             this.addAll((fakeQuizRepository as FakeQuizRepository).savedQuizes)
         }
     }
@@ -52,7 +53,7 @@ class QuizPage(
         )
 
     fun assertPageDisplayed() {
-        composeTestRule.onNodeWithContentDescription(QuizUiState.QUIZ_SCREEN)
+        composeTestRule.onNodeWithContentDescription(mainContentDesc)
             .assertExists()
             .assertIsDisplayed()
     }

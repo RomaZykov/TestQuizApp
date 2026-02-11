@@ -1,6 +1,6 @@
 package com.example.dailyquiztest.domain.repository
 
-import com.example.dailyquiztest.domain.model.QuizQuestion
+import com.example.dailyquiztest.domain.model.QuizDomain
 
 interface QuizRepository {
 
@@ -8,5 +8,5 @@ interface QuizRepository {
         amount: Int,
         category: Int,
         difficulty: String
-    ) : Result<List<QuizQuestion>>
+    ) : Result<List<QuizDomain.Quiz>>
 }
