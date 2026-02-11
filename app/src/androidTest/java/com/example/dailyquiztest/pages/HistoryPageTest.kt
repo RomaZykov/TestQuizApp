@@ -2,6 +2,7 @@ package com.example.dailyquiztest.pages
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasText
+ import androidx.compose.ui.test.isNotDisplayed
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -33,10 +34,12 @@ class HistoryPageTest : StringResources() {
     @Before
     fun setUp() {
         historyPage = HistoryPage(composeTestRule, FakeHistoryRepository())
+    }
+
+    @Test
+    fun firstHistoryTitle_shouldBe_numberOne() {
         restorationTester.setContent {
-            val uiState = HistoryUi(
-                histories = stubHistories
-            )
+            val uiState = HistoryUi(histories = listOf(stubHistories.first()))
             HistoryScreen(
                 uiState = uiState,
                 navController = rememberTestNavController(),
@@ -44,10 +47,24 @@ class HistoryPageTest : StringResources() {
                 deleteQuizHistory = {},
             )
         }
+
+        historyPage.assertNonEmptyHistoriesDisplayed()
+
+        composeTestRule.onNodeWithText("Quiz 1").assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithText("Quiz 0").isNotDisplayed()
     }
 
     @Test
     fun changeOrientation_showsAllHistoriesBeforeChanging() {
+        restorationTester.setContent {
+            val uiState = HistoryUi(histories = stubHistories)
+            HistoryScreen(
+                uiState = uiState,
+                navController = rememberTestNavController(),
+                navigateToFilters = {},
+                deleteQuizHistory = {},
+            )
+        }
         historyPage.assertNonEmptyHistoriesDisplayed()
 
         composeTestRule.onNodeWithTag(historyPage.historyLazyListTag).performScrollToNode(

@@ -52,7 +52,7 @@ class QuizPageTest {
             QuizScreenUi(
                 uiState = uiState,
                 navController = rememberTestNavController(),
-                timerProgress = {},
+//                timerProgress = {},
                 prepareQuizGame = { _, _ -> },
                 saveQuizAnswer = {},
                 retrieveNextAnswer = {},
@@ -90,7 +90,7 @@ class QuizPageTest {
             QuizScreenUi(
                 uiState = uiState,
                 navController = rememberTestNavController(),
-                timerProgress = {},
+//                timerProgress = {},
                 prepareQuizGame = { _, _ -> },
                 saveQuizAnswer = {},
                 retrieveNextAnswer = {},
