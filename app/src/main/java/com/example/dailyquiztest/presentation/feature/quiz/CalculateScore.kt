@@ -3,11 +3,12 @@ package com.example.dailyquiztest.presentation.feature.quiz
 import com.example.dailyquiztest.R
 import javax.inject.Inject
 
-interface CalculateScore  {
+interface CalculateScore {
     interface AddInfo {
-        fun accIfCorrect(isAnsweredCorrect: Boolean)
+        fun addCorrectness()
         fun totalQuestions(totalQuestions: Int)
     }
+
     interface All : AddInfo, CalculateScore
 
     fun calculateScorePercentage(): Int
@@ -54,14 +55,9 @@ interface CalculateScore  {
             }
         }
 
+        override fun addCorrectness() { correctAnswers++ }
         override fun totalQuestions(totalQuestions: Int) {
             allQuestions = totalQuestions
-        }
-
-        override fun accIfCorrect(isAnsweredCorrect: Boolean) {
-            if (isAnsweredCorrect) {
-                correctAnswers++
-            }
         }
 
         override fun scoreTitleResId(): Int = titleAndDescription().first
