@@ -91,11 +91,11 @@ class HistoryPage(
         }
     }
 
-    fun longPressToDeleteHistoryByIndex(id: Int) {
+    fun longPressToDeleteHistoryByNumber(number: Int) {
         composeTestRule.onNodeWithTag(historyLazyListTag).performScrollToNode(
-            hasText(retrieveString(R.string.quiz_number_title, id + 1))
+            hasText(retrieveString(R.string.quiz_number_title, number))
         )
-        composeTestRule.onNodeWithText(retrieveString(R.string.quiz_number_title, id + 1))
+        composeTestRule.onNodeWithText(retrieveString(R.string.quiz_number_title, number))
             .assertExists()
             .assertIsDisplayed()
             .performTouchInput {
