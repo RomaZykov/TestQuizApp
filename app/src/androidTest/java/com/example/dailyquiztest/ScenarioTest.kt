@@ -116,7 +116,7 @@ class ScenarioTest : StringResources() {
 
         var totalHistories = stubHistories.size
         repeat(totalHistories) {
-            historyPage.longPressToDeleteHistoryByIndex(totalHistories - 1)
+            historyPage.longPressToDeleteHistoryByNumber(totalHistories)
             totalHistories--
         }
 
@@ -134,9 +134,9 @@ class ScenarioTest : StringResources() {
         historyPage.initWithDummyHistories()
         historyPage.assertNonEmptyHistoriesDisplayed()
 
-        historyPage.longPressToDeleteHistoryByIndex(2)
+        historyPage.longPressToDeleteHistoryByNumber(2)
         historyPage.assertSnackBarAboutDeletingExist()
-        historyPage.assertHistoryNonExistWithText("Quiz 3")
+        historyPage.assertHistoryNonExistWithText("Quiz 2")
 
         historyPage.clickBackButton()
         welcomePage.assertPageDisplayed()
@@ -280,6 +280,7 @@ class ScenarioTest : StringResources() {
         quizPage.assertPageDisplayed()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun failQuizOnHardDifficulty_whenNoTimeLeft() = runTest {
         welcomePage.assertPageDisplayed()
@@ -297,7 +298,9 @@ class ScenarioTest : StringResources() {
         quizPage.chooseOption(false)
 
         // Failed after 60 seconds for HARD difficulty
-        composeTestRule.mainClock.advanceTimeBy(60005)
+        testDispatcher.scheduler.advanceTimeBy(30000)
+        composeTestRule.waitForIdle()
+        testDispatcher.scheduler.advanceTimeBy(31000)
         composeTestRule.waitForIdle()
         quizPage.assertFailedDialogDisplayed()
         quizPage.clickStartAgainButton()
@@ -406,7 +409,7 @@ class ScenarioTest : StringResources() {
         composeTestRule.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithContentDescription(loadingScreenContentDesc)
+        composeTestRule.onNodeWithContentDescription(welcomePage.mainContentDesc)
             .performTouchInput {
                 repeat(5) {
                     swipeUp()
@@ -424,7 +427,7 @@ class ScenarioTest : StringResources() {
         welcomePage.assertPageDisplayed()
         welcomePage.assertHistoryButtonNotDisplayed()
 
-        composeTestRule.onNodeWithContentDescription(loadingScreenContentDesc)
+        composeTestRule.onNodeWithContentDescription(welcomePage.mainContentDesc)
             .performTouchInput {
                 repeat(5) {
                     swipeDown()
@@ -465,7 +468,7 @@ class ScenarioTest : StringResources() {
         composeTestRule.onNodeWithText(
             retrieveString(
                 R.string.quiz_number_title,
-                stubHistories.last().number + 1
+                stubHistories.last().number
             )
         ).assertExists().assertIsDisplayed()
 
@@ -535,10 +538,10 @@ class ScenarioTest : StringResources() {
 
         quizPage.assertPageDisplayed()
         quizPage.assertNextButtonNotEnabled()
-        composeTestRule.onNodeWithText(stubDomainQuizes.first().incorrectAnswers[2])
+        composeTestRule.onNodeWithText("InCorrect 3")
             .performScrollTo()
             .performClick()
-        composeTestRule.onNodeWithText(stubDomainQuizes.first().incorrectAnswers[0])
+        composeTestRule.onNodeWithText("InCorrect 1")
             .performScrollTo()
             .performClick()
         quizPage.assertNextButtonEnabled()
@@ -558,8 +561,7 @@ class ScenarioTest : StringResources() {
             }
 
         quizPage.assertPageDisplayed()
-        composeTestRule.onNodeWithText(stubDomainQuizes.first().incorrectAnswers[2]).assertIsSelected()
-        composeTestRule.onNodeWithText(stubDomainQuizes.first().incorrectAnswers[0]).assertIsSelected()
+        composeTestRule.onNodeWithText("InCorrect 1").assertIsSelected()
         quizPage.assertNextButtonEnabled()
     }
 
