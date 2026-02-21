@@ -120,9 +120,10 @@ class QuizPage(
 
     fun assertFailedDialogDisplayed() {
         composeTestRule.apply {
-            onNode(SemanticsMatcher.expectValue(SemanticsProperties.IsDialog, Unit))
-                .assertExists()
-                .assertIsDisplayed()
+            waitUntil {
+                onNode(SemanticsMatcher.expectValue(SemanticsProperties.IsDialog, Unit))
+                    .isDisplayed()
+            }
             onNodeWithText(retrieveString(R.string.time_is_over_title))
                 .assertExists()
                 .assertIsDisplayed()

@@ -29,9 +29,10 @@ import androidx.compose.ui.unit.sp
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.StarsScore
-import com.example.dailyquiztest.presentation.feature.quiz.CalculateScore
+import com.example.dailyquiztest.presentation.feature.quiz.core.CalculateScore
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUserActions
+import com.example.dailyquiztest.presentation.feature.quiz.core.Timer
 import com.example.dailyquiztest.presentation.feature.quiz.model.small_screen.QuizGroupUi
 import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 
@@ -189,7 +190,6 @@ private fun QuizResultsPreview() {
                 QuizUi(
                     number = it,
                     question = question,
-                    incorrectAnswers = listOf("a", "b", "c"),
                     correctAnswer = correctAnswer,
                     totalQuestions = it,
                     userAnswer = userAnswer,
@@ -199,7 +199,8 @@ private fun QuizResultsPreview() {
                         correctOption = correctAnswer,
                         inCorrectOptions = listOf("a", "b", "c"),
                         userAnswer = userAnswer
-                    )
+                    ),
+                    timer = Timer.Initial
                 )
             )
         }

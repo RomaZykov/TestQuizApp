@@ -96,10 +96,10 @@ interface QuizGroupUi {
         }
     }
 
-    class BooleanGroupUi(
-        question: String,
-        correctOption: String,
-        userAnswer: String,
+    data class BooleanGroupUi(
+        private val question: String,
+        private val correctOption: String,
+        private val userAnswer: String,
     ) : Abstract(
         question,
         correctOption,
@@ -107,11 +107,11 @@ interface QuizGroupUi {
         userAnswer
     )
 
-    class MultipleGroupUi(
-        question: String,
-        inCorrectOptions: List<String>,
-        correctOption: String,
-        userAnswer: String
+    data class MultipleGroupUi(
+        private val question: String,
+        private val inCorrectOptions: List<String>,
+        private val correctOption: String,
+        private val userAnswer: String
     ) : Abstract(
         question,
         correctOption,
@@ -133,7 +133,8 @@ private fun configureSelectableOption(
     isCorrect: Boolean
 ): SelectableOptionMetaData {
     return when {
-        shouldShowBorder && isSelected && isCorrect -> SelectableOptionMetaData()
+        shouldShowBorder && isCorrect && isSelected -> SelectableOptionMetaData()
+        shouldShowBorder && isCorrect -> SelectableOptionMetaData()
         shouldShowBorder && isSelected -> SelectableOptionMetaData(
             optionTestTag = "red edge",
             borderColor = Color.Red,
@@ -141,7 +142,6 @@ private fun configureSelectableOption(
             iconContentDesc = "wrong option icon"
         )
 
-        shouldShowBorder && isCorrect -> SelectableOptionMetaData()
         !shouldShowBorder && isSelected -> SelectableOptionMetaData(
             optionTestTag = "no edge",
             borderColor = Color.Transparent,

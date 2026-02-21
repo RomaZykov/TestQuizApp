@@ -13,7 +13,7 @@ interface ResultDomain {
         val categoryDomain: CategoryDomain,
         val difficultyDomain: DifficultyDomain,
         val lastTime: String,
-        val lastDate: String
+        val lastDate: String,
     ) : ResultDomain {
         override fun <T> map(mapper: MapTo<T>): T {
             return mapper.mapToResult(this)
