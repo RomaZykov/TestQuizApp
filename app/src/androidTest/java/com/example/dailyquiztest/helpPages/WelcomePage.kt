@@ -15,6 +15,8 @@ import com.example.dailyquiztest.core.StringResources
 class WelcomePage(private val composeTestRule: ComposeTestRule) :
     StringResources() {
 
+    val mainContentDesc = "welcome screen"
+
     private val startButton =
         composeTestRule.onNode(
             hasText(retrieveString(R.string.start_quiz_button_text))
