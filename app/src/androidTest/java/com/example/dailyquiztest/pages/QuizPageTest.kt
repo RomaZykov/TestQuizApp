@@ -8,8 +8,10 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.dailyquiztest.core.rememberTestNavController
+import com.example.dailyquiztest.domain.model.DifficultyDomain
 import com.example.dailyquiztest.helpPages.QuizPage
 import com.example.dailyquiztest.presentation.feature.quiz.QuizScreenUi
+import com.example.dailyquiztest.presentation.feature.quiz.core.Timer
 import com.example.dailyquiztest.presentation.feature.quiz.model.QuizUi
 import com.example.dailyquiztest.presentation.feature.quiz.model.small_screen.QuizGroupUi
 import com.example.testing.repository.FakeQuizRepository
@@ -39,7 +41,6 @@ class QuizPageTest {
             val uiState = QuizUi(
                 number = 1,
                 question = "Test question",
-                incorrectAnswers = listOf("Bbb", "Ccc", "Ddd"),
                 correctAnswer = "Aaa",
                 totalQuestions = 5,
                 quizGroupUi = QuizGroupUi.MultipleGroupUi(
@@ -48,15 +49,16 @@ class QuizPageTest {
                     correctOption = "Aaa",
                     userAnswer = ""
                 ),
+                timer = Timer.TimerProgress(30000f, DifficultyDomain.EASY)
             )
             QuizScreenUi(
                 uiState = uiState,
                 navController = rememberTestNavController(),
-//                timerProgress = {},
                 prepareQuizGame = { _, _ -> },
                 saveQuizAnswer = {},
                 retrieveNextAnswer = {},
                 showResult = {},
+                stopTimer = {},
                 navigateToWelcome = {}
             )
         }
@@ -78,7 +80,6 @@ class QuizPageTest {
             val uiState = QuizUi(
                 number = 1,
                 question = "Test question",
-                incorrectAnswers = listOf("False"),
                 correctAnswer = "True",
                 totalQuestions = 5,
                 quizGroupUi = QuizGroupUi.BooleanGroupUi(
@@ -86,11 +87,12 @@ class QuizPageTest {
                     correctOption = "True",
                     userAnswer = ""
                 ),
+                timer = Timer.TimerProgress(30000f, DifficultyDomain.EASY)
             )
             QuizScreenUi(
                 uiState = uiState,
                 navController = rememberTestNavController(),
-//                timerProgress = {},
+                stopTimer = {},
                 prepareQuizGame = { _, _ -> },
                 saveQuizAnswer = {},
                 retrieveNextAnswer = {},
