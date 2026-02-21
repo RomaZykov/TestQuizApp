@@ -4,9 +4,10 @@ import com.example.dailyquiztest.domain.model.CategoryDomain
 import com.example.dailyquiztest.domain.model.DifficultyDomain
 import com.example.dailyquiztest.fake.FakeFormatDate
 import com.example.dailyquiztest.fake.FakeWelcomeRouteProvider
-import com.example.dailyquiztest.presentation.feature.quiz.CalculateScore
+import com.example.dailyquiztest.presentation.feature.quiz.core.CalculateScore
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.feature.quiz.QuizViewModel
+import com.example.dailyquiztest.presentation.feature.quiz.core.Timer
 import com.example.dailyquiztest.presentation.feature.quiz.mapper.QuizMapper
 import com.example.dailyquiztest.presentation.feature.quiz.model.FiltersUi
 import com.example.dailyquiztest.presentation.feature.quiz.model.LoadingUi
@@ -103,7 +104,6 @@ class QuizViewModelTest {
             val expectedFinalState = QuizUi(
                 number = 1,
                 question = question,
-                incorrectAnswers = incorrectAnswers,
                 correctAnswer = correctAnswer,
                 totalQuestions = stubDomainQuizes.size,
                 quizGroupUi = QuizGroupUi.MultipleGroupUi(
@@ -111,7 +111,8 @@ class QuizViewModelTest {
                     correctOption = correctAnswer,
                     inCorrectOptions = incorrectAnswers,
                     userAnswer = ""
-                )
+                ),
+                timer = Timer.Initial
             )
             assertEquals(expectedFinalState, stateFlow.value)
         }
@@ -193,19 +194,16 @@ class QuizViewModelTest {
 
     private fun retrieveDummyTrueFalseQuestionByIndex(index: Int, totalQuestions: Int): QuizUi {
         val question = stubTrueFalseQuizes[index].question.replaceFirstChar { it.uppercaseChar() }
-        val incorrectAnswers = stubTrueFalseQuizes[index].incorrectAnswers.map { word ->
-            word.replaceFirstChar { it.uppercaseChar() }
-        }
         val correctAnswer = stubTrueFalseQuizes[index].correctAnswer.replaceFirstChar { it.uppercaseChar() }
         val userAnswer = stubTrueFalseQuizes[index].userAnswer.replaceFirstChar { it.uppercaseChar() }
         return QuizUi(
             number = index + 1,
             question = question,
-            incorrectAnswers = incorrectAnswers,
             correctAnswer = correctAnswer,
             totalQuestions = totalQuestions,
             userAnswer = userAnswer,
             isAnsweredCorrect = stubTrueFalseQuizes[index].isAnsweredCorrect,
+            timer = Timer.Initial,
             quizGroupUi = QuizGroupUi.BooleanGroupUi(
                 question = question,
                 correctOption = correctAnswer,

@@ -21,12 +21,12 @@ fun QuizScreen(
     QuizScreenUi(
         uiState,
         navController,
-//        viewModel::timerProgress,
         viewModel::prepareQuizGame,
         viewModel::saveQuizAnswer,
         viewModel::retrieveNextAnswer,
         viewModel::showResult,
-        viewModel::navigateToWelcome
+        viewModel::stopTimer,
+        viewModel::navigateToWelcome,
     )
 }
 
@@ -34,11 +34,11 @@ fun QuizScreen(
 fun QuizScreenUi(
     uiState: QuizUiState,
     navController: NavController,
-//    timerProgress: () -> Unit,
     prepareQuizGame: (categoryDomain: CategoryDomain, difficultyDomain: DifficultyDomain) -> Unit,
     saveQuizAnswer: (quizUi: QuizUi) -> Unit,
     retrieveNextAnswer: () -> Unit,
     showResult: () -> Unit,
+    stopTimer: () -> Unit,
     navigateToWelcome: (toWelcome: (Route) -> Unit) -> Unit
 ) {
     uiState.Display(quizUserActions = object : QuizUserActions {
@@ -57,6 +57,7 @@ fun QuizScreenUi(
         }
 
         override fun onResultClicked(): (QuizUi) -> Unit = {
+            stopTimer()
             saveQuizAnswer(it)
             showResult()
         }
