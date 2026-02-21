@@ -71,7 +71,7 @@ class HistoryPageTest : StringResources() {
             hasText(
                 retrieveString(
                     R.string.quiz_number_title,
-                    stubHistories.last().number + 1
+                    stubHistories.last().number
                 )
             )
         )
@@ -83,7 +83,7 @@ class HistoryPageTest : StringResources() {
         composeTestRule.onNodeWithText(
             retrieveString(
                 R.string.quiz_number_title,
-                stubHistories.last().number + 1
+                stubHistories.last().number
             )
         ).assertExists().assertIsDisplayed()
     }
