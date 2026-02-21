@@ -10,7 +10,7 @@ import com.example.dailyquiztest.core.rememberTestNavController
 import com.example.dailyquiztest.domain.model.QuizDomain
 import com.example.dailyquiztest.domain.model.QuizTypeDomain
 import com.example.dailyquiztest.helpPages.ResultPage
-import com.example.dailyquiztest.presentation.feature.quiz.CalculateScore
+import com.example.dailyquiztest.presentation.feature.quiz.core.CalculateScore
 import com.example.dailyquiztest.presentation.feature.quiz.QuizScreenUi
 import com.example.dailyquiztest.presentation.feature.quiz.mapper.QuizMapper
 import com.example.dailyquiztest.presentation.feature.quiz.model.ResultUi
@@ -34,25 +34,6 @@ class ResultPageTest {
     fun setUp() {
         resultPage = ResultPage(composeTestRule)
     }
-
-//    // Use as copy-past to new tests
-//    // Green
-//    resultPage.assertGreenCardIconDisplayedOnQuestion(results.first().question)
-//    resultPage.assertGreenEdgeDisplayedOnText(results.first().userAnswer)
-//    resultPage.assertGreenOptionIconDisplayedOnText(results.first().userAnswer)
-//
-//    // Red
-//    resultPage.assertRedCardIconDisplayedOnQuestion(results.first().question)
-//    resultPage.assertRedEdgeDisplayedOnText(results.first().userAnswer)
-//    resultPage.assertRedOptionIconIsNotDisplayedOnText(results.first().userAnswer)
-//
-//    // Green Not Displayed
-//    resultPage.assertGreenOptionIconIsNotDisplayedOnText(results.first().userAnswer)
-//    resultPage.assertGreenEdgeIsNotDisplayedOnText(results.first().userAnswer)
-//
-//    // Red Not Displayed
-//    resultPage.assertRedEdgeIsNotDisplayedOnText(results.first().incorrectAnswers[0])
-//    resultPage.assertRedOptionIconIsNotDisplayedOnText(results.first().userAnswer)
 
     @Test
     fun checkCorrectMultiple_showsGreenIconsAndEdges() {
@@ -79,7 +60,8 @@ class ResultPageTest {
                 saveQuizAnswer = {},
                 retrieveNextAnswer = {},
                 showResult = {},
-                navigateToWelcome = {}
+                navigateToWelcome = {},
+                stopTimer = {}
             )
         }
 
@@ -105,12 +87,12 @@ class ResultPageTest {
             QuizScreenUi(
                 uiState = uiState,
                 navController = rememberTestNavController(),
-//                timerProgress = {},
                 prepareQuizGame = { _, _ -> },
                 saveQuizAnswer = {},
                 retrieveNextAnswer = {},
                 showResult = {},
-                navigateToWelcome = {}
+                navigateToWelcome = {},
+                stopTimer = {}
             )
         }
 
@@ -136,12 +118,12 @@ class ResultPageTest {
             QuizScreenUi(
                 uiState = uiState,
                 navController = rememberTestNavController(),
-//                timerProgress = {},
                 prepareQuizGame = { _, _ -> },
                 saveQuizAnswer = {},
                 retrieveNextAnswer = {},
                 showResult = {},
-                navigateToWelcome = {}
+                navigateToWelcome = {},
+                stopTimer = {}
             )
         }
 
@@ -152,8 +134,8 @@ class ResultPageTest {
         resultPage.assertRedEdgeDisplayedOnText(results.first().userAnswer)
 
         with(results.first().correctAnswer) {
-            resultPage.assertGreenEdgeIsNotDisplayedOnText(this)
-            resultPage.assertGreenOptionIconIsNotDisplayedOnText(this)
+            resultPage.assertGreenEdgeDisplayedOnText(this)
+            resultPage.assertGreenOptionIconDisplayedOnText(this)
         }
     }
 
@@ -177,12 +159,12 @@ class ResultPageTest {
             QuizScreenUi(
                 uiState = uiState,
                 navController = rememberTestNavController(),
-//                timerProgress = {},
                 prepareQuizGame = { _, _ -> },
                 saveQuizAnswer = {},
                 retrieveNextAnswer = {},
                 showResult = {},
-                navigateToWelcome = {}
+                navigateToWelcome = {},
+                stopTimer = {}
             )
         }
 
@@ -207,12 +189,12 @@ class ResultPageTest {
             QuizScreenUi(
                 uiState = uiState,
                 navController = rememberTestNavController(),
-//                timerProgress = {},
                 prepareQuizGame = { _, _ -> },
                 saveQuizAnswer = {},
                 retrieveNextAnswer = {},
                 showResult = {},
-                navigateToWelcome = {}
+                navigateToWelcome = {},
+                stopTimer = {}
             )
         }
 

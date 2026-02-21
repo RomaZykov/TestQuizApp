@@ -1,6 +1,6 @@
 package com.example.dailyquiztest.presentation.feature.quiz.di
 
-import com.example.dailyquiztest.presentation.feature.quiz.CalculateScore
+import com.example.dailyquiztest.presentation.feature.quiz.core.CalculateScore
 import com.example.dailyquiztest.presentation.main_navigation.RouteBuilder
 import com.example.dailyquiztest.presentation.feature.quiz.navigation.BaseQuizRouteProvider
 import com.example.dailyquiztest.presentation.feature.quiz.navigation.QuizRouteBuilder
