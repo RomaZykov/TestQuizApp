@@ -133,7 +133,8 @@ private fun configureSelectableOption(
     isCorrect: Boolean
 ): SelectableOptionMetaData {
     return when {
-        shouldShowBorder && isSelected && isCorrect -> SelectableOptionMetaData()
+        shouldShowBorder && isCorrect && isSelected -> SelectableOptionMetaData()
+        shouldShowBorder && isCorrect -> SelectableOptionMetaData()
         shouldShowBorder && isSelected -> SelectableOptionMetaData(
             optionTestTag = "red edge",
             borderColor = Color.Red,
@@ -141,7 +142,6 @@ private fun configureSelectableOption(
             iconContentDesc = "wrong option icon"
         )
 
-        shouldShowBorder && isCorrect -> SelectableOptionMetaData()
         !shouldShowBorder && isSelected -> SelectableOptionMetaData(
             optionTestTag = "no edge",
             borderColor = Color.Transparent,
