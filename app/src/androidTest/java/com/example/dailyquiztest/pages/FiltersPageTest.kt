@@ -41,12 +41,12 @@ class FiltersPageTest : StringResources() {
             QuizScreenUi(
                 uiState = uiState,
                 navController = rememberTestNavController(),
-//                timerProgress = {},
                 prepareQuizGame = { _, _ -> },
                 saveQuizAnswer = {},
                 retrieveNextAnswer = {},
                 showResult = {},
-                navigateToWelcome = {}
+                navigateToWelcome = {},
+                stopTimer = {}
             )
         }
     }

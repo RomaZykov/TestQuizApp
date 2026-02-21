@@ -19,7 +19,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -40,9 +39,10 @@ import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.CommonCard
 import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
 import com.example.dailyquiztest.presentation.common.UiLogo
-import com.example.dailyquiztest.presentation.feature.quiz.CalculateScore
+import com.example.dailyquiztest.presentation.feature.quiz.core.CalculateScore
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUserActions
+import com.example.dailyquiztest.presentation.feature.quiz.core.Timer
 import com.example.dailyquiztest.presentation.feature.quiz.model.small_screen.QuizGroupUi
 import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
 import kotlinx.coroutines.delay
@@ -52,17 +52,17 @@ import kotlin.time.Duration.Companion.seconds
 data class QuizUi(
     private val number: Int,
     private val question: String,
-    private val incorrectAnswers: List<String>,
     private val correctAnswer: String,
     private val totalQuestions: Int,
     private val userAnswer: String = "",
     private val isAnsweredCorrect: Boolean = false,
-    private val quizGroupUi: QuizGroupUi
+    private val timer: Timer,
+    private val quizGroupUi: QuizGroupUi,
 ) : QuizUiState {
 
     override fun visit(score: CalculateScore.AddInfo) {
         if (isAnsweredCorrect) {
-            score.addCorrectness()
+            score.addIfCorrect()
         }
         score.totalQuestions(totalQuestions)
     }
@@ -111,8 +111,8 @@ data class QuizUi(
                             .background(DailyQuizTheme.colorScheme.secondary),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-//                        TimerProgress(shouldShowTimeIsOverDialog)
-                        NumberOfQuestions(number, totalQuestions)
+                        TimerProgress()
+                        NumberOfQuestions()
                         Column(modifier = Modifier.padding(8.dp)) {
                             Question(question)
                             QuizOptions(shouldShowBorder.value) { selectedOption ->
@@ -157,9 +157,9 @@ data class QuizUi(
                 )
             }
         }
-//        timerDialogUi.Display {
-//            quizUserActions.onStartNewQuizClicked().invoke()
-//        }
+        timer.ShowTimeIsOverDialog {
+            quizUserActions.onStartNewQuizClicked().invoke()
+        }
     }
 
     @Composable
@@ -192,17 +192,7 @@ data class QuizUi(
     }
 
     @Composable
-    private fun TimerProgress(shouldShowTimeIsOverDialog: MutableState<Boolean>) {
-//        var ticks by rememberSaveable { mutableIntStateOf(0) }
-//        val currentProgress = remember { mutableFloatStateOf(0f) }
-//        LaunchedEffect(Unit) {
-//            while (ticks < difficulty.timeToComplete / 1000) {
-//                delay(1.seconds)
-//                ticks++
-//                currentProgress.floatValue = (ticks.toFloat() / (difficulty.timeToComplete / 1000))
-//            }
-//            shouldShowTimeIsOverDialog.value = true
-//        }
+    private fun TimerProgress() {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -217,13 +207,17 @@ data class QuizUi(
                 Text(
                     text = stringResource(
                         R.string.time_counter,
-//                        ticks / 60,
-//                        ticks % 60
+                        timer.currentSecondsProgress().toInt(),
+                        timer.currentMinutes(),
                     )
                 )
-//                val totalMinutes = difficulty.timeToComplete / 1000 / 60
-//                val totalSeconds = difficulty.timeToComplete / 1000 % 60
-//                Text(text = stringResource(R.string.time_counter, totalMinutes, totalSeconds))
+                Text(
+                    text = stringResource(
+                        R.string.time_counter,
+                        timer.totalMinutes(),
+                        timer.totalSeconds()
+                    )
+                )
             }
             LinearProgressIndicator(
                 modifier = Modifier
@@ -234,20 +228,19 @@ data class QuizUi(
                 color = DailyQuizTheme.colorScheme.tertiary,
                 drawStopIndicator = {},
                 progress = {
-                    0f
-//                    currentProgress.floatValue
+                    timer.currentSecondsProgress()
                 }
             )
         }
     }
 
     @Composable
-    private fun NumberOfQuestions(currentNumberQuestion: Int, totalQuestions: Int) {
+    private fun NumberOfQuestions() {
         Text(
             modifier = Modifier.padding(top = 32.dp, bottom = 24.dp),
             text = stringResource(
                 R.string.total_questions,
-                currentNumberQuestion,
+                number,
                 totalQuestions
             ),
             style = DailyQuizTheme.typography.numberOfQuestions
@@ -295,7 +288,6 @@ private fun LongQuizPreview() {
     QuizUi(
         number = 0,
         question = question,
-        incorrectAnswers = incorrectAnswers,
         correctAnswer = correctAnswer,
         totalQuestions = 5,
         quizGroupUi = QuizGroupUi.MultipleGroupUi(
@@ -303,7 +295,8 @@ private fun LongQuizPreview() {
             correctOption = correctAnswer,
             inCorrectOptions = incorrectAnswers,
             userAnswer = ""
-        )
+        ),
+        timer = Timer.Initial
     ).Display(quizUserActions = QuizUserActions.ForPreview)
 }
 
@@ -320,7 +313,6 @@ private fun ShortQuizPreview() {
     QuizUi(
         number = 0,
         question = question,
-        incorrectAnswers = incorrectAnswers,
         correctAnswer = correctAnswer,
         totalQuestions = 5,
         quizGroupUi = QuizGroupUi.MultipleGroupUi(
@@ -328,7 +320,8 @@ private fun ShortQuizPreview() {
             correctOption = correctAnswer,
             inCorrectOptions = incorrectAnswers,
             userAnswer = "4"
-        )
+        ),
+        timer = Timer.Initial,
     ).Display(quizUserActions = QuizUserActions.ForPreview)
 }
 

@@ -9,6 +9,8 @@ import com.example.dailyquiztest.domain.model.DifficultyDomain
 import com.example.dailyquiztest.domain.model.ResultDomain
 import com.example.dailyquiztest.domain.repository.HistoryRepository
 import com.example.dailyquiztest.domain.repository.QuizRepository
+import com.example.dailyquiztest.presentation.feature.quiz.core.CalculateScore
+import com.example.dailyquiztest.presentation.feature.quiz.core.Timer
 import com.example.dailyquiztest.presentation.feature.quiz.mapper.QuizMapper
 import com.example.dailyquiztest.presentation.feature.quiz.model.LoadingUi
 import com.example.dailyquiztest.presentation.feature.quiz.model.QuizUi
@@ -17,6 +19,7 @@ import com.example.dailyquiztest.presentation.feature.quiz.model.small_screen.Er
 import com.example.dailyquiztest.presentation.main_navigation.Route
 import com.example.dailyquiztest.presentation.main_navigation.WelcomeRouteProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,6 +42,11 @@ class QuizViewModel @Inject constructor(
     val uiState: StateFlow<QuizUiState>
         get() = uiStateMutable.asStateFlow()
 
+    private lateinit var timerJob: Job
+    private val tickMutable = MutableStateFlow(0f)
+    private val timerStateMutable =
+        MutableStateFlow<Timer>(Timer.Initial)
+
     private lateinit var category: CategoryDomain
     private lateinit var difficulty: DifficultyDomain
     private val quizes: MutableList<QuizUi> = mutableListOf()
@@ -59,6 +67,7 @@ class QuizViewModel @Inject constructor(
             ).onSuccess {
                 quizes.addAll(mapper.mapToListQuiz(it))
                 uiStateMutable.value = quizes[currentQuizQuestion]
+                startTimer()
             }.onFailure {
                 val filtersUi = mapper.mapToFilterWithError(it.message ?: "")
                 uiStateMutable.value = filtersUi
@@ -70,6 +79,30 @@ class QuizViewModel @Inject constructor(
 
     override fun saveQuizAnswer(answeredQuiz: QuizUi) {
         quizes[currentQuizQuestion] = answeredQuiz
+    }
+
+    override fun startTimer() {
+        val totalSeconds = difficulty.timeToComplete / 1000
+        timerJob = viewModelScope.launch(dispatcherList.ui()) {
+            for (tick in 1..totalSeconds) {
+                delay(1000)
+                tickMutable.value = tick.toFloat()
+                timerStateMutable.value = Timer.TimerProgress(
+                    tick = tickMutable.value,
+                    difficulty = difficulty
+                )
+                uiStateMutable.value =
+                    quizes[currentQuizQuestion].copy(timer = timerStateMutable.value)
+            }
+            stopTimer()
+            uiStateMutable.value = quizes[currentQuizQuestion].copy(
+                timer = Timer.TimeIsOverDialog(totalSeconds.toFloat(), difficulty)
+            )
+        }
+    }
+
+    override fun stopTimer() {
+        timerJob.cancel()
     }
 
     override fun retrieveNextAnswer() {
@@ -112,6 +145,9 @@ interface CoreVMActions {
         categoryDomain: CategoryDomain,
         difficultyDomain: DifficultyDomain
     )
+
+    fun startTimer()
+    fun stopTimer()
 
     fun navigateToWelcome(toWelcome: (Route) -> Unit)
 }
