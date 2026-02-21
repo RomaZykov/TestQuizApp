@@ -4,7 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class DispatcherListBaseTest {
+class DispatcherTest {
 
     @Test
     fun `base dispatcher should return correct dispatchers`() {

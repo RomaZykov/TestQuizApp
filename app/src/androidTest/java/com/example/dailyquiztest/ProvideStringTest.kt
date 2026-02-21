@@ -6,7 +6,7 @@ import com.example.dailyquiztest.core.ProvideString
 import junit.framework.TestCase
 import org.junit.Test
 
-class ProvideStringBaseTest {
+class ProvideStringTest {
     @Test
     fun string_returnsCorrectString() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
