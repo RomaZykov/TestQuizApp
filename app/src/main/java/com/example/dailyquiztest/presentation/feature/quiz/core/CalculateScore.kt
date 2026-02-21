@@ -1,11 +1,11 @@
-package com.example.dailyquiztest.presentation.feature.quiz
+package com.example.dailyquiztest.presentation.feature.quiz.core
 
 import com.example.dailyquiztest.R
 import javax.inject.Inject
 
 interface CalculateScore {
     interface AddInfo {
-        fun addCorrectness()
+        fun addIfCorrect()
         fun totalQuestions(totalQuestions: Int)
     }
 
@@ -55,18 +55,19 @@ interface CalculateScore {
             }
         }
 
-        override fun addCorrectness() { correctAnswers++ }
+        override fun addIfCorrect() { correctAnswers++ }
+
         override fun totalQuestions(totalQuestions: Int) {
             allQuestions = totalQuestions
         }
 
         override fun scoreTitleResId(): Int = titleAndDescription().first
+
         override fun scoreDescriptionResId(): Int = titleAndDescription().second
+
         override fun totalCorrectAnswers(): Int = correctAnswers
 
-        override fun calculateScorePercentage(): Int {
-            return totalCorrectAnswers() * 100 / allQuestions
-        }
+        override fun calculateScorePercentage(): Int = totalCorrectAnswers() * 100 / allQuestions
 
         override fun calculateStarsScoreResult(): Int {
             val percentagesList = listOf(20, 40, 60, 80, 100)
