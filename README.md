@@ -1,3 +1,7 @@
+<div align="center">
+  [![CI](https://github.com/RomaZykov/TestQuizApp/actions/workflows/blank.yml/badge.svg)](https://github.com/RomaZykov/TestQuizApp/actions/workflows/blank.yml)  
+</div>
+
 <h1 align="center">TestQuizApp <br /></h1>
 
 ## Описание
