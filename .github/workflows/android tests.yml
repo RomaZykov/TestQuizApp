@@ -9,7 +9,7 @@ on:
 
 jobs:
   android_ui_test_job:
-      runs-on: windows-latest
+      runs-on: macos-latest
       steps:
         - name: Run Android UI tests
           uses: reactivecircus/android-emulator-runner@v2
