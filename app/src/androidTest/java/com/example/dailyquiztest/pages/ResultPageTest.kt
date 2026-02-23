@@ -55,7 +55,6 @@ class ResultPageTest {
             QuizScreenUi(
                 uiState = uiState,
                 navController = rememberTestNavController(),
-//                timerProgress = {},
                 prepareQuizGame = { _, _ -> },
                 saveQuizAnswer = {},
                 retrieveNextAnswer = {},
