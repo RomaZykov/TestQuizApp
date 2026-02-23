@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://codecov.io/gh/username/repo">
-    <img src="https://github.com/RomaZykov/TestQuizApp/actions/workflows/blank.yml/badge.svg">
+    <img src="https://github.com/RomaZykov/TestQuizApp/actions/workflows/android tests.yml/badge.svg">
   </a>
 </p>
 
