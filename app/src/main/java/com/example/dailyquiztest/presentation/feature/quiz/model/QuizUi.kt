@@ -39,7 +39,7 @@ import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.CommonCard
 import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
 import com.example.dailyquiztest.presentation.common.UiLogo
-import com.example.dailyquiztest.presentation.feature.quiz.core.CalculateScore
+import com.example.dailyquiztest.domain.CalculateScore
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUserActions
 import com.example.dailyquiztest.presentation.feature.quiz.core.Timer
@@ -86,6 +86,7 @@ data class QuizUi(
             }
         }
 
+        val screenContDesc = stringResource(R.string.quiz_screen_cont_desc)
         Scaffold(
             topBar = {
                 TopAppBarDecorator(scrollBehavior) {
@@ -94,7 +95,7 @@ data class QuizUi(
             },
             modifier = Modifier
                 .semantics {
-                    contentDescription = "quiz screen"
+                    contentDescription = screenContDesc
                 }
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { innerPadding ->

@@ -33,9 +33,10 @@ object EmptyHistoryUi : HistoryUiState {
     override fun Display(
         historyUserActions: HistoryUserActions
     ) {
+        val screenContDesc = stringResource(R.string.empty_history_screen_cont_desc)
         Scaffold(
             modifier = Modifier.semantics {
-                contentDescription = "empty history screen"
+                contentDescription = screenContDesc
             },
             topBar = {
                 HistoryTopBar(historyUserActions.onBackButtonClicked())

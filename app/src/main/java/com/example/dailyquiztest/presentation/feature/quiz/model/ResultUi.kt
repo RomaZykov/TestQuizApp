@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.presentation.common.ActionButtonWithText
 import com.example.dailyquiztest.presentation.common.StarsScore
-import com.example.dailyquiztest.presentation.feature.quiz.core.CalculateScore
+import com.example.dailyquiztest.domain.CalculateScore
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUserActions
 import com.example.dailyquiztest.presentation.feature.quiz.core.Timer
@@ -44,10 +44,11 @@ data class ResultUi(
     @Composable
     override fun Display(quizUserActions: QuizUserActions) {
         val listState = rememberLazyListState()
+        val screenContDesc = stringResource(R.string.result_screen_cont_desc)
         LazyColumn(
             modifier = Modifier
                 .semantics {
-                    contentDescription = "result screen"
+                    contentDescription = screenContDesc
                 }
                 .testTag("result lazy list")
                 .fillMaxWidth()
@@ -71,10 +72,11 @@ data class ResultUi(
                 QuizResultItem(i, answeredQuiz)
             }
             item {
+                val bottomButtonContDesc = stringResource(R.string.bottom_start_again_button_cont_desc)
                 ActionButtonWithText(
                     modifier = Modifier
                         .semantics {
-                            contentDescription = "bottom start again button"
+                            contentDescription = bottomButtonContDesc
                         }
                         .padding(start = 20.dp, end = 20.dp, bottom = 72.dp),
                     onClick = {

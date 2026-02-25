@@ -22,10 +22,11 @@ class HistoryPage(
     private val composeTestRule: ComposeTestRule,
     private val fakeHistoryRepository: HistoryRepository
 ) : StringResources() {
+    fun historyLazyListTag() = "history lazy list"
 
-    val historyLazyListTag = "history lazy list"
-    val nonEmptyContentDesc = "non empty history screen"
-    val emptyContentDesc = "empty history screen"
+    fun emptyHistoryContentDesc() = retrieveString(R.string.empty_history_screen_cont_desc)
+
+    fun nonEmptyHistoryContentDesc() = retrieveString(R.string.non_empty_history_screen_cont_desc)
 
     private val backButton =
         composeTestRule.onNode(
@@ -76,12 +77,12 @@ class HistoryPage(
     }
 
     fun assertEmptyHistoriesDisplayed() {
-        composeTestRule.onNodeWithContentDescription(emptyContentDesc)
+        composeTestRule.onNodeWithContentDescription(emptyHistoryContentDesc())
             .assertExists().assertIsDisplayed()
     }
 
     fun assertNonEmptyHistoriesDisplayed() {
-        composeTestRule.onNodeWithContentDescription(nonEmptyContentDesc)
+        composeTestRule.onNodeWithContentDescription(nonEmptyHistoryContentDesc())
             .assertExists().assertIsDisplayed()
     }
 
@@ -92,7 +93,7 @@ class HistoryPage(
     }
 
     fun longPressToDeleteHistoryByNumber(number: Int) {
-        composeTestRule.onNodeWithTag(historyLazyListTag).performScrollToNode(
+        composeTestRule.onNodeWithTag(historyLazyListTag()).performScrollToNode(
             hasText(retrieveString(R.string.quiz_number_title, number))
         )
         composeTestRule.onNodeWithText(retrieveString(R.string.quiz_number_title, number))

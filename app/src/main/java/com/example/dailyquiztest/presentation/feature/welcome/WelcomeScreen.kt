@@ -69,9 +69,10 @@ fun WelcomeScreen(
     val scrollState = rememberScrollState()
     val scrollBehavior =
         TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val screenContDesc = stringResource(R.string.welcome_screen_cont_desc)
     Scaffold(
         modifier = Modifier
-            .semantics { contentDescription = "welcome screen" }
+            .semantics { contentDescription = screenContDesc }
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             WelcomeAppBar(onHistoryButtonClicked = {

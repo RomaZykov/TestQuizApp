@@ -72,10 +72,11 @@ data class FiltersUi(
         val scrollState = rememberScrollState()
         val scrollBehavior =
             TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+        val screenContDesc = stringResource(R.string.filters_screen_cont_desc)
         Scaffold(
             modifier = Modifier
                 .semantics {
-                    contentDescription = "filters screen"
+                    contentDescription = screenContDesc
                 }
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = { FiltersTopBar(quizUserActions.onBackClicked(), scrollBehavior) }

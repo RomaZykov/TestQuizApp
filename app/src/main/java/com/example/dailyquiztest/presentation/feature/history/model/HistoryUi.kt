@@ -71,10 +71,11 @@ import kotlinx.coroutines.launch
         val scrollBehavior =
             TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
         val snackBarHostState = remember { SnackbarHostState() }
+        val screenContDesc = stringResource(R.string.non_empty_history_screen_cont_desc)
         Scaffold(
             modifier = Modifier
                 .semantics {
-                    contentDescription = "non empty history screen"
+                    contentDescription = screenContDesc
                 }
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
             snackbarHost = {

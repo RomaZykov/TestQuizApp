@@ -2,7 +2,7 @@ package com.example.dailyquiztest.pages
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasText
- import androidx.compose.ui.test.isNotDisplayed
+import androidx.compose.ui.test.isNotDisplayed
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -15,8 +15,8 @@ import com.example.dailyquiztest.core.rememberTestNavController
 import com.example.dailyquiztest.helpPages.HistoryPage
 import com.example.dailyquiztest.presentation.feature.history.HistoryScreen
 import com.example.dailyquiztest.presentation.feature.history.model.HistoryUi
-import com.example.testing.stub.stubHistories
 import com.example.testing.repository.FakeHistoryRepository
+import com.example.testing.stub.stubHistories
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -67,7 +67,7 @@ class HistoryPageTest : StringResources() {
         }
         historyPage.assertNonEmptyHistoriesDisplayed()
 
-        composeTestRule.onNodeWithTag(historyPage.historyLazyListTag).performScrollToNode(
+        composeTestRule.onNodeWithTag(historyPage.historyLazyListTag()).performScrollToNode(
             hasText(
                 retrieveString(
                     R.string.quiz_number_title,

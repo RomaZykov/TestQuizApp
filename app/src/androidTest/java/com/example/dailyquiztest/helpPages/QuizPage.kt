@@ -26,7 +26,7 @@ class QuizPage(
     private val fakeQuizRepository: QuizRepository
 ) : StringResources() {
 
-    val mainContentDesc = "quiz screen"
+    fun contentDesc() = retrieveString(R.string.quiz_screen_cont_desc)
 
     private val dummyQuizesToIterate: ArrayDeque<QuizDomain.Quiz> by lazy {
         ArrayDeque<QuizDomain.Quiz>().apply {
@@ -53,7 +53,7 @@ class QuizPage(
         )
 
     fun assertPageDisplayed() {
-        composeTestRule.onNodeWithContentDescription(mainContentDesc)
+        composeTestRule.onNodeWithContentDescription(contentDesc())
             .assertExists()
             .assertIsDisplayed()
     }

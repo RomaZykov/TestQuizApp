@@ -19,8 +19,9 @@ import com.example.dailyquiztest.R
 import com.example.dailyquiztest.core.StringResources
 
 class ResultPage(private val composeTestRule: ComposeTestRule) : StringResources() {
-    val resultLazyListTag = "result lazy list"
-    val mainContentDesc = "result screen"
+    fun resultLazyListTag() = "result lazy list"
+
+    fun contentDesc() = retrieveString(R.string.result_screen_cont_desc)
 
     private val startAgainButton =
         composeTestRule.onNode(
@@ -29,14 +30,14 @@ class ResultPage(private val composeTestRule: ComposeTestRule) : StringResources
         )
 
     fun assertPageDisplayed() {
-        composeTestRule.onNodeWithContentDescription(mainContentDesc)
+        composeTestRule.onNodeWithContentDescription(retrieveString(R.string.result_screen_cont_desc))
             .assertExists()
             .assertIsDisplayed()
     }
 
     fun hasScrollOption() {
         composeTestRule.onNode(
-            hasTestTag(resultLazyListTag)
+            hasTestTag(resultLazyListTag())
                     and hasScrollAction()
         )
     }
@@ -52,8 +53,8 @@ class ResultPage(private val composeTestRule: ComposeTestRule) : StringResources
     }
 
     fun clickBottomStartAgainButton() {
-        composeTestRule.onNodeWithTag(resultLazyListTag).performScrollToNode(
-            hasContentDescription("bottom start again button")
+        composeTestRule.onNodeWithTag(resultLazyListTag()).performScrollToNode(
+            hasContentDescription(retrieveString(R.string.bottom_start_again_button_cont_desc))
         )
         composeTestRule.onNodeWithContentDescription("bottom start again button")
             .assertExists().assertIsDisplayed().performClick()
@@ -62,7 +63,7 @@ class ResultPage(private val composeTestRule: ComposeTestRule) : StringResources
 
     fun performScrollToItemWithText(questionTitle: String) {
         composeTestRule.waitUntil {
-            composeTestRule.onNodeWithTag(resultLazyListTag)
+            composeTestRule.onNodeWithTag(resultLazyListTag())
                 .performScrollToNode(hasText(questionTitle))
                 .isDisplayed()
         }
@@ -91,19 +92,22 @@ class ResultPage(private val composeTestRule: ComposeTestRule) : StringResources
 
     // Edge board
     fun assertGreenEdgeDisplayedOnText(userAnswer: String) {
-        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists()
+            .assertIsDisplayed()
         composeTestRule.onNodeWithTag("green edge")
             .assertExists().assertIsDisplayed()
     }
 
     fun assertGreenEdgeIsNotDisplayedOnText(userAnswer: String) {
-        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists()
+            .assertIsDisplayed()
         composeTestRule.onNodeWithTag("green edge")
             .assertIsNotDisplayed()
     }
 
     fun assertRedEdgeDisplayedOnText(userAnswer: String) {
-        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists()
+            .assertIsDisplayed()
         composeTestRule.onNodeWithTag("red edge")
             .assertExists().assertIsDisplayed()
     }
@@ -116,25 +120,29 @@ class ResultPage(private val composeTestRule: ComposeTestRule) : StringResources
 
     // Option icon
     fun assertGreenOptionIconDisplayedOnText(userAnswer: String) {
-        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists()
+            .assertIsDisplayed()
         composeTestRule.onNodeWithContentDescription("correct option icon")
             .assertExists().assertIsDisplayed()
     }
 
     fun assertGreenOptionIconIsNotDisplayedOnText(userAnswer: String) {
-        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists()
+            .assertIsDisplayed()
         composeTestRule.onNodeWithContentDescription("correct option icon")
             .assertIsNotDisplayed()
     }
 
     fun assertRedOptionIconDisplayedOnText(userAnswer: String) {
-        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists()
+            .assertIsDisplayed()
         composeTestRule.onNodeWithContentDescription("wrong option icon")
             .assertExists().assertIsDisplayed()
     }
 
     fun assertRedOptionIconIsNotDisplayedOnText(userAnswer: String) {
-        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists().assertIsDisplayed()
+        composeTestRule.onNodeWithText(userAnswer, ignoreCase = true).assertExists()
+            .assertIsDisplayed()
         composeTestRule.onNodeWithContentDescription("wrong option icon")
             .assertIsNotDisplayed()
     }

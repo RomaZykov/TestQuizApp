@@ -10,7 +10,6 @@ import com.example.dailyquiztest.domain.model.DifficultyDomain
 data class LocalQuizResult(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(
         name = "quiz_number",
-        defaultValue = "0"
     ) val number: Int,
     @ColumnInfo(name = "stars") val stars: Int,
     @ColumnInfo(name = "category") val category: String,
@@ -18,14 +17,6 @@ data class LocalQuizResult(
     @ColumnInfo(name = "last_time") val lastTime: String,
     @ColumnInfo(name = "last_date") val lastDate: String
 ) {
-    constructor(
-        stars: Int,
-        category: String,
-        difficulty: String,
-        lastTime: String,
-        lastDate: String
-    ) : this(0, stars, category, difficulty, lastTime, lastDate)
-
     fun <T> map(mapper: Mapper<T>): T {
         return mapper.mappedValue(
             number = this.number,

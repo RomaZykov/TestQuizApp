@@ -22,7 +22,7 @@ import com.example.dailyquiztest.domain.model.DifficultyDomain
 
 class FiltersPage(private val composeTestRule: ComposeTestRule) : StringResources() {
 
-    val mainContentDesc = "filters screen"
+    fun contentDesc() = retrieveString(R.string.filters_screen_cont_desc)
 
     private val startButton =
         composeTestRule.onNode(
@@ -39,7 +39,7 @@ class FiltersPage(private val composeTestRule: ComposeTestRule) : StringResource
     }
 
     fun assertPageDisplayed() {
-        composeTestRule.onNodeWithContentDescription(mainContentDesc)
+        composeTestRule.onNodeWithContentDescription(contentDesc())
             .assertExists()
             .assertIsDisplayed()
     }
@@ -86,7 +86,7 @@ class FiltersPage(private val composeTestRule: ComposeTestRule) : StringResource
     }
 
     fun hasScrollOption() {
-        composeTestRule.onNodeWithContentDescription(mainContentDesc)
+        composeTestRule.onNodeWithContentDescription(contentDesc())
             .onChildren().onFirst().assert(
                 hasScrollAction()
             )
