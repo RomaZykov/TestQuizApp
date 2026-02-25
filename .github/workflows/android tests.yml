@@ -8,17 +8,17 @@ on:
 
 jobs:
   android_ui_test_job:
-      runs-on: macos-latest
-      strategy:
-        matrix:
-          api-level: [33, 35]
-          target: [default]
-      steps:
-        - uses: actions/checkout@v4
-        - name: Provide emulator
-          uses: reactivecircus/android-emulator-runner@v2
-          with:
-            script: ./gradlew connectedDebugAndroidTest
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        api-level: [33, 35]
+        target: [default]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Provide emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          script: ./gradlew connectedDebugAndroidTest
 
   android_unit_test_job:
     runs-on: ubuntu-latest
