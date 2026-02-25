@@ -21,8 +21,8 @@ jobs:
       - name: Provide emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          # api-level: ${{ matrix.api-level }}
-          # target: ${{ matrix.target }}
+          api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
           # arch: x86_64
           # profile: pixel_7_pro
           wait-for-boot: true
