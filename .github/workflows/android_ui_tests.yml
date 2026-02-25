@@ -26,8 +26,13 @@ jobs:
           target: ${{ matrix.target }}
           arch: 'x86_64'
           profile: Nexus 6
+          emulator-options: -no-window -no-snapshot -no-audio -no-boot-anim
           disable-animations: true
-          script: ./gradlew connectedDebugAndroidTest
+          wait-for-boot: true
+          boot-timeout: 600
+          script: |
+            adb devices
+            ./gradlew connectedDebugAndroidTest
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4
