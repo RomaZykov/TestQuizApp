@@ -78,7 +78,7 @@ class HistoryViewModelTest {
         assertTrue(dispatchers.wasIoCalled)
         assertFalse(dispatchers.wasUiCalled)
 
-        var countOfHistory = 0
+        var countOfHistory = 1
         repeat(7) {
             viewModel.deleteQuizHistory(countOfHistory++)
         }
@@ -95,17 +95,17 @@ class HistoryViewModelTest {
         assertTrue(dispatchers.wasIoCalled)
         assertFalse(dispatchers.wasUiCalled)
 
-        viewModel.deleteQuizHistory(0)
-        viewModel.deleteQuizHistory(4)
-        viewModel.deleteQuizHistory(2)
-        viewModel.deleteQuizHistory(3)
+        viewModel.deleteQuizHistory(1)
         viewModel.deleteQuizHistory(5)
+        viewModel.deleteQuizHistory(3)
+        viewModel.deleteQuizHistory(4)
         viewModel.deleteQuizHistory(6)
+        viewModel.deleteQuizHistory(7)
 
         val expectedUiState = HistoryUi(
             listOf(
                 ResultDomain.Result(
-                    number = 1,
+                    number = 2,
                     stars = 0,
                     categoryDomain = CategoryDomain.GENERAL_KNOWLEDGE,
                     difficultyDomain = DifficultyDomain.EASY,
