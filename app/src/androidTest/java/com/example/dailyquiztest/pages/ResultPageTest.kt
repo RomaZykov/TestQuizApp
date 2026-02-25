@@ -10,7 +10,7 @@ import com.example.dailyquiztest.core.rememberTestNavController
 import com.example.dailyquiztest.domain.model.QuizDomain
 import com.example.dailyquiztest.domain.model.QuizTypeDomain
 import com.example.dailyquiztest.helpPages.ResultPage
-import com.example.dailyquiztest.presentation.feature.quiz.core.CalculateScore
+import com.example.dailyquiztest.domain.CalculateScore
 import com.example.dailyquiztest.presentation.feature.quiz.QuizScreenUi
 import com.example.dailyquiztest.presentation.feature.quiz.mapper.QuizMapper
 import com.example.dailyquiztest.presentation.feature.quiz.model.ResultUi

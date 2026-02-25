@@ -4,7 +4,7 @@ import com.example.dailyquiztest.domain.model.CategoryDomain
 import com.example.dailyquiztest.domain.model.DifficultyDomain
 import com.example.dailyquiztest.fake.FakeFormatDate
 import com.example.dailyquiztest.fake.FakeWelcomeRouteProvider
-import com.example.dailyquiztest.presentation.feature.quiz.core.CalculateScore
+import com.example.dailyquiztest.domain.CalculateScore
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.feature.quiz.QuizViewModel
 import com.example.dailyquiztest.presentation.feature.quiz.core.Timer

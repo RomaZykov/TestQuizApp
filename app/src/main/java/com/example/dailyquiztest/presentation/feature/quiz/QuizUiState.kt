@@ -1,7 +1,7 @@
 package com.example.dailyquiztest.presentation.feature.quiz
 
 import androidx.compose.runtime.Composable
-import com.example.dailyquiztest.presentation.feature.quiz.core.CalculateScore
+import com.example.dailyquiztest.domain.CalculateScore
 
 interface QuizUiState {
 

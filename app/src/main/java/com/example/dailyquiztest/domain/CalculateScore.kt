@@ -1,4 +1,4 @@
-package com.example.dailyquiztest.presentation.feature.quiz.core
+package com.example.dailyquiztest.domain
 
 import com.example.dailyquiztest.R
 import javax.inject.Inject
