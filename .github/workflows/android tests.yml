@@ -18,7 +18,6 @@ jobs:
         - name: Provide emulator
           uses: reactivecircus/android-emulator-runner@v2
           with:
-            api-level: 35
             script: ./gradlew connectedDebugAndroidTest
 
   android_unit_test_job:
