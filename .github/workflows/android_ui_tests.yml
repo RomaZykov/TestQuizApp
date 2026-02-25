@@ -11,7 +11,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        api-level: [33, 35]
+        api-level: [30]
         target: [default]
     steps:
       - uses: actions/checkout@v4
@@ -25,7 +25,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
           arch: 'x86_64'
-          profile: Nexus 6
+          profile: Pixel 9
           disable-animations: true
           wait-for-boot: true
           boot-timeout: 600
