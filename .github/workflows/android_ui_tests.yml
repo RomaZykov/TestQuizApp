@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        api-level: [28]
+        api-level: [29]
         target: [google_apis]
     steps:
       - uses: actions/checkout@v4
@@ -25,17 +25,9 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
           arch: x86_64
-          profile: Nexus 6
-          disable-animations: true
-          wait-for-boot: true
-          boot-timeout: 600
-          emulator-options: >
-            -no-window
-            -gpu swiftshader_indirect
-            -no-boot-anim
-            -camera-back none
-            -camera-front none
-            -no-snapshot-save
+          profile: pixel_7_pro
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: |
             adb devices
             ./gradlew connectedDebugAndroidTest
