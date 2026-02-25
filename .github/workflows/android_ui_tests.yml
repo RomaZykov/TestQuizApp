@@ -25,7 +25,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
           arch: 'x86_64'
-          profile: Pixel 9
+          profile: pixel_4
           disable-animations: true
           wait-for-boot: true
           boot-timeout: 600
