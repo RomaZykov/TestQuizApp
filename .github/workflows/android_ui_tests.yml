@@ -3,7 +3,6 @@ name: Android UI Tests
 on:
   push:
   pull_request:
-  
   workflow_dispatch:
 
 jobs:
@@ -11,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        api-level: [33]
+        api-level: [29]
         target: [google_apis]
     steps:
       - uses: actions/checkout@v4
@@ -30,7 +29,6 @@ jobs:
           boot-timeout: 600
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: |
-            adb devices
             ./gradlew connectedDebugAndroidTest
       - name: Upload test reports
         if: always()
