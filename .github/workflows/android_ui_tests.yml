@@ -11,7 +11,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        api-level: [30]
+        api-level: [29]
         target: [default]
     steps:
       - uses: actions/checkout@v4
@@ -24,8 +24,8 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
-          arch: 'x86_64'
-          profile: pixel_4
+          arch: x86_64
+          profile: pixel_7_pro
           disable-animations: true
           wait-for-boot: true
           boot-timeout: 600
