@@ -19,6 +19,9 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
+      - name: Install system image
+        run: | 
+          sdkmanager "system-images;android-29;google_apis;x86_64"
       - name: Provide emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -26,7 +29,8 @@ jobs:
           target: ${{ matrix.target }}
           arch: x86_64
           profile: pixel_7_pro
-          force-avd-creation: false
+          wait-for-boot: true
+          boot-timeout: 600
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: |
             adb devices
