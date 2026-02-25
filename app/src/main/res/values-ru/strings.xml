@@ -73,4 +73,15 @@
     <string name="hard">hard</string>
     <string name="no_connection_exception">Check your connection!</string>
     <string name="generic_exception">Something went wrong. Sorry!</string>
+    <string name="result_screen_cont_desc">result screen</string>
+    <string name="loading_screen_cont_desc">loading screen</string>
+    <string name="empty_history_screen_cont_desc">empty history screen</string>
+    <string name="correct_option_icon_cont_desc">correct option icon</string>
+    <string name="wrong_option_icon_cont_desc">wrong option icon</string>
+    <string name="selected_option_icon_cont_desc">selected option icon</string>
+    <string name="default_option_icon_cont_desc">default option icon</string>
+    <string name="welcome_screen_cont_desc">welcome screen</string>
+    <string name="bottom_start_again_button_cont_desc">bottom start again button</string>
+    <string name="filters_screen_cont_desc">filters screen</string>
+    <string name="quiz_screen_cont_desc">quiz screen</string>
 </resources>

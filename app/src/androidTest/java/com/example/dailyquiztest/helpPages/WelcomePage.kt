@@ -15,7 +15,7 @@ import com.example.dailyquiztest.core.StringResources
 class WelcomePage(private val composeTestRule: ComposeTestRule) :
     StringResources() {
 
-    val mainContentDesc = "welcome screen"
+    fun contentDesc() = retrieveString(R.string.welcome_screen_cont_desc)
 
     private val startButton =
         composeTestRule.onNode(
@@ -44,7 +44,7 @@ class WelcomePage(private val composeTestRule: ComposeTestRule) :
     fun assertStartQuizButtonDisplayed() = startButton.assertExists().assertIsDisplayed()
 
     fun assertPageDisplayed() {
-        composeTestRule.onNodeWithContentDescription("welcome screen")
+        composeTestRule.onNodeWithContentDescription(contentDesc())
             .assertExists().assertIsDisplayed()
     }
 }

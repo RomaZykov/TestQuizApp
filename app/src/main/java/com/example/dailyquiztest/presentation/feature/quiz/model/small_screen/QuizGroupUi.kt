@@ -1,6 +1,7 @@
 package com.example.dailyquiztest.presentation.feature.quiz.model.small_screen
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -124,7 +126,7 @@ private data class SelectableOptionMetaData(
     val optionTestTag: String = "green edge",
     val borderColor: Color = Color.Green,
     @DrawableRes val iconOption: Int = R.drawable.property_right,
-    val iconContentDesc: String = "correct option icon",
+    @StringRes val iconContentDesc: Int = R.string.correct_option_icon_cont_desc,
 )
 
 private fun configureSelectableOption(
@@ -139,21 +141,21 @@ private fun configureSelectableOption(
             optionTestTag = "red edge",
             borderColor = Color.Red,
             iconOption = R.drawable.property_wrong,
-            iconContentDesc = "wrong option icon"
+            iconContentDesc = R.string.wrong_option_icon_cont_desc
         )
 
         !shouldShowBorder && isSelected -> SelectableOptionMetaData(
             optionTestTag = "no edge",
             borderColor = Color.Transparent,
             iconOption = R.drawable.selected_radio_button,
-            iconContentDesc = "selected option icon"
+            iconContentDesc = R.string.selected_option_icon_cont_desc
         )
 
         else -> SelectableOptionMetaData(
             optionTestTag = "no edge",
             borderColor = Color.Transparent,
             iconOption = R.drawable.radio_button_default,
-            iconContentDesc = "default option icon"
+            iconContentDesc = R.string.default_option_icon_cont_desc
         )
     }
 }
@@ -202,10 +204,11 @@ private fun Options(
                     .then(borderModifier),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                val imageContDesc = stringResource(groupMetaData.iconContentDesc)
                 Image(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     painter = painterResource(id = groupMetaData.iconOption),
-                    contentDescription = groupMetaData.iconContentDesc
+                    contentDescription = imageContDesc
                 )
                 Text(
                     modifier = Modifier.padding(8.dp),
