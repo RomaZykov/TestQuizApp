@@ -40,6 +40,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+    kotlin {
+        jvmToolchain(17)
+    }
     buildFeatures {
         compose = true
     }
@@ -68,7 +71,7 @@ dependencies {
     // room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-//    implementation(libs.test.runner)
+    implementation(libs.test.runner)
     implementation(libs.androidx.compose.material3)
     ksp(libs.androidx.room.compiler)
 
