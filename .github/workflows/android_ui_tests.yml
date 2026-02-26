@@ -7,7 +7,7 @@ on:
 
 jobs:
   android_ui_test_job:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     # strategy:
     #   matrix:
     #     api-level: [29]
@@ -35,11 +35,12 @@ jobs:
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
+          disable-animations: true
           profile: pixel_7_pro
           api-level: 29
           script: | 
             ./gradlew assembleDebugAndroidTest
-            ./gradlew :app:connectedDebugAndroidTest --stacktrace
+            ./gradlew :app:connectedDebugAndroidTest
           # ./gradlew connectedCheck
         # with:
         #   api-level: ${{ matrix.api-level }}
