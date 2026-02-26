@@ -55,8 +55,8 @@
       4. mapper tests.
 
   - CI/CD for UNIT and UI tests
-  - OOP approach in проектировании (не всё), используемые паттерны:
-      1. prototip;
+  - OOP approach in design (not all), patterns used:
+      1. prototype;
       2. singleton;
       3. visitor;
       4. strategy;
