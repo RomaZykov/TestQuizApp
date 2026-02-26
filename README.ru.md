@@ -1,0 +1,65 @@
+<p align="center">
+  <a href="https://codecov.io/gh/username/repo">
+    <img src="https://github.com/RomaZykov/TestQuizApp/actions/workflows/android_ui_tests.yml/badge.svg">
+  </a>
+  <a href="https://codecov.io/gh/username/repo">
+    <img src="https://github.com/RomaZykov/TestQuizApp/actions/workflows/android_unit_tests.yml/badge.svg">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/RomaZykov/TestQuizApp/blob/master/README.md">
+    <img src="https://img.shields.io/badge/lang-en-purple" />
+  </a>
+  <a href="https://github.com/RomaZykov/TestQuizApp/blob/master/README.ru.md">
+    <img src="https://img.shields.io/badge/%D1%8F%D0%B7%D1%8B%D0%BA-%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9-blue" />
+  </a>
+</p>
+<p align="center">
+
+<h1 align="center">TestQuizApp <br /></h1>
+
+## Описание
+  TestQuizApp — приложение для прохождения коротких викторин. Пользователь может запустить викторину в любое время, пройти 5 вопросов и сохранить результат. Также доступна история предыдущих попыток с возможностью просмотра деталей.
+
+## Скриншоты
+
+## Технологии
+  - Kotlin (KTS), Kotlin coroutines, Flow
+  - MVVM, Clean Architecture
+  - Single-Activity
+  - Jetpack Compose
+  - Hilt
+  - Room
+
+## Особенности (клиент)
+  - Квиз по категориям с 3 видами сложностями
+  - Таймер - градация времени в зависимости от сложности
+  - Просмотр результатов квизов с кратким описанием и датой
+  - Перевороты экрана с сохранением состояния (окак)
+
+## Особенности (разработка)
+  - 35 UI тестов различного уровня сложности в ООП стиле:
+      1. обычные проверки текста/нужных экранов;
+      2. тесты таймера с различными временными отрезками;
+      3. end-to-end тесты навигации;
+      4. тесты при смене конфигурации;
+      5. тесты горизонтального положения экрана с переходом в вертикальность;
+      6. тесты появления диалогов и снэкбаров;
+      7. тесты ресурсов.
+
+  - 19 UNIT тестов, куда входит:
+      1. тесты viewModel`ей;
+      2. тесты вызова навигации;
+      3. тесты репозиториев;
+      4. тесты data мапперов.
+
+  - CI/CD для прохождения UNIT и UI тестов
+  - OOP подход в проектировании (не всё), используемые паттерны:
+      1. прототип;
+      2. одиночка;
+      3. посетитель;
+      4. стратегия;
+      5. декоратор.
+
+## Прохождение UI тестов
