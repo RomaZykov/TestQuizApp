@@ -35,6 +35,7 @@ jobs:
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
+          profile: pixel_7_pro
           api-level: 29
           script: | 
             ./gradlew assembleDebugAndroidTest
