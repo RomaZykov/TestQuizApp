@@ -38,7 +38,7 @@ jobs:
           api-level: 29
           script: | 
             ./gradlew assembleDebugAndroidTest
-            ./gradlew connectedDebugAndroidTest
+            ./gradlew connectedDebugAndroidTest --stacktrace
           # ./gradlew connectedCheck
         # with:
         #   api-level: ${{ matrix.api-level }}
