@@ -63,3 +63,4 @@
       5. decorator.
 
 ## UI tests highlites
+  - - [End-to-end tests here](https://github.com/RomaZykov/TestQuizApp/blob/master/app/src/androidTest/java/com/example/dailyquiztest/ScenarioTest.kt)
