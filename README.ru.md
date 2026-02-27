@@ -63,3 +63,4 @@
       5. декоратор.
 
 ## Прохождение UI тестов
+  - [End-to-end тесты находятся здесь](https://github.com/RomaZykov/TestQuizApp/blob/master/app/src/androidTest/java/com/example/dailyquiztest/ScenarioTest.kt)
