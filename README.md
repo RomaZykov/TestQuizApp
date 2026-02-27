@@ -1,4 +1,3 @@
-
 <p align="center">
   <a href="https://codecov.io/gh/username/repo">
     <img src="https://github.com/RomaZykov/TestQuizApp/actions/workflows/android_ui_tests.yml/badge.svg">
