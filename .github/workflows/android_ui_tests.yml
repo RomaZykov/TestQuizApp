@@ -3,12 +3,10 @@ name: Android UI Tests
 on:
   push:
     paths-ignore:
-      - 'README.md'
-      - 'README.ru.md'
+      - 'README.**'
   pull_request:
     paths-ignore:
-        - 'README.md'
-        - 'README.ru.md'
+        - 'README.**'
   workflow_dispatch:
 
 jobs:
