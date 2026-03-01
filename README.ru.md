@@ -6,7 +6,6 @@
     <img src="https://github.com/RomaZykov/TestQuizApp/actions/workflows/android_unit_tests.yml/badge.svg">
   </a>
 </p>
-
 <p align="center">
   <a href="https://github.com/RomaZykov/TestQuizApp/blob/master/README.md">
     <img src="https://img.shields.io/badge/lang-en-purple" />
