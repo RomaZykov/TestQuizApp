@@ -32,6 +32,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.dailyquiztest.R
 import com.example.dailyquiztest.presentation.ui.DailyQuizTheme
+import com.example.dailyquiztest.presentation.ui.Green
+import com.example.dailyquiztest.presentation.ui.Red
+import com.example.dailyquiztest.presentation.ui.TertiaryBlue
 
 interface QuizGroupUi {
     @Composable
@@ -124,7 +127,7 @@ interface QuizGroupUi {
 
 private data class SelectableOptionMetaData(
     val optionTestTag: String = "green edge",
-    val borderColor: Color = Color.Green,
+    val borderColor: Color = Green,
     @DrawableRes val iconOption: Int = R.drawable.property_right,
     @StringRes val iconContentDesc: Int = R.string.correct_option_icon_cont_desc,
 )
@@ -139,14 +142,14 @@ private fun configureSelectableOption(
         shouldShowBorder && isCorrect -> SelectableOptionMetaData()
         shouldShowBorder && isSelected -> SelectableOptionMetaData(
             optionTestTag = "red edge",
-            borderColor = Color.Red,
+            borderColor = Red,
             iconOption = R.drawable.property_wrong,
             iconContentDesc = R.string.wrong_option_icon_cont_desc
         )
 
-        !shouldShowBorder && isSelected -> SelectableOptionMetaData(
-            optionTestTag = "no edge",
-            borderColor = Color.Transparent,
+        isSelected -> SelectableOptionMetaData(
+            optionTestTag = "selected edge",
+            borderColor = TertiaryBlue,
             iconOption = R.drawable.selected_radio_button,
             iconContentDesc = R.string.selected_option_icon_cont_desc
         )
@@ -178,9 +181,10 @@ private fun Options(
         allOptions.forEach { option ->
             val isSelected = option.equals(selectedOption, ignoreCase = true)
             val isCorrect = option.equals(correctOption, ignoreCase = true)
-            val groupMetaData = configureSelectableOption(shouldShowBorder, isSelected, isCorrect)
+            val groupMetaData =
+                configureSelectableOption(shouldShowBorder, isSelected, isCorrect)
             val borderModifier = Modifier.border(
-                2.dp,
+                0.5.dp,
                 groupMetaData.borderColor,
                 RoundedCornerShape(16.dp)
             )
@@ -230,4 +234,15 @@ private fun BooleanStaticPreview() {
         correctOption = "false",
         userAnswer = "true"
     ).DisplayStaticGroup("true")
+}
+
+@Composable
+@Preview
+private fun MultipleDynamicPreview() {
+    QuizGroupUi.MultipleGroupUi(
+        question = "abc",
+        correctOption = "d",
+        inCorrectOptions = listOf("a", "b", "c"),
+        userAnswer = "b",
+    ).DisplayDynamicGroup(false) { }
 }
