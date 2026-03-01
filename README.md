@@ -62,5 +62,6 @@
       4. strategy;
       5. decorator.
 
-## UI tests highlights
+## UI tests
   - [End-to-end tests here](https://github.com/RomaZykov/TestQuizApp/blob/master/app/src/androidTest/java/com/example/dailyquiztest/ScenarioTest.kt)
+
