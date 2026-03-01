@@ -6,7 +6,6 @@
     <img src="https://github.com/RomaZykov/TestQuizApp/actions/workflows/android_unit_tests.yml/badge.svg">
   </a>
 </p>
-
 <p align="center">
   <a href="https://github.com/RomaZykov/TestQuizApp/blob/master/README.md">
     <img src="https://img.shields.io/badge/lang-en-purple" />
@@ -16,8 +15,11 @@
   </a>
 </p>
 <p align="center">
-
 <h1 align="center">TestQuizApp <br /></h1>
+
+<a href="https://drive.google.com/drive/folders/12di8CXu-fQpZOwDtYse1PMIF_siAOQMY?ths=true">
+    <strong>Скачать APK</strong>
+</a>
 
 ## Описание
   TestQuizApp — приложение для прохождения коротких викторин. Пользователь может запустить викторину в любое время, пройти 5 вопросов и сохранить результат. Также доступна история предыдущих попыток с возможностью просмотра деталей.

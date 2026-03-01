@@ -16,8 +16,11 @@
   </a>
 </p>
 <p align="center">
-
 <h1 align="center">TestQuizApp <br /></h1>
+
+<a href="https://drive.google.com/drive/folders/12di8CXu-fQpZOwDtYse1PMIF_siAOQMY?ths=true">
+    <strong>Download APK</strong>
+</a>
 
 ## Description
   TestQuizApp — an application for passing quizzes. The user can start the quiz at any time, complete 5 (depends on difficulty) questions and save the result. A history of previous attempts is also available with the ability to view details.
