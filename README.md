@@ -51,19 +51,19 @@ https://github.com/user-attachments/assets/a080b1a3-a863-4fe5-804d-cafe713157db
 ## Features (dev)
   - CI/CD for UNIT and UI tests
   - 35 UI tests of various levels of complexity in the OOP style:
-      - Simple texts/screens checks;
-      - Timer tests with different time intervals;
-      - End-to-end navigation tests;
-      - Configuration change tests;
-      - Tests of the horizontal position of the screen with the transition to verticality;
-      - Testing the appearance of dialogs and snack bars;
-      - Resource tests.
+      - :one: Simple texts/screens checks;
+      - :two: Timer tests with different time intervals;
+      - 3️⃣: End-to-end navigation tests;
+      - 4️⃣: Configuration change tests;
+      - 5️⃣: Tests of the horizontal position of the screen with the transition to verticality;
+      - :six: Testing the appearance of dialogs and snack bars;
+      - :seven: Resource tests.
 
   - 19 UNIT tests which include:
-      - viewModel`s tests;
-      - navigation invokation tests;
-      - repository tests;
-      - mapper tests.
+      - :one: viewModel`s tests;
+      - :two: navigation invokation tests;
+      - :three: repository tests;
+      - :four: mapper tests.
 
   - OOP approach in design (not all), patterns used:
       - prototype;
