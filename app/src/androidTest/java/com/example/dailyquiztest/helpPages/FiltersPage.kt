@@ -54,7 +54,8 @@ class FiltersPage(private val composeTestRule: ComposeTestRule) : StringResource
     fun chooseSomeDifficulty(someDifficultyDomain: DifficultyDomain) {
         composeTestRule.onNodeWithText(retrieveString(R.string.difficulty_menu_text))
             .assertIsDisplayed().performClick()
-        composeTestRule.onNodeWithText(someDifficultyDomain.toString()).assertIsDisplayed().performClick()
+        composeTestRule.onNodeWithText(someDifficultyDomain.toString(), ignoreCase = true)
+            .assertIsDisplayed().performClick()
     }
 
     fun clickStartQuizButton() {
@@ -81,7 +82,8 @@ class FiltersPage(private val composeTestRule: ComposeTestRule) : StringResource
     }
 
     fun assertDifficultySelected(difficultyDomain: DifficultyDomain) {
-        composeTestRule.onNodeWithText(difficultyDomain.toString(), ignoreCase = true).assertExists()
+        composeTestRule.onNodeWithText(difficultyDomain.toString(), ignoreCase = true)
+            .assertExists()
             .assertIsDisplayed()
     }
 

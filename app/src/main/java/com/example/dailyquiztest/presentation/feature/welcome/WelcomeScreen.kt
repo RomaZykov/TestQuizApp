@@ -88,7 +88,8 @@ fun WelcomeScreen(
                 .padding(
                     top = innerPadding.calculateTopPadding(),
                     start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
-                    end = innerPadding.calculateEndPadding(LayoutDirection.Rtl)
+                    end = innerPadding.calculateEndPadding(LayoutDirection.Rtl),
+                    bottom = innerPadding.calculateBottomPadding()
                 )
                 .padding(top = DailyQuizTheme.dimensions.topPadding),
             verticalArrangement = Arrangement.Top
