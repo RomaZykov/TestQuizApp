@@ -23,6 +23,12 @@
   TestQuizApp — приложение для прохождения коротких викторин. Пользователь может запустить викторину в любое время, пройти 5 вопросов и сохранить результат. Также доступна история предыдущих попыток с возможностью просмотра деталей.
 
 ## Скриншоты
+<p align="center">
+<img src="https://github.com/RomaZykov/TestQuizApp/blob/master/demo/DailyQuiz%201.png">
+</p>
+<p align="center">
+<img src="https://github.com/RomaZykov/TestQuizApp/blob/master/demo/DailyQuiz%202.png">
+</p>
 
 ## Технологии
   - Kotlin (KTS), Kotlin coroutines, Flow
@@ -62,5 +68,5 @@
       4. стратегия;
       5. декоратор.
 
-## Прохождение UI тестов
+## UI тесты
   - [End-to-end тесты находятся здесь](https://github.com/RomaZykov/TestQuizApp/blob/master/app/src/androidTest/java/com/example/dailyquiztest/ScenarioTest.kt)
