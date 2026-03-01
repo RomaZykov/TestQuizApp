@@ -43,7 +43,7 @@ class ProvideStringBaseTest {
         val firstArg = 5
         val secondArg = 10
 
-        val expectedString = "5 из 10"
+        val expectedString = "5 out of 10"
         val result = provideString.string(testStringRes, firstArg, secondArg)
 
         TestCase.assertEquals(expectedString, result)
