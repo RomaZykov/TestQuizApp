@@ -66,11 +66,11 @@ https://github.com/user-attachments/assets/8abbf8d7-1759-4775-be6b-34503a1749b4
       - 4️⃣ тесты data мапперов.
 
   - OOP подход в проектировании (не всё), используемые паттерны:
-      - :one: прототип;
-      - :two: одиночка;
-      - 3️⃣ посетитель;
-      - 4️⃣ стратегия;
-      - 5️⃣ декоратор.
+      - прототип;
+      - одиночка;
+      - посетитель;
+      - стратегия;
+      - декоратор.
 
 ## UI тесты
   - [End-to-end тесты находятся здесь](https://github.com/RomaZykov/TestQuizApp/blob/master/app/src/androidTest/java/com/example/dailyquiztest/ScenarioTest.kt)
