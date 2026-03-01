@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -78,6 +79,7 @@ import kotlinx.coroutines.launch
                     contentDescription = screenContDesc
                 }
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
+            containerColor = Color.Transparent,
             snackbarHost = {
                 SnackbarHost(snackBarHostState)
             },
