@@ -18,7 +18,7 @@
 <p align="center">
 <h1 align="center">TestQuizApp <br /></h1>
 
-<a href="https://drive.google.com/drive/folders/12di8CXu-fQpZOwDtYse1PMIF_siAOQMY">
+<a href="https://drive.google.com/drive/folders/12di8CXu-fQpZOwDtYse1PMIF_siAOQMY?ths=true">
     <strong>Download APK</strong>
 </a>
 
