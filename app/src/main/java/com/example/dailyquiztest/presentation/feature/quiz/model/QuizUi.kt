@@ -212,7 +212,7 @@ data class QuizUi(
                     text = stringResource(
                         R.string.time_counter,
                         timer.currentMinutes(),
-                        timer.currentSecondsProgress().toInt()
+                        timer.currentSeconds()
                     )
                 )
                 Text(
