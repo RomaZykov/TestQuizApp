@@ -43,11 +43,11 @@ interface Timer {
         }
 
         override fun currentSecondsProgress(): Float {
-            return tick / (difficulty.timeToComplete / 1000)
+            return tick % 60
         }
 
         override fun currentMinutes(): Int {
-            return tick.toInt() % 60
+            return tick.toInt() / 60
         }
     }
 

@@ -41,6 +41,7 @@ import com.example.dailyquiztest.presentation.common.CommonCard
 import com.example.dailyquiztest.presentation.common.TopAppBarDecorator
 import com.example.dailyquiztest.presentation.common.UiLogo
 import com.example.dailyquiztest.domain.CalculateScore
+import com.example.dailyquiztest.domain.model.DifficultyDomain
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUserActions
 import com.example.dailyquiztest.presentation.feature.quiz.core.Timer
@@ -210,8 +211,8 @@ data class QuizUi(
                 Text(
                     text = stringResource(
                         R.string.time_counter,
-                        timer.currentSecondsProgress().toInt(),
                         timer.currentMinutes(),
+                        timer.currentSecondsProgress().toInt()
                     )
                 )
                 Text(
@@ -324,7 +325,10 @@ private fun ShortQuizPreview() {
             inCorrectOptions = incorrectAnswers,
             userAnswer = "4"
         ),
-        timer = Timer.Initial,
+        timer = Timer.TimerProgress(
+            tick = 67f,
+            difficulty = DifficultyDomain.EASY
+        ),
     ).Display(quizUserActions = QuizUserActions.ForPreview)
 }
 
