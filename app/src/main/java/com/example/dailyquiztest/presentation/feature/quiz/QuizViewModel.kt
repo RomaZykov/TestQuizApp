@@ -106,7 +106,12 @@ class QuizViewModel @Inject constructor(
     }
 
     override fun retrieveNextAnswer() {
-        uiStateMutable.value = quizes[++currentQuizQuestion]
+        uiStateMutable.value = quizes[++currentQuizQuestion].copy(
+            timer = Timer.TimerProgress(
+                tickMutable.value,
+                difficulty
+            )
+        )
     }
 
     override fun showResult() {
