@@ -5,6 +5,8 @@ import com.example.dailyquiztest.domain.model.DifficultyDomain
 import com.example.dailyquiztest.fake.FakeFormatDate
 import com.example.dailyquiztest.fake.FakeWelcomeRouteProvider
 import com.example.dailyquiztest.domain.CalculateScore
+import com.example.dailyquiztest.domain.model.QuizDomain
+import com.example.dailyquiztest.domain.model.QuizTypeDomain
 import com.example.dailyquiztest.presentation.feature.quiz.QuizUiState
 import com.example.dailyquiztest.presentation.feature.quiz.QuizViewModel
 import com.example.dailyquiztest.presentation.feature.quiz.core.Timer
@@ -151,6 +153,7 @@ class QuizViewModelTest {
             assertTrue(fakeWelcomeRouteProvider.wasRouteCalled)
         }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `show correct state (4 answered correct and 1 failed) when all questions accidentally were true or false options`() =
         runTest {
@@ -160,11 +163,53 @@ class QuizViewModelTest {
             val expectedQuizResults = mutableListOf<QuizUi>()
             viewModel.prepareQuizGame(
                 CategoryDomain.CARTOON_AND_ANIMATIONS,
-                DifficultyDomain.EASY
+                DifficultyDomain.MEDIUM
             )
-            repeat(4) {
-                val currentQuestion = retrieveDummyTrueFalseQuestionByIndex(curIndex, 5)
-                assertEquals(currentQuestion, stateFlow.value)
+
+//            QuizDomain.Quiz(
+//                question = "Dummy question 1",
+//                incorrectAnswers = listOf("false"),
+//                correctAnswer = "true",
+//                type = QuizTypeDomain.BOOLEAN
+//            )
+            val currentQuestion = QuizUi(
+                number = curIndex + 1,
+                question = stubTrueFalseQuizes.first().question,
+                correctAnswer = "True",
+                totalQuestions = 10,
+                userAnswer = "",
+                isAnsweredCorrect = false,
+                timer = Timer.Initial,
+                quizGroupUi = QuizGroupUi.BooleanGroupUi(
+                    question = stubTrueFalseQuizes.first().question,
+                    correctOption = "True",
+                    userAnswer = ""
+                )
+            )
+            assertEquals(
+                currentQuestion,
+                stateFlow.value
+            )
+            val correctAnsweredQuestion = currentQuestion.copy(
+                userAnswer = "true",
+                isAnsweredCorrect = true
+            )
+            viewModel.saveQuizAnswer(correctAnsweredQuestion)
+            expectedQuizResults.add(correctAnsweredQuestion)
+            curIndex++
+            viewModel.retrieveNextAnswer()
+
+            repeat(8) {
+                val currentQuestion =
+                    retrieveDummyTrueFalseQuestionByIndex(
+                        curIndex,
+                        10,
+                        DifficultyDomain.MEDIUM
+                    )
+                assertEquals(
+                    currentQuestion,
+                    stateFlow.value
+                )
 
                 val correctAnsweredQuestion = currentQuestion.copy(
                     userAnswer = "true",
@@ -177,7 +222,12 @@ class QuizViewModelTest {
                 viewModel.retrieveNextAnswer()
             }
 
-            val finalQuestion = retrieveDummyTrueFalseQuestionByIndex(curIndex, 5)
+            val finalQuestion = retrieveDummyTrueFalseQuestionByIndex(
+                curIndex, 10,
+                DifficultyDomain.MEDIUM
+            ).copy(
+                timer = Timer.TimerProgress(0.0f, DifficultyDomain.MEDIUM)
+            )
             assertEquals(finalQuestion, stateFlow.value)
 
             val incorrectAnsweredQuestion = finalQuestion.copy(
@@ -192,10 +242,16 @@ class QuizViewModelTest {
             assertEquals(expectedResultUiState, stateFlow.value)
         }
 
-    private fun retrieveDummyTrueFalseQuestionByIndex(index: Int, totalQuestions: Int): QuizUi {
+    private fun retrieveDummyTrueFalseQuestionByIndex(
+        index: Int,
+        totalQuestions: Int,
+        difficultyDomain: DifficultyDomain
+    ): QuizUi {
         val question = stubTrueFalseQuizes[index].question.replaceFirstChar { it.uppercaseChar() }
-        val correctAnswer = stubTrueFalseQuizes[index].correctAnswer.replaceFirstChar { it.uppercaseChar() }
-        val userAnswer = stubTrueFalseQuizes[index].userAnswer.replaceFirstChar { it.uppercaseChar() }
+        val correctAnswer =
+            stubTrueFalseQuizes[index].correctAnswer.replaceFirstChar { it.uppercaseChar() }
+        val userAnswer =
+            stubTrueFalseQuizes[index].userAnswer.replaceFirstChar { it.uppercaseChar() }
         return QuizUi(
             number = index + 1,
             question = question,
@@ -203,7 +259,7 @@ class QuizViewModelTest {
             totalQuestions = totalQuestions,
             userAnswer = userAnswer,
             isAnsweredCorrect = stubTrueFalseQuizes[index].isAnsweredCorrect,
-            timer = Timer.Initial,
+            timer = Timer.TimerProgress(0.0f, difficultyDomain),
             quizGroupUi = QuizGroupUi.BooleanGroupUi(
                 question = question,
                 correctOption = correctAnswer,
