@@ -166,12 +166,6 @@ class QuizViewModelTest {
                 DifficultyDomain.MEDIUM
             )
 
-//            QuizDomain.Quiz(
-//                question = "Dummy question 1",
-//                incorrectAnswers = listOf("false"),
-//                correctAnswer = "true",
-//                type = QuizTypeDomain.BOOLEAN
-//            )
             val currentQuestion = QuizUi(
                 number = curIndex + 1,
                 question = stubTrueFalseQuizes.first().question,
