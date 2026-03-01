@@ -23,6 +23,12 @@
   TestQuizApp — an application for passing quizzes. The user can start the quiz at any time, complete 5 (depends on difficulty) questions and save the result. A history of previous attempts is also available with the ability to view details.
 
 ## Screenshots
+<p align="center">
+<img src="https://github.com/RomaZykov/TestQuizApp/blob/master/demo/DailyQuiz%201.png">
+</p>
+<p align="center">
+<img src="https://github.com/RomaZykov/TestQuizApp/blob/master/demo/DailyQuiz%202.png">
+</p>
 
 ## Stack
   - Kotlin (KTS), Kotlin coroutines, Flow
