@@ -30,6 +30,10 @@
 <img src="https://github.com/RomaZykov/TestQuizApp/blob/master/demo/DailyQuiz%202.png">
 </p>
 
+## Video
+
+https://github.com/user-attachments/assets/a080b1a3-a863-4fe5-804d-cafe713157db
+
 ## Stack
   - Kotlin (KTS), Kotlin coroutines, Flow
   - MVVM, Clean Architecture
@@ -45,29 +49,28 @@
   - State saving during orientation/configuration change (okak)
 
 ## Features (dev)
+  - CI/CD for UNIT and UI tests
   - 35 UI tests of various levels of complexity in the OOP style:
-      1. Simple texts/screens checks;
-      2. Timer tests with different time intervals;
-      3. End-to-end navigation tests;
-      4. Configuration change tests;
-      5. Tests of the horizontal position of the screen with the transition to verticality;
-      6. Testing the appearance of dialogs and snack bars;
-      7. Resource tests.
+      - Simple texts/screens checks;
+      - Timer tests with different time intervals;
+      - End-to-end navigation tests;
+      - Configuration change tests;
+      - Tests of the horizontal position of the screen with the transition to verticality;
+      - Testing the appearance of dialogs and snack bars;
+      - Resource tests.
 
   - 19 UNIT tests which include:
-      1. viewModel`s tests;
-      2. navigation invokation tests;
-      3. repository tests;
-      4. mapper tests.
+      - viewModel`s tests;
+      - navigation invokation tests;
+      - repository tests;
+      - mapper tests.
 
-  - CI/CD for UNIT and UI tests
   - OOP approach in design (not all), patterns used:
-      1. prototype;
-      2. singleton;
-      3. visitor;
-      4. strategy;
-      5. decorator.
+      - prototype;
+      - singleton;
+      - visitor;
+      - strategy;
+      - decorator.
 
 ## UI tests
   - [End-to-end tests here](https://github.com/RomaZykov/TestQuizApp/blob/master/app/src/androidTest/java/com/example/dailyquiztest/ScenarioTest.kt)
-
