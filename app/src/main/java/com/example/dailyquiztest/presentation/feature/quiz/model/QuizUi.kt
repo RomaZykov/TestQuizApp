@@ -1,5 +1,6 @@
 package com.example.dailyquiztest.presentation.feature.quiz.model
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -161,6 +162,7 @@ data class QuizUi(
         timer.ShowTimeIsOverDialog {
             quizUserActions.onStartNewQuizClicked().invoke()
         }
+        BackHandler(enabled = true) {}
     }
 
     @Composable
