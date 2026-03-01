@@ -16,8 +16,8 @@ android {
         applicationId = "com.example.dailyquizetest"
         minSdk = 26
         targetSdk = 33
-        versionCode = 10
-        versionName = "1.10"
+        versionCode = 11
+        versionName = "1.11"
 
         testInstrumentationRunner = "com.example.dailyquiztest.core.DailyQuizTestRunner"
     }
