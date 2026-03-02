@@ -37,7 +37,7 @@
 https://github.com/user-attachments/assets/8abbf8d7-1759-4775-be6b-34503a1749b4
 
 ## Технологии
-  - Kotlin (KTS), Kotlin coroutines, Flow
+  - Kotlin, Kotlin coroutines, Flow
   - MVVM, Clean Architecture
   - Single-Activity
   - Jetpack Compose
