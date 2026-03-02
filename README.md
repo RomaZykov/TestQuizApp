@@ -71,11 +71,11 @@ https://github.com/user-attachments/assets/a080b1a3-a863-4fe5-804d-cafe713157db
       - :four: mapper tests.
 
   - OOP approach in design (not all), patterns used:
-      - prototype;
-      - singleton;
-      - visitor;
-      - strategy;
-      - decorator.
+      - :one: prototype;
+      - :two: singleton;
+      - 3️⃣ visitor;
+      - 4️⃣ strategy;
+      - 5️⃣ decorator.
 
 ## UI tests
   - [End-to-end tests here](https://github.com/RomaZykov/TestQuizApp/blob/master/app/src/androidTest/java/com/example/dailyquiztest/ScenarioTest.kt)
