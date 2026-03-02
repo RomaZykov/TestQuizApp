@@ -58,9 +58,9 @@ https://github.com/user-attachments/assets/a080b1a3-a863-4fe5-804d-cafe713157db
   - 35 UI tests of various levels of complexity in the OOP style:
       - :one: Simple texts/screens checks;
       - :two: Timer tests with different time intervals;
-      - 3️⃣: End-to-end navigation tests;
-      - 4️⃣: Configuration change tests;
-      - 5️⃣: Tests of the horizontal position of the screen with the transition to verticality;
+      - 3️⃣ End-to-end navigation tests;
+      - 4️⃣ Configuration change tests;
+      - 5️⃣ Tests of the horizontal position of the screen with the transition to verticality;
       - :six: Testing the appearance of dialogs and snack bars;
       - :seven: Resource tests.
 
