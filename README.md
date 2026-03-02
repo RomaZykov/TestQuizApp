@@ -44,14 +44,16 @@ https://github.com/user-attachments/assets/a080b1a3-a863-4fe5-804d-cafe713157db
   - Jetpack Compose
   - Hilt
   - Room
+  - Retrofit
 
 ## Features (client)
-  - Quiz by category with 3 types of difficulties
-  - Timer - time gradation depending on the difficulty
-  - View quiz results with a brief description and date
-  - State saving during orientation/configuration change (okak)
+  - Quiz by category with 3 types of difficulties (with time gradation depending on the difficulty)
+  - History with a brief description and date
+  - Instant verification of the response
+  - Getting questions from the Open Trivia API
 
 ## Features (dev)
+  - State saving during orientation/configuration change (okak)
   - CI/CD for UNIT and UI tests
   - 35 UI tests of various levels of complexity in the OOP style:
       - :one: Simple texts/screens checks;
