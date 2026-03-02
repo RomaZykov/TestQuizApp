@@ -38,7 +38,7 @@
 https://github.com/user-attachments/assets/a080b1a3-a863-4fe5-804d-cafe713157db
 
 ## Stack
-  - Kotlin (KTS), Kotlin coroutines, Flow
+  - Kotlin, Kotlin coroutines, Flow
   - MVVM, Clean Architecture
   - Single-Activity
   - Jetpack Compose
