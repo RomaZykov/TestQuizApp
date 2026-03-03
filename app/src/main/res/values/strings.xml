@@ -85,4 +85,5 @@
     <string name="selected_option_icon_cont_desc">selected option icon</string>
     <string name="default_option_icon_cont_desc">default option icon</string>
     <string name="bottom_start_again_button_cont_desc">bottom start again button</string>
+    <string name="snack_bar_cont_desc">history deleted snackBar</string>
 </resources>

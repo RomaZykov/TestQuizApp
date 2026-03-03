@@ -84,4 +84,5 @@
     <string name="bottom_start_again_button_cont_desc">нижняя кнопка начать заново</string>
     <string name="filters_screen_cont_desc">экран настройки квиза</string>
     <string name="quiz_screen_cont_desc">экран квиза</string>
+    <string name="snack_bar_cont_desc">уведомление об удалении истории квиза</string>
 </resources>
