@@ -1,5 +1,6 @@
 package com.example.dailyquiztest.helpPages
 
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.hasClickAction
@@ -42,9 +43,8 @@ class HistoryPage(
 
     private val deleteButton =
         composeTestRule.onNode(
-            hasText(retrieveString(R.string.delete_text))
-
-                    and hasClickAction()
+            hasClickAction()
+                    and hasText(retrieveString(R.string.delete_text))
         )
 
     fun assertHistoryTitleWithBackButtonDisplayed() {
@@ -65,9 +65,12 @@ class HistoryPage(
         composeTestRule.waitForIdle()
     }
 
+    @OptIn(ExperimentalTestApi::class)
     private fun clickDeleteButton() {
         deleteButton.assertExists().assertIsDisplayed().performClick()
-        composeTestRule.waitForIdle()
+        composeTestRule.waitUntilDoesNotExist(
+            hasClickAction() and hasText(retrieveString(R.string.delete_text))
+        )
     }
 
     fun clickStartQuizButtonWhenEmptyHistory() {
@@ -105,9 +108,11 @@ class HistoryPage(
         clickDeleteButton()
     }
 
+    @OptIn(ExperimentalTestApi::class)
     fun assertSnackBarAboutDeletingExist() {
-        composeTestRule.onNodeWithText(retrieveString(R.string.delete_retry))
+        composeTestRule.onNodeWithContentDescription(retrieveString(R.string.snack_bar_cont_desc))
             .assertIsDisplayed()
+        composeTestRule.waitForIdle()
     }
 
     fun assertHistoryNonExistWithText(title: String) {
