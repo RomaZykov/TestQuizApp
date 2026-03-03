@@ -34,7 +34,7 @@
 
 ## Видео
 
-https://github.com/user-attachments/assets/8abbf8d7-1759-4775-be6b-34503a1749b4
+https://github.com/user-attachments/assets/012aa8f4-c917-44da-9eb7-a2865ced46e6
 
 ## Технологии
   - Kotlin, Kotlin coroutines, Flow
