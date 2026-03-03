@@ -35,7 +35,7 @@
 
 ## Video
 
-https://github.com/user-attachments/assets/a080b1a3-a863-4fe5-804d-cafe713157db
+https://github.com/user-attachments/assets/012aa8f4-c917-44da-9eb7-a2865ced46e6
 
 ## Stack
   - Kotlin, Kotlin coroutines, Flow
