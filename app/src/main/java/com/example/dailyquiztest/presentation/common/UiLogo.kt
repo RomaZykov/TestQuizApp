@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.example.dailyquiztest.R
 
 @Composable
-fun UiLogo(requiredHeight: Dp = 60.dp) {
+fun UiLogo(alpha: Float = 1f, requiredHeight: Dp = 60.dp) {
     Image(
         modifier = Modifier
             .fillMaxWidth()
@@ -23,6 +23,7 @@ fun UiLogo(requiredHeight: Dp = 60.dp) {
             .padding(),
         painter = painterResource(R.drawable.logo),
         contentDescription = stringResource(R.string.logo),
+        alpha = alpha,
         alignment = Alignment.TopCenter
     )
 }
