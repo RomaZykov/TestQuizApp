@@ -79,7 +79,7 @@ data class QuizUi(
         val shouldShowBorder = rememberSaveable(question) { mutableStateOf(false) }
 
         val scrollState = rememberScrollState()
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+        val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
         val scope = rememberCoroutineScope()
         LaunchedEffect(shouldShowBorder) {
             if (shouldShowBorder.value) {
@@ -92,7 +92,7 @@ data class QuizUi(
         Scaffold(
             topBar = {
                 TopAppBarDecorator(scrollBehavior) {
-                    UiLogo(40.dp)
+                    UiLogo(requiredHeight = 40.dp)
                 }
             },
             modifier = Modifier

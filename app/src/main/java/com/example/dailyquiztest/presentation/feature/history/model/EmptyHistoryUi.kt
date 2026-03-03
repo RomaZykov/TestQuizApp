@@ -47,12 +47,12 @@ object EmptyHistoryUi : HistoryUiState {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(innerPadding)
                     .background(DailyQuizTheme.colorScheme.primary)
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(innerPadding)
                         .padding(16.dp)
                         .clip(RoundedCornerShape(40.dp))
                         .background(DailyQuizTheme.colorScheme.secondary),

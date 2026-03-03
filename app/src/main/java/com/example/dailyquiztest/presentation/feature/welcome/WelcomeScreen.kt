@@ -69,7 +69,7 @@ fun WelcomeScreen(
 ) {
     val scrollState = rememberScrollState()
     val scrollBehavior =
-        TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val screenContDesc = stringResource(R.string.welcome_screen_cont_desc)
     Scaffold(
         modifier = Modifier
