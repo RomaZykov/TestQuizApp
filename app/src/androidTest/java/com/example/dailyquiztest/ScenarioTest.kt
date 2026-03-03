@@ -99,8 +99,8 @@ class ScenarioTest : StringResources() {
 
         historyPage.initWithDummyHistories()
         historyPage.assertNonEmptyHistoriesDisplayed()
-
         historyPage.clickBackButton()
+
         welcomePage.assertPageDisplayed()
     }
 
@@ -111,16 +111,14 @@ class ScenarioTest : StringResources() {
 
         historyPage.initWithDummyHistories()
         historyPage.assertNonEmptyHistoriesDisplayed()
-
         var totalHistories = stubHistories.size
         repeat(totalHistories) {
             historyPage.longPressToDeleteHistoryByNumber(totalHistories)
             totalHistories--
         }
-
         historyPage.assertEmptyHistoriesDisplayed()
-
         historyPage.clickBackButton()
+
         welcomePage.assertPageDisplayed()
     }
 
@@ -131,12 +129,11 @@ class ScenarioTest : StringResources() {
 
         historyPage.initWithDummyHistories()
         historyPage.assertNonEmptyHistoriesDisplayed()
-
         historyPage.longPressToDeleteHistoryByNumber(2)
         historyPage.assertSnackBarAboutDeletingExist()
         historyPage.assertHistoryNonExistWithText("Quiz 2")
-
         historyPage.clickBackButton()
+
         welcomePage.assertPageDisplayed()
     }
 
@@ -159,7 +156,6 @@ class ScenarioTest : StringResources() {
             quizPage.chooseOption(true)
             quizPage.clickNextButton()
         }
-
         quizPage.assertFinishQuizButtonNotEnabled()
         quizPage.chooseOption(true)
         quizPage.clickFinishQuizButton()
